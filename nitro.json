@@ -12,7 +12,12 @@
     ],
     "androidCxxLibName": "NitroToast"
   },
-  "autolinking": {},
+  "autolinking": {
+    "NitroToast": {
+      "swift": "HybridNitroToast",
+      "kotlin": "HybridNitroToast"
+    }
+  },
   "ignorePaths": [
     "**/node_modules"
   ]
