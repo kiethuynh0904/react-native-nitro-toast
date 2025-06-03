@@ -16,6 +16,8 @@
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 #include "JHybridNitroToastSpec.hpp"
+#include "JHybridNitroToastViewSpec.hpp"
+#include "views/JHybridNitroToastViewStateUpdater.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
 #include <NitroModules/DefaultConstructableObject.hpp>
 
@@ -29,6 +31,8 @@ int initialize(JavaVM* vm) {
   return facebook::jni::initialize(vm, [] {
     // Register native JNI methods
     margelo::nitro::nitrotoast::JHybridNitroToastSpec::registerNatives();
+    margelo::nitro::nitrotoast::JHybridNitroToastViewSpec::registerNatives();
+    margelo::nitro::nitrotoast::views::JHybridNitroToastViewStateUpdater::registerNatives();
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(
@@ -38,6 +42,15 @@ int initialize(JavaVM* vm) {
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridNitroToastSpec>(globalRef);
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "NitroToastView",
+      []() -> std::shared_ptr<HybridObject> {
+        static DefaultConstructableObject<JHybridNitroToastViewSpec::javaobject> object("com/margelo/nitro/nitrotoast/HybridNitroToastView");
+        auto instance = object.create();
+        auto globalRef = jni::make_global(instance);
+        return JNISharedPtr::make_shared_from_jni<JHybridNitroToastViewSpec>(globalRef);
       }
     );
   });

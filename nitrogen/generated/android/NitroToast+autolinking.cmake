@@ -28,8 +28,12 @@ target_sources(
   ../nitrogen/generated/android/NitroToastOnLoad.cpp
   # Shared Nitrogen C++ sources
   ../nitrogen/generated/shared/c++/HybridNitroToastSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridNitroToastViewSpec.cpp
+  ../nitrogen/generated/shared/c++/views/HybridNitroToastViewComponent.cpp
   # Android-specific Nitrogen C++ sources
   ../nitrogen/generated/android/c++/JHybridNitroToastSpec.cpp
+  ../nitrogen/generated/android/c++/JHybridNitroToastViewSpec.cpp
+  ../nitrogen/generated/android/c++/views/JHybridNitroToastViewStateUpdater.cpp
 )
 
 # Define a flag to check if we are building properly
