@@ -29,7 +29,7 @@ class ToastManager: ObservableObject {
 
   func dismiss(_ toast: Toast) {
     if let index = self.toasts.firstIndex(of: toast) {
-      withAnimation {
+      _ = withAnimation {
         self.toasts.remove(at: index)
       }
     }
