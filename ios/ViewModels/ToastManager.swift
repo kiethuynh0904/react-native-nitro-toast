@@ -13,29 +13,38 @@ class ToastManager: ObservableObject {
   static let shared = ToastManager()
 
   @Published var toasts: [Toast] = []
+  @Published var isExpanded: Bool = false
+
   var onEmpty: (() -> Void)?
 
   func show(type: NitroToastType, message: String, duration: Double = 2) {
     let toast = Toast(type: type, message: message)
-    withAnimation {
+    withAnimation(.bouncy) {
       self.toasts.append(toast)
     }
 
-    Task {
-      try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
-      self.dismiss(toast)
-    }
+//    Task {
+//      var remaining = duration
+//      let interval: TimeInterval = 0.1
+//
+//      while remaining > 0 {
+//        try? await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000))
+//        if !self.isExpanded {
+//          remaining -= interval
+//        }
+//      }
+//
+//      self.dismiss(toast)
+//    }
   }
 
   func dismiss(_ toast: Toast) {
-    if let index = self.toasts.firstIndex(of: toast) {
-      _ = withAnimation {
-        self.toasts.remove(at: index)
-      }
+    withAnimation(.bouncy) {
+      toasts.removeAll { $0.id == toast.id }
     }
 
     if toasts.isEmpty {
-      onEmpty?()  // 🔸 Trigger cleanup
+      isExpanded = false
     }
   }
 }
