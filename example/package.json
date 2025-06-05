@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "pod" : "cd ios && bundle exec pod install"
+    "pod": "cd ios && bundle exec pod install"
   },
   "dependencies": {
     "react": "19.0.0",

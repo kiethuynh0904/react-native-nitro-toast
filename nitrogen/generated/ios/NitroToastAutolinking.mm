@@ -11,7 +11,6 @@
 #import <type_traits>
 
 #include "HybridNitroToastSpecSwift.hpp"
-#include "HybridNitroToastViewSpecSwift.hpp"
 
 @interface NitroToastAutolinking : NSObject
 @end
@@ -26,13 +25,6 @@
     "NitroToast",
     []() -> std::shared_ptr<HybridObject> {
       std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastSpec> hybridObject = NitroToast::NitroToastAutolinking::createNitroToast();
-      return hybridObject;
-    }
-  );
-  HybridObjectRegistry::registerHybridObjectConstructor(
-    "NitroToastView",
-    []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastViewSpec> hybridObject = NitroToast::NitroToastAutolinking::createNitroToastView();
       return hybridObject;
     }
   );

@@ -12,8 +12,6 @@
 namespace margelo::nitro::nitrotoast { enum class AlertToastType; }
 // Forward declaration of `HybridNitroToastSpec` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { class HybridNitroToastSpec; }
-// Forward declaration of `HybridNitroToastViewSpec` to properly resolve imports.
-namespace margelo::nitro::nitrotoast { class HybridNitroToastViewSpec; }
 // Forward declaration of `NitroToastConfig` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { struct NitroToastConfig; }
 // Forward declaration of `PositionToastType` to properly resolve imports.
@@ -24,7 +22,6 @@ namespace margelo::nitro::nitrotoast { enum class PresentationToastType; }
 // Include C++ defined types
 #include "AlertToastType.hpp"
 #include "HybridNitroToastSpec.hpp"
-#include "HybridNitroToastViewSpec.hpp"
 #include "NitroToastConfig.hpp"
 #include "PositionToastType.hpp"
 #include "PresentationToastType.hpp"
@@ -45,8 +42,6 @@ namespace margelo::nitro::nitrotoast { enum class PresentationToastType; }
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridNitroToastSpec_cxx` to properly resolve imports.
 namespace NitroToast { class HybridNitroToastSpec_cxx; }
-// Forward declaration of `HybridNitroToastViewSpec_cxx` to properly resolve imports.
-namespace NitroToast { class HybridNitroToastViewSpec_cxx; }
 
 // Include Swift defined types
 #if __has_include("NitroToast-Swift.h")

@@ -16,10 +16,6 @@
     "NitroToast": {
       "swift": "HybridNitroToast",
       "kotlin": "HybridNitroToast"
-    },
-    "NitroToastView": {
-      "swift": "HybridNitroToastView",
-      "kotlin": "HybridNitroToastView"
     }
   },
   "ignorePaths": [

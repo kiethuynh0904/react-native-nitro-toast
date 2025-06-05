@@ -10,18 +10,13 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridNitroToastSpec` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { class HybridNitroToastSpec; }
-// Forward declaration of `HybridNitroToastViewSpec` to properly resolve imports.
-namespace margelo::nitro::nitrotoast { class HybridNitroToastViewSpec; }
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridNitroToastSpec_cxx` to properly resolve imports.
 namespace NitroToast { class HybridNitroToastSpec_cxx; }
-// Forward declaration of `HybridNitroToastViewSpec_cxx` to properly resolve imports.
-namespace NitroToast { class HybridNitroToastViewSpec_cxx; }
 
 // Include C++ defined types
 #include "HybridNitroToastSpec.hpp"
-#include "HybridNitroToastViewSpec.hpp"
 #include <NitroModules/Result.hpp>
 #include <exception>
 #include <memory>
@@ -63,17 +58,5 @@ namespace margelo::nitro::nitrotoast::bridge::swift {
   inline Result_void_ create_Result_void_(const std::exception_ptr& error) {
     return Result<void>::withError(error);
   }
-  
-  // pragma MARK: std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastViewSpec>
-  /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastViewSpec>`.
-   */
-  using std__shared_ptr_margelo__nitro__nitrotoast__HybridNitroToastViewSpec_ = std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastViewSpec>;
-  std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastViewSpec> create_std__shared_ptr_margelo__nitro__nitrotoast__HybridNitroToastViewSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__nitrotoast__HybridNitroToastViewSpec_(std__shared_ptr_margelo__nitro__nitrotoast__HybridNitroToastViewSpec_ cppType);
-  
-  // pragma MARK: std::weak_ptr<margelo::nitro::nitrotoast::HybridNitroToastViewSpec>
-  using std__weak_ptr_margelo__nitro__nitrotoast__HybridNitroToastViewSpec_ = std::weak_ptr<margelo::nitro::nitrotoast::HybridNitroToastViewSpec>;
-  inline std__weak_ptr_margelo__nitro__nitrotoast__HybridNitroToastViewSpec_ weakify_std__shared_ptr_margelo__nitro__nitrotoast__HybridNitroToastViewSpec_(const std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastViewSpec>& strong) { return strong; }
 
 } // namespace margelo::nitro::nitrotoast::bridge::swift

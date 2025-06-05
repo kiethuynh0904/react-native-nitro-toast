@@ -9,7 +9,6 @@
 
 // Include C++ implementation defined types
 #include "HybridNitroToastSpecSwift.hpp"
-#include "HybridNitroToastViewSpecSwift.hpp"
 #include "NitroToast-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::nitrotoast::bridge::swift {
@@ -27,22 +26,6 @@ namespace margelo::nitro::nitrotoast::bridge::swift {
     }
   #endif
     NitroToast::HybridNitroToastSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
-    return swiftPart.toUnsafe();
-  }
-  
-  // pragma MARK: std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastViewSpec>
-  std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastViewSpec> create_std__shared_ptr_margelo__nitro__nitrotoast__HybridNitroToastViewSpec_(void* _Nonnull swiftUnsafePointer) {
-    NitroToast::HybridNitroToastViewSpec_cxx swiftPart = NitroToast::HybridNitroToastViewSpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return std::make_shared<margelo::nitro::nitrotoast::HybridNitroToastViewSpecSwift>(swiftPart);
-  }
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__nitrotoast__HybridNitroToastViewSpec_(std__shared_ptr_margelo__nitro__nitrotoast__HybridNitroToastViewSpec_ cppType) {
-    std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastViewSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::nitrotoast::HybridNitroToastViewSpecSwift>(cppType);
-  #ifdef NITRO_DEBUG
-    if (swiftWrapper == nullptr) [[unlikely]] {
-      throw std::runtime_error("Class \"HybridNitroToastViewSpec\" is not implemented in Swift!");
-    }
-  #endif
-    NitroToast::HybridNitroToastViewSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
 

@@ -6,7 +6,7 @@ import {
 } from './specs/NitroToast.nitro'
 
 // TODO: Export all HybridObjects here for the user
-export * from './views/NitroToastView'
+// export * from './views/NitroToastView'
 export * from './specs/NitroToast.nitro'
 
 const NitroToastModule =
