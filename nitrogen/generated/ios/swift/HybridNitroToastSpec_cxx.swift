@@ -101,9 +101,9 @@ public class HybridNitroToastSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func show(message: std.string, type: Int32) -> bridge.Result_void_ {
+  public final func show(message: std.string, config: NitroToastConfig) -> bridge.Result_void_ {
     do {
-      try self.__implementation.show(message: String(message), type: margelo.nitro.nitrotoast.NitroToastType(rawValue: type)!)
+      try self.__implementation.show(message: String(message), config: config)
       return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()

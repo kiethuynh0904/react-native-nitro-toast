@@ -13,11 +13,11 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `NitroToastType` to properly resolve imports.
-namespace margelo::nitro::nitrotoast { enum class NitroToastType; }
+// Forward declaration of `NitroToastConfig` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { struct NitroToastConfig; }
 
 #include <string>
-#include "NitroToastType.hpp"
+#include "NitroToastConfig.hpp"
 
 namespace margelo::nitro::nitrotoast {
 
@@ -50,7 +50,7 @@ namespace margelo::nitro::nitrotoast {
 
     public:
       // Methods
-      virtual void show(const std::string& message, NitroToastType type) = 0;
+      virtual void show(const std::string& message, const NitroToastConfig& config) = 0;
 
     protected:
       // Hybrid Setup

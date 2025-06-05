@@ -8,20 +8,30 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AlertToastType` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { enum class AlertToastType; }
 // Forward declaration of `HybridNitroToastSpec` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { class HybridNitroToastSpec; }
 // Forward declaration of `HybridNitroToastViewSpec` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { class HybridNitroToastViewSpec; }
-// Forward declaration of `NitroToastType` to properly resolve imports.
-namespace margelo::nitro::nitrotoast { enum class NitroToastType; }
+// Forward declaration of `NitroToastConfig` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { struct NitroToastConfig; }
+// Forward declaration of `PositionToastType` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { enum class PositionToastType; }
+// Forward declaration of `PresentationToastType` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { enum class PresentationToastType; }
 
 // Include C++ defined types
+#include "AlertToastType.hpp"
 #include "HybridNitroToastSpec.hpp"
 #include "HybridNitroToastViewSpec.hpp"
-#include "NitroToastType.hpp"
+#include "NitroToastConfig.hpp"
+#include "PositionToastType.hpp"
+#include "PresentationToastType.hpp"
 #include <NitroModules/Result.hpp>
 #include <exception>
 #include <memory>
+#include <optional>
 #include <string>
 
 // C++ helpers for Swift

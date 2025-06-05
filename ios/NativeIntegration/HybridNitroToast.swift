@@ -6,20 +6,21 @@ class HybridNitroToast: HybridNitroToastSpec {
   static let shared = HybridNitroToast()
   private var toastWindow: UIWindow?
 
-  @objc public func show(message: String, type: NitroToastType) {
+  func show(message: String, config: NitroToastConfig) {
     DispatchQueue.main.async {
-      self.presentToast(message: message, type: type)
+      self.presentToast(message: message, config: config)
     }
   }
-  @MainActor private func presentToast(message: String, type: NitroToastType) {
-    ToastManager.shared.show(type: type, message: message)
+  @MainActor private func presentToast(message: String, config: NitroToastConfig) {
+    ToastManager.shared.show(message: message, config: config)
 
     if toastWindow != nil {
       return  // already showing, just update state
     }
 
-    let toastStackView = ToastStackView()
-    let host = UIHostingController(rootView: toastStackView)
+    let toastHostView = makeToastHostView(for: config)
+
+    let host = UIHostingController(rootView: toastHostView)
     host.view.backgroundColor = .clear
 
     let toastWindow = PassthroughWindow(frame: UIScreen.main.bounds)
@@ -36,6 +37,15 @@ class HybridNitroToast: HybridNitroToastSpec {
         self?.toastWindow?.rootViewController = nil
         self?.toastWindow = nil
       }
+    }
+  }
+
+  private func makeToastHostView(for config: NitroToastConfig) -> AnyView {
+    switch config.presentation {
+    case .stacked:
+      return AnyView(ToastStackView())
+    case .alert:
+      return AnyView(ToastListView())
     }
   }
 }

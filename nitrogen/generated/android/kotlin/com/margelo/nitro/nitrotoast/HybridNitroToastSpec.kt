@@ -42,7 +42,7 @@ abstract class HybridNitroToastSpec: HybridObject() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun show(message: String, type: NitroToastType): Unit
+  abstract fun show(message: String, config: NitroToastConfig): Unit
 
   private external fun initHybrid(): HybridData
 

@@ -14,7 +14,7 @@ public protocol HybridNitroToastSpec_protocol: HybridObject {
   
 
   // Methods
-  func show(message: String, type: NitroToastType) throws -> Void
+  func show(message: String, config: NitroToastConfig) throws -> Void
 }
 
 /// See ``HybridNitroToastSpec``

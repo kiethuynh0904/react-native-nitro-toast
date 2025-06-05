@@ -12,11 +12,21 @@
 // Forward declaration of `HybridNitroToastSpec_cxx` to properly resolve imports.
 namespace NitroToast { class HybridNitroToastSpec_cxx; }
 
-// Forward declaration of `NitroToastType` to properly resolve imports.
-namespace margelo::nitro::nitrotoast { enum class NitroToastType; }
+// Forward declaration of `NitroToastConfig` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { struct NitroToastConfig; }
+// Forward declaration of `AlertToastType` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { enum class AlertToastType; }
+// Forward declaration of `PresentationToastType` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { enum class PresentationToastType; }
+// Forward declaration of `PositionToastType` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { enum class PositionToastType; }
 
 #include <string>
-#include "NitroToastType.hpp"
+#include "NitroToastConfig.hpp"
+#include "AlertToastType.hpp"
+#include "PresentationToastType.hpp"
+#include <optional>
+#include "PositionToastType.hpp"
 
 #include "NitroToast-Swift-Cxx-Umbrella.hpp"
 
@@ -57,8 +67,8 @@ namespace margelo::nitro::nitrotoast {
 
   public:
     // Methods
-    inline void show(const std::string& message, NitroToastType type) override {
-      auto __result = _swiftPart.show(message, static_cast<int>(type));
+    inline void show(const std::string& message, const NitroToastConfig& config) override {
+      auto __result = _swiftPart.show(message, config);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

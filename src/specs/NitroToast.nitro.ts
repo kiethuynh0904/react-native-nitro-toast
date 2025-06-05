@@ -1,8 +1,28 @@
 import type { HybridObject } from 'react-native-nitro-modules'
 
-export type NitroToastType = 'success' | 'error' | 'warning' | 'info'
+export type AlertToastType =
+  | 'success'
+  | 'error'
+  | 'warning'
+  | 'info'
+  | 'default'
+export type PresentationToastType = 'alert' | 'stacked'
+export type PositionToastType = 'top' | 'bottom'
+export type NitroToastConfig = {
+  type: AlertToastType
+  presentation: PresentationToastType
+  duration: number // in milliseconds
+  title?: string
+  position: PositionToastType
+}
 
+export const DEFAULT_TOAST_CONFIG: NitroToastConfig = {
+  type: 'default',
+  presentation: 'alert',
+  duration: 3000,
+  position: 'bottom',
+}
 export interface NitroToast
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
-  show(message: string, type: NitroToastType): void
+  show(message: string, config: NitroToastConfig): void
 }

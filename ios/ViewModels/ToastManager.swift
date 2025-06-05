@@ -17,25 +17,26 @@ class ToastManager: ObservableObject {
 
   var onEmpty: (() -> Void)?
 
-  func show(type: NitroToastType, message: String, duration: Double = 2) {
-    let toast = Toast(type: type, message: message)
+  func show(message: String, config: NitroToastConfig) {
+    let toast = Toast(message: message, config: config)
     withAnimation(.bouncy) {
       self.toasts.append(toast)
     }
 
-//    Task {
-//      var remaining = duration
-//      let interval: TimeInterval = 0.1
-//
-//      while remaining > 0 {
-//        try? await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000))
-//        if !self.isExpanded {
-//          remaining -= interval
-//        }
-//      }
-//
-//      self.dismiss(toast)
-//    }
+    Task {
+      /// Auto dismiss
+      var remaining = config.duration / 1000
+      let interval: TimeInterval = 0.1
+
+      while remaining > 0 {
+        try? await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000))
+        if !self.isExpanded {
+          remaining -= interval
+        }
+      }
+
+      self.dismiss(toast)
+    }
   }
 
   func dismiss(_ toast: Toast) {
@@ -44,7 +45,19 @@ class ToastManager: ObservableObject {
     }
 
     if toasts.isEmpty {
+      onEmpty?()
       isExpanded = false
+    }
+  }
+}
+
+extension Binding<[Toast]> {
+  func delete(_ id: String) {
+    if let toast = first(where: { $0.id == id }) {
+      toast.wrappedValue.isDeleting = true
+    }
+    withAnimation(.bouncy) {
+      self.wrappedValue.removeAll(where: { $0.id == id })
     }
   }
 }

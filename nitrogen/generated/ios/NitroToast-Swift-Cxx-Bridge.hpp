@@ -25,6 +25,8 @@ namespace NitroToast { class HybridNitroToastViewSpec_cxx; }
 #include <NitroModules/Result.hpp>
 #include <exception>
 #include <memory>
+#include <optional>
+#include <string>
 
 /**
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
@@ -32,6 +34,15 @@ namespace NitroToast { class HybridNitroToastViewSpec_cxx; }
  */
 namespace margelo::nitro::nitrotoast::bridge::swift {
 
+  // pragma MARK: std::optional<std::string>
+  /**
+   * Specialized version of `std::optional<std::string>`.
+   */
+  using std__optional_std__string_ = std::optional<std::string>;
+  inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
+    return std::optional<std::string>(value);
+  }
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastSpec>`.
