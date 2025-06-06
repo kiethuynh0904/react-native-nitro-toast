@@ -1,12 +1,9 @@
 {
-  "include": [
-    "src",
-    "example"
-  ],
+  "include": ["src"],
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
-    "outDir": "lib",
+    "outDir": "./lib",
     "paths": {
       "react-native-nitro-toast": [
         "src"
@@ -34,5 +31,5 @@
     "strict": true,
     "target": "esnext",
     "verbatimModuleSyntax": true
-  }
+  },
 }

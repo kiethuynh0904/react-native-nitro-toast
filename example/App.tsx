@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import {Button, StyleSheet, View} from 'react-native';
+import {Button, View} from 'react-native';
 import {showToast} from 'react-native-nitro-toast';
 
 function App(): React.JSX.Element {
