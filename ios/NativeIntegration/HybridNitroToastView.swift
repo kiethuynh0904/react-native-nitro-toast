@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 import UIKit
 
-class HybridNitroToastView: HybridNitroToastViewSpec {
-  var view: UIView = UIView()
+//class HybridNitroToastView: HybridNitroToastViewSpec {
+//  var view: UIView = UIView()
 
 //  private let hostingController: UIHostingController<ToastHostView<EmptyView>>
 //
@@ -32,4 +32,4 @@ class HybridNitroToastView: HybridNitroToastViewSpec {
 //      hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 //    ])
 //  }
-}
+//}

@@ -68,3 +68,7 @@ private struct ToastView: View {
     .padding(.horizontal, 15)
   }
 }
+
+#Preview {
+    ToastListView()
+}

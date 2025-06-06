@@ -28,15 +28,15 @@ extension Toast {
   var backgroundColor: Color {
     switch config.type {
     case .success:
-      return .green
+      return Color.toastSuccess
     case .error:
-      return .red
+      return Color.toastError
     case .info:
-      return .blue
+      return Color.toastInfo
     case .warning:
-      return .yellow
+      return Color.toastWarning
     case .default:
-      return .gray
+      return Color.toastDefault
     }
   }
   var iconName: String {
