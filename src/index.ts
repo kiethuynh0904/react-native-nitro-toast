@@ -1,16 +1,20 @@
+export * from './specs/NitroToast.nitro'
+
 import { NitroModules } from 'react-native-nitro-modules'
 import {
-  DEFAULT_TOAST_CONFIG,
   type NitroToast,
   type NitroToastConfig,
 } from './specs/NitroToast.nitro'
 
-// TODO: Export all HybridObjects here for the user
-// export * from './views/NitroToastView'
-export * from './specs/NitroToast.nitro'
-
 const NitroToastModule =
   NitroModules.createHybridObject<NitroToast>('NitroToast')
+
+export const DEFAULT_TOAST_CONFIG: NitroToastConfig = {
+  type: 'default',
+  presentation: 'alert',
+  duration: 3000,
+  position: 'bottom',
+}
 
 export const showToast = (
   message: string,

@@ -6,6 +6,14 @@
   "module": "./lib/module/index.js",
   "types": "./lib/typescript/index.d.ts",
   "source": "./src/index.ts",
+  "exports": {
+    ".": {
+      "source": "./src/index.tsx",
+      "types": "./lib/typescript/index.d.ts",
+      "default": "./lib/module/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "src",
     "lib",
@@ -109,28 +117,16 @@
     "useTabs": false,
     "semi": false
   },
-  
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
     "targets": [
-      [
-        "commonjs",
-        {
-          "esm": true
-        }
-      ],
-      [
-        "module",
-        {
-          "esm": true
-        }
-      ],
+      "commonjs",
+      "module",
       [
         "typescript",
         {
-          "project": "tsconfig.build.json",
-          "outDir": "lib/typescript"
+          "project": "tsconfig.build.json"
         }
       ]
     ]

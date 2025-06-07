@@ -15,13 +15,6 @@ export type NitroToastConfig = {
   title?: string
   position: PositionToastType
 }
-
-export const DEFAULT_TOAST_CONFIG: NitroToastConfig = {
-  type: 'default',
-  presentation: 'alert',
-  duration: 3000,
-  position: 'bottom',
-}
 export interface NitroToast
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
   show(message: string, config: NitroToastConfig): void

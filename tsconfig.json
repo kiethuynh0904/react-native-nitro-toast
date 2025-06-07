@@ -9,7 +9,6 @@
         "src"
       ]
     },
-    "rootDir": "src",
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
