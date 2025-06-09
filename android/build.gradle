@@ -136,5 +136,8 @@ dependencies {
 
   // Add a dependency on NitroModules
   implementation project(":react-native-nitro-modules")
+  implementation 'androidx.compose.ui:ui-graphics-android:1.8.2'
+  implementation 'androidx.compose.foundation:foundation-android:1.8.2'
+  implementation 'androidx.compose.material3:material3-android:1.3.2'
 }
 

@@ -19,6 +19,6 @@ class HybridNitroToastModule(private val reactContext: ReactApplicationContext?)
 
     @ReactMethod
     fun show(message:String,config: NitroToastConfig) {
-        Toast.makeText(reactContext, message, Toast.LENGTH_SHORT).show()
+//        ToastManager.show(reactContext, message,config)
     }
 }
