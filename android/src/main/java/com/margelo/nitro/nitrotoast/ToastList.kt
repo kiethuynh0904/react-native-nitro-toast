@@ -7,9 +7,13 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 
 @Composable
-fun ToastList(toasts: List<Toast>) {
+fun ToastList(state: ToastListState) {
+    val toasts by state.toasts.collectAsState()
+
     if (toasts.isEmpty()) return
 
     val position = when (toasts.firstOrNull()?.config?.position) {
@@ -23,17 +27,17 @@ fun ToastList(toasts: List<Toast>) {
             .padding(vertical = 15.dp),
         contentAlignment = position
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.wrapContentHeight()
+        ) {
             toasts.forEach { toast ->
                 key(toast.id) {
                     AnimatedVisibility(
-                        visible = true,
-                        enter = slideInVertically(
-                            initialOffsetY = { if (position == Alignment.TopCenter) -it else it }
-                        ) + fadeIn(),
-                        exit = slideOutVertically(
-                            targetOffsetY = { if (position == Alignment.TopCenter) -it else it }
-                        ) + fadeOut()
+                        visible = toast.isVisible,
+                        enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+                        exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
                     ) {
                         ToastView(toast)
                     }

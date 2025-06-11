@@ -5,11 +5,13 @@
  * @format
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {Button, View} from 'react-native';
 import {showToast} from 'react-native-nitro-toast';
 
 function App(): React.JSX.Element {
+  const [index, setIndex] = useState(0);
+
   return (
     <>
       <View
@@ -22,6 +24,7 @@ function App(): React.JSX.Element {
         <Button
           title="Show Toast Stacked"
           onPress={() => {
+
             showToast('Hello, world!', {
               type: 'default',
               presentation: 'stacked',
@@ -41,9 +44,10 @@ function App(): React.JSX.Element {
         <Button
           title="Show Toast Alert Success"
           onPress={() => {
-            showToast('Hello, world!', {
+            showToast(`Hello, world! ${index}`, {
               type: 'success',
             });
+            setIndex(index + 1);
           }}
         />
         <Button

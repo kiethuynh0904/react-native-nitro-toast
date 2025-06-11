@@ -1,95 +1,84 @@
-//package com.margelo.nitro.nitrotoast
-//
-//import android.app.Activity
-//import android.content.Context
-//import android.view.Gravity
-//import android.view.ViewGroup
-//import android.view.WindowManager
-//import android.widget.FrameLayout
-//import androidx.compose.animation.*
-//import androidx.compose.foundation.background
-//import androidx.compose.foundation.layout.*
-//import androidx.compose.foundation.shape.RoundedCornerShape
-//import androidx.compose.material.icons.Icons
-//import androidx.compose.material.icons.filled.CheckCircle
-//import androidx.compose.material.icons.filled.Close
-//import androidx.compose.material.icons.filled.Info
-//import androidx.compose.material.icons.filled.Warning
-//import androidx.compose.material3.Icon
-//import androidx.compose.material3.MaterialTheme
-//import androidx.compose.material3.Text
-//import androidx.compose.runtime.*
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.platform.ComposeView
-//import androidx.compose.ui.text.font.FontWeight
-//import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.unit.sp
-//import kotlinx.coroutines.*
-//
-//object ToastManager {
-//    private var toastContainer: FrameLayout? = null
-//    private var toastJob: Job? = null
-//    private val toasts = mutableStateListOf<Toast>()
-//
-//    fun show(context: Context?, message: String, config: NitroToastConfig) {
-//        if (context !is Activity) return
-//
-//        val toast = Toast(
-//            message = message,
-//            config = config
-//        )
-//        toasts.add(toast)
-//
-//        if (toastContainer == null) {
-//            createToastContainer(context)
-//        }
-//
-//        toastJob?.cancel()
-//        toastJob = CoroutineScope(Dispatchers.Main).launch {
-//            delay(config.duration.toLong())
-//            toasts.remove(toast)
-//            if (toasts.isEmpty()) {
-//                removeToastContainer(context)
-//            }
-//        }
-//    }
-//
-//    private fun createToastContainer(context: Activity) {
-//        toastContainer = FrameLayout(context).also { container ->
-//            val composeView = ComposeView(context).apply {
-//                setContent {
-//                    ToastList(toasts)
-//                }
-//            }
-//            container.addView(
-//                composeView,
-//                ViewGroup.LayoutParams(
-//                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                    ViewGroup.LayoutParams.MATCH_PARENT
-//                )
-//            )
-//
-//            val params = WindowManager.LayoutParams().apply {
-//                width = WindowManager.LayoutParams.MATCH_PARENT
-//                height = WindowManager.LayoutParams.MATCH_PARENT
-//                type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL
-//                flags =
-//                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-//                format = android.graphics.PixelFormat.TRANSLUCENT
-//                gravity = if (toasts.firstOrNull()?.config?.position == PositionToastType.TOP) Gravity.TOP else Gravity.BOTTOM
-//            }
-//            context.windowManager.addView(container, params)
-//        }
-//    }
-//
-//    private fun removeToastContainer(context: Activity) {
-//        toastContainer?.let {
-//            try {
-//                context.windowManager.removeView(it)
-//            } catch (_: Exception) {}
-//        }
-//        toastContainer = null
-//    }
-//}
+package com.margelo.nitro.nitrotoast
+
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.util.Log
+import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
+class ToastListState {
+    private val _toasts = MutableStateFlow<List<Toast>>(emptyList())
+    val toasts = _toasts.asStateFlow()
+
+    fun addToast(toast: Toast) {
+        _toasts.value += toast
+    }
+
+    fun updateToastVisibility(toastId: String, isVisible: Boolean) {
+        _toasts.value = _toasts.value.map {
+            if (it.id == toastId) it.copy(isVisible = isVisible) else it
+        }
+    }
+
+    suspend fun removeToast(toastId: String) {
+        // Set isVisible = false (exit animation trigger)
+        _toasts.value = _toasts.value.map {
+            if (it.id == toastId) it.copy(isVisible = false) else it
+        }
+        delay(300) // wait for animation to finish
+        // Actually remove from list
+        _toasts.value = _toasts.value.filterNot { it.id == toastId }
+    }
+
+}
+
+object ToastManager {
+    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private var toastContainer: ComposeView? = null
+    private val toastListState = ToastListState()
+
+    @SuppressLint("SuspiciousIndentation")
+    fun show(context: Context?, message: String, config: NitroToastConfig) {
+        if (context !is Activity) return
+
+        val toast = Toast(message = message, config = config, isVisible = false)
+        toastListState.addToast(toast)
+
+        context.runOnUiThread {
+            if (toastContainer == null) {
+                toastContainer = ComposeView(context).apply {
+                    setContent {
+                        ToastList(state = toastListState)
+                    }
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+                }
+                (context.window?.decorView as? ViewGroup)?.addView(toastContainer)
+            }
+
+            Log.d("ToastManager", "Showing toast: ${toastListState.toasts.value}")
+            scope.launch {
+                // Delay briefly to allow AnimatedVisibility to detect false -> true transition
+                delay(16)
+                toastListState.updateToastVisibility(toast.id, true)
+
+                delay(config.duration.toLong() - 300)
+                toastListState.removeToast(toast.id)
+
+                context.runOnUiThread {
+                    Log.d("ToastManager", "Removing toast: ${toast.id}")
+                    if (toastListState.toasts.value.isEmpty()) {
+                        (context.window?.decorView as? ViewGroup)?.removeView(toastContainer)
+                        toastContainer = null
+                    }
+                }
+            }
+        }
+    }
+}

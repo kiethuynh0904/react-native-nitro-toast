@@ -1,8 +1,7 @@
 package com.margelo.nitro.nitrotoast
 
-import android.widget.Toast
+import android.util.Log
 import com.facebook.react.bridge.BaseJavaModule
-import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.module.annotations.ReactModule
@@ -18,7 +17,17 @@ class HybridNitroToastModule(private val reactContext: ReactApplicationContext?)
     override fun getName(): String = NAME
 
     @ReactMethod
-    fun show(message:String,config: NitroToastConfig) {
-//        ToastManager.show(reactContext, message,config)
+    fun show(message: String, config: NitroToastConfig) {
+        try {
+            val activity = reactContext?.currentActivity
+            if (activity == null) {
+                Log.w("HybridNitroToastModule", "No current Activity available to show toast")
+                return
+            }
+            ToastManager.show(activity, message, config)
+        } catch (e: Exception) {
+            Log.e("HybridNitroToastModule", "Error in show()", e)
+            throw e // or send error back to JS
+        }
     }
 }

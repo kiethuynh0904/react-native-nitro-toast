@@ -11,7 +11,7 @@ data class Toast(
     val message: String,
     val config: NitroToastConfig,
     var offsetX: Float = 0f,
-    var isDeleting: Boolean = false
+    var isVisible: Boolean = false
 ) {
     val backgroundColor: Color
         get() = when (config.type) {

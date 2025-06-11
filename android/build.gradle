@@ -18,8 +18,13 @@ def isNewArchitectureEnabled() {
   return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
 }
 
-apply plugin: "com.android.library"
-apply plugin: 'org.jetbrains.kotlin.android'
+// apply plugin: "com.android.library"
+// apply plugin: 'org.jetbrains.kotlin.android'
+plugins {
+  id 'com.android.library'
+  id 'org.jetbrains.kotlin.android'
+  id("org.jetbrains.kotlin.plugin.compose") version "2.0.0"
+}
 apply from: '../nitrogen/generated/android/NitroToast+autolinking.gradle'
 
 if (isNewArchitectureEnabled()) {
@@ -93,6 +98,11 @@ android {
   buildFeatures {
     buildConfig true
     prefab true
+    compose true
+  }
+
+  composeOptions {
+    kotlinCompilerExtensionVersion = "2.0.0" // ✅ Compose Compiler version
   }
 
   buildTypes {
@@ -125,6 +135,7 @@ android {
 repositories {
   mavenCentral()
   google()
+  gradlePluginPortal() // ✅ required for kotlin plugin
 }
 
 
@@ -132,12 +143,24 @@ dependencies {
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
   //noinspection GradleDynamicVersion
+  // React Native core
   implementation "com.facebook.react:react-native:+"
 
-  // Add a dependency on NitroModules
+  // NitroModules dependency
   implementation project(":react-native-nitro-modules")
-  implementation 'androidx.compose.ui:ui-graphics-android:1.8.2'
-  implementation 'androidx.compose.foundation:foundation-android:1.8.2'
-  implementation 'androidx.compose.material3:material3-android:1.3.2'
+
+  // ✅ Jetpack Compose BOM for compatibility and simplified versioning
+  implementation platform("androidx.compose:compose-bom:2024.05.00")
+
+  // ✅ Jetpack Compose core UI
+  implementation "androidx.compose.ui:ui"
+  implementation "androidx.compose.foundation:foundation"
+  implementation "androidx.compose.foundation:foundation-layout"
+  implementation "androidx.compose.material3:material3"
+  implementation "androidx.compose.ui:ui-tooling-preview"
+  debugImplementation "androidx.compose.ui:ui-tooling"
+
+  // Optional graphics if needed
+  implementation "androidx.compose.ui:ui-graphics"
 }
 
