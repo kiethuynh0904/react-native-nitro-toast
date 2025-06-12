@@ -2,7 +2,10 @@ package com.margelo.nitro.nitrotoast
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.ui.graphics.Color
 
 
@@ -22,13 +25,17 @@ data class Toast(
             AlertToastType.DEFAULT -> Color(0xFF6B7280)
         }
 
+
+    val overlayColor: Color
+        get() = backgroundColor.copy(alpha = 0.08f)
+
     val icon: ImageVector
         get() = when (config.type) {
-            AlertToastType.SUCCESS -> Icons.Default.CheckCircle
-            AlertToastType.ERROR -> Icons.Default.Close
-            AlertToastType.WARNING -> Icons.Default.Warning
-            AlertToastType.INFO -> Icons.Default.Info
-            AlertToastType.DEFAULT -> Icons.Default.Info
+            AlertToastType.SUCCESS -> Icons.Filled.CheckCircle
+            AlertToastType.ERROR -> Icons.Filled.Error
+            AlertToastType.WARNING -> Icons.Filled.Warning
+            AlertToastType.INFO -> Icons.Filled.Info
+            AlertToastType.DEFAULT -> Icons.Filled.Info
         }
 
     val title: String

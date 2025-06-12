@@ -21,28 +21,44 @@ fun ToastList(state: ToastListState) {
         else -> Alignment.BottomCenter
     }
 
-    Box(
+    val exitAnimation = when (toasts.firstOrNull()?.config?.position) {
+        PositionToastType.TOP -> slideOutVertically(targetOffsetY = { -it }) + fadeOut()
+        else -> slideOutVertically(targetOffsetY = { it }) + fadeOut()
+    }
+    val enterAnimation = when (toasts.firstOrNull()?.config?.position) {
+        PositionToastType.TOP -> slideInVertically(initialOffsetY = { -it }) + fadeIn()
+        else -> slideInVertically(initialOffsetY = { it }) + fadeIn()
+    }
+
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 15.dp),
-        contentAlignment = position
+            .padding(
+                top = WindowInsets.statusBars.asPaddingValues()
+                    .calculateTopPadding() + if (position == Alignment.TopCenter) 16.dp else 0.dp,
+                bottom = WindowInsets.navigationBars.asPaddingValues()
+                    .calculateBottomPadding() + if (position == Alignment.BottomCenter) 16.dp else 0.dp
+            )
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.wrapContentHeight()
-        ) {
-            toasts.forEach { toast ->
-                key(toast.id) {
-                    AnimatedVisibility(
-                        visible = toast.isVisible,
-                        enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
-                        exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
-                    ) {
-                        ToastView(toast)
-                    }
+        if (position == Alignment.BottomCenter) {
+            Spacer(modifier = Modifier.weight(1f))
+        }
+        toasts.forEach { toast ->
+            key(toast.id) {
+                AnimatedVisibility(
+                    visible = toast.isVisible,
+                    enter = enterAnimation,
+                    exit = exitAnimation
+                ) {
+                    ToastView(toast)
                 }
             }
+        }
+        if (position == Alignment.TopCenter) {
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
