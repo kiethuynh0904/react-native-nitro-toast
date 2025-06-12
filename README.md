@@ -50,11 +50,13 @@ showToast('Upload completed!', {
 |------------------|------------------------------|-------------|--------------------------------------------|
 | `type`           | `success`, `error`, `info`, `warning`, `default` | `'default'` | Predefined visual styles                   |
 | `title`          | `string`                     | `null`      | Optional title                             |
+| `titleColor`     | `string` (HEX)               | Varies by type      | Custom title color (optional)              |
 | `message`        | `string`                     | (required)  | Toast message                              |
-| `duration`       | `number` (ms)                | `3000`      | Auto-dismiss duration                      |
+| `messageColor`   | `string` (HEX)               | Varies by type      | Custom message color (optional)            |
+| `duration`       | `number` (MS)                | `3000`      | Auto-dismiss duration                      |
 | `position`       | `'top'` \| `'bottom'`        | `'bottom'`  | Toast position                             |
 | `presentation`   | `'stacked'` \| `'alert'`     | `'alert'`   | Display style                              |
-| `backgroundColor`| `string` (hex or rgba)       | Varies by type | Custom background                          |                      |
+| `backgroundColor`| `string` (HEX)               | Varies by type | Custom background                       |                      |
 | `useOverlay`     | `boolean`                    | `true`      | Apply semi-transparent overlay             |
 
 ---
@@ -65,12 +67,6 @@ showToast('Upload completed!', {
 |----------|------------|
 | iOS      | ✅ SwiftUI |
 | Android  | ✅ Compose |
-
----
-
-## 🧪 Advanced Usage
-
-> In the future: support for passing a React component or native template `template: 'withAvatar'`.
 
 ---
 
