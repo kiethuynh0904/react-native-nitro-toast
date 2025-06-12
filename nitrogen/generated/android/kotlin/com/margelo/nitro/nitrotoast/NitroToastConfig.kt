@@ -24,7 +24,11 @@ data class NitroToastConfig
     val presentation: PresentationToastType,
     val duration: Double,
     val title: String?,
-    val position: PositionToastType
+    val position: PositionToastType,
+    val backgroundColor: String?,
+    val titleColor: String?,
+    val messageColor: String?,
+    val useOverlay: Boolean
   ) {
   /* main constructor */
 }

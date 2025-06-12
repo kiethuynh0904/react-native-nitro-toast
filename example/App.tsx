@@ -46,6 +46,7 @@ function App(): React.JSX.Element {
           onPress={() => {
             showToast(`Hello, world! ${index}`, {
               type: 'success',
+              backgroundColor:'#4169E1',
             });
             setIndex(index + 1);
           }}

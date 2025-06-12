@@ -7,7 +7,16 @@ import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.toColorInt
 
+
+fun String.toColorOrNull(): Color? {
+    return try {
+        Color(this.toColorInt())
+    } catch (e: IllegalArgumentException) {
+        null // or log error
+    }
+}
 
 data class Toast(
     val id: String = java.util.UUID.randomUUID().toString(),
@@ -17,7 +26,7 @@ data class Toast(
     var isVisible: Boolean = false
 ) {
     val backgroundColor: Color
-        get() = when (config.type) {
+        get() = config.backgroundColor?.toColorOrNull() ?: when (config.type) {
             AlertToastType.SUCCESS -> Color(0xFF22C55E)
             AlertToastType.ERROR -> Color(0xFFEF4444)
             AlertToastType.INFO -> Color(0xFF3B82F6)
@@ -25,9 +34,8 @@ data class Toast(
             AlertToastType.DEFAULT -> Color(0xFF6B7280)
         }
 
-
     val overlayColor: Color
-        get() = backgroundColor.copy(alpha = 0.08f)
+        get() = if (config.useOverlay == true) backgroundColor.copy(alpha = 0.08f) else backgroundColor
 
     val icon: ImageVector
         get() = when (config.type) {
@@ -37,6 +45,8 @@ data class Toast(
             AlertToastType.INFO -> Icons.Filled.Info
             AlertToastType.DEFAULT -> Icons.Filled.Info
         }
+    val iconColor: Color
+        get() = if(config.useOverlay != true) Color.White else backgroundColor
 
     val title: String
         get() = config.title ?: when (config.type) {
@@ -46,4 +56,11 @@ data class Toast(
             AlertToastType.WARNING -> "Warning"
             AlertToastType.DEFAULT -> ""
         }
+
+
+    val titleColor: Color
+        get() = config.titleColor?.toColorOrNull() ?: Color.Black
+
+    val messageColor: Color
+        get() = config.messageColor?.toColorOrNull() ?: Color.DarkGray
 }

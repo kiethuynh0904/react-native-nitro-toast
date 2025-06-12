@@ -26,6 +26,10 @@ extension NitroToastConfig: Equatable {
 
 extension Toast {
   var backgroundColor: Color {
+    if let hex = config.backgroundColor {
+      return Color(hex)
+    }
+
     switch config.type {
     case .success:
       return Color.toastSuccess
@@ -39,6 +43,14 @@ extension Toast {
       return Color.toastDefault
     }
   }
+
+  var overlayColor: Color {
+    if config.useOverlay {
+      return self.backgroundColor.opacity(0.08)
+    }
+    return self.backgroundColor
+  }
+
   var iconName: String {
     switch config.type {
     case .success:
@@ -52,6 +64,13 @@ extension Toast {
     case .default:
       return "bell.fill"
     }
+  }
+
+  var iconColor: Color {
+    if config.useOverlay {
+      return self.backgroundColor
+    }
+    return .white
   }
 
   var title: String {
@@ -70,5 +89,19 @@ extension Toast {
     case .default:
       return ""
     }
+  }
+
+  var titleColor: Color {
+    if let hex = config.titleColor {
+      return Color(hex)
+    }
+    return .black
+  }
+
+  var messageColor: Color {
+    if let hex = config.messageColor {
+      return Color(hex)
+    }
+    return .secondary
   }
 }

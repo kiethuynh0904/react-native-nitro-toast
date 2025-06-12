@@ -48,12 +48,24 @@ namespace margelo::nitro::nitrotoast {
       jni::local_ref<jni::JString> title = this->getFieldValue(fieldTitle);
       static const auto fieldPosition = clazz->getField<JPositionToastType>("position");
       jni::local_ref<JPositionToastType> position = this->getFieldValue(fieldPosition);
+      static const auto fieldBackgroundColor = clazz->getField<jni::JString>("backgroundColor");
+      jni::local_ref<jni::JString> backgroundColor = this->getFieldValue(fieldBackgroundColor);
+      static const auto fieldTitleColor = clazz->getField<jni::JString>("titleColor");
+      jni::local_ref<jni::JString> titleColor = this->getFieldValue(fieldTitleColor);
+      static const auto fieldMessageColor = clazz->getField<jni::JString>("messageColor");
+      jni::local_ref<jni::JString> messageColor = this->getFieldValue(fieldMessageColor);
+      static const auto fieldUseOverlay = clazz->getField<jboolean>("useOverlay");
+      jboolean useOverlay = this->getFieldValue(fieldUseOverlay);
       return NitroToastConfig(
         type->toCpp(),
         presentation->toCpp(),
         duration,
         title != nullptr ? std::make_optional(title->toStdString()) : std::nullopt,
-        position->toCpp()
+        position->toCpp(),
+        backgroundColor != nullptr ? std::make_optional(backgroundColor->toStdString()) : std::nullopt,
+        titleColor != nullptr ? std::make_optional(titleColor->toStdString()) : std::nullopt,
+        messageColor != nullptr ? std::make_optional(messageColor->toStdString()) : std::nullopt,
+        static_cast<bool>(useOverlay)
       );
     }
 
@@ -68,7 +80,11 @@ namespace margelo::nitro::nitrotoast {
         JPresentationToastType::fromCpp(value.presentation),
         value.duration,
         value.title.has_value() ? jni::make_jstring(value.title.value()) : nullptr,
-        JPositionToastType::fromCpp(value.position)
+        JPositionToastType::fromCpp(value.position),
+        value.backgroundColor.has_value() ? jni::make_jstring(value.backgroundColor.value()) : nullptr,
+        value.titleColor.has_value() ? jni::make_jstring(value.titleColor.value()) : nullptr,
+        value.messageColor.has_value() ? jni::make_jstring(value.messageColor.value()) : nullptr,
+        value.useOverlay
       );
     }
   };

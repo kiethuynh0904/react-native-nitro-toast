@@ -14,6 +14,10 @@ export type NitroToastConfig = {
   duration: number // in milliseconds
   title?: string
   position: PositionToastType
+  backgroundColor?: string
+  titleColor?: string
+  messageColor?: string
+  useOverlay: boolean
 }
 export interface NitroToast
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {

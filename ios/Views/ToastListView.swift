@@ -39,15 +39,16 @@ private struct ToastView: View {
     HStack(spacing: 12) {
       Image(systemName: toast.iconName)
         .font(.system(size: 20))
-        .foregroundColor(toast.backgroundColor)
+        .foregroundColor(toast.iconColor)
 
       VStack(alignment: .leading) {
         Text(toast.title)
           .font(.footnote)
           .fontWeight(.semibold)
+          .foregroundStyle(toast.titleColor)
         Text(toast.message)
           .font(.caption)
-          .foregroundStyle(.secondary)
+          .foregroundStyle(toast.messageColor)
       }
       Spacer(minLength: 0)
     }
@@ -59,7 +60,7 @@ private struct ToastView: View {
         RoundedRectangle(cornerRadius: 12, style: .continuous)
           .fill(Color(.systemBackground))  // solid base background
         RoundedRectangle(cornerRadius: 12, style: .continuous)
-          .fill(toast.backgroundColor.opacity(0.08))
+          .fill(toast.overlayColor)
         RoundedRectangle(cornerRadius: 12, style: .continuous)
           .stroke(toast.backgroundColor, lineWidth: 0.5)
       }

@@ -43,10 +43,14 @@ namespace margelo::nitro::nitrotoast {
     double duration     SWIFT_PRIVATE;
     std::optional<std::string> title     SWIFT_PRIVATE;
     PositionToastType position     SWIFT_PRIVATE;
+    std::optional<std::string> backgroundColor     SWIFT_PRIVATE;
+    std::optional<std::string> titleColor     SWIFT_PRIVATE;
+    std::optional<std::string> messageColor     SWIFT_PRIVATE;
+    bool useOverlay     SWIFT_PRIVATE;
 
   public:
     NitroToastConfig() = default;
-    explicit NitroToastConfig(AlertToastType type, PresentationToastType presentation, double duration, std::optional<std::string> title, PositionToastType position): type(type), presentation(presentation), duration(duration), title(title), position(position) {}
+    explicit NitroToastConfig(AlertToastType type, PresentationToastType presentation, double duration, std::optional<std::string> title, PositionToastType position, std::optional<std::string> backgroundColor, std::optional<std::string> titleColor, std::optional<std::string> messageColor, bool useOverlay): type(type), presentation(presentation), duration(duration), title(title), position(position), backgroundColor(backgroundColor), titleColor(titleColor), messageColor(messageColor), useOverlay(useOverlay) {}
   };
 
 } // namespace margelo::nitro::nitrotoast
@@ -65,7 +69,11 @@ namespace margelo::nitro {
         JSIConverter<PresentationToastType>::fromJSI(runtime, obj.getProperty(runtime, "presentation")),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "duration")),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "title")),
-        JSIConverter<PositionToastType>::fromJSI(runtime, obj.getProperty(runtime, "position"))
+        JSIConverter<PositionToastType>::fromJSI(runtime, obj.getProperty(runtime, "position")),
+        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "backgroundColor")),
+        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "titleColor")),
+        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "messageColor")),
+        JSIConverter<bool>::fromJSI(runtime, obj.getProperty(runtime, "useOverlay"))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const NitroToastConfig& arg) {
@@ -75,6 +83,10 @@ namespace margelo::nitro {
       obj.setProperty(runtime, "duration", JSIConverter<double>::toJSI(runtime, arg.duration));
       obj.setProperty(runtime, "title", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.title));
       obj.setProperty(runtime, "position", JSIConverter<PositionToastType>::toJSI(runtime, arg.position));
+      obj.setProperty(runtime, "backgroundColor", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.backgroundColor));
+      obj.setProperty(runtime, "titleColor", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.titleColor));
+      obj.setProperty(runtime, "messageColor", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.messageColor));
+      obj.setProperty(runtime, "useOverlay", JSIConverter<bool>::toJSI(runtime, arg.useOverlay));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -87,6 +99,10 @@ namespace margelo::nitro {
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "duration"))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "title"))) return false;
       if (!JSIConverter<PositionToastType>::canConvert(runtime, obj.getProperty(runtime, "position"))) return false;
+      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "backgroundColor"))) return false;
+      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "titleColor"))) return false;
+      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "messageColor"))) return false;
+      if (!JSIConverter<bool>::canConvert(runtime, obj.getProperty(runtime, "useOverlay"))) return false;
       return true;
     }
   };

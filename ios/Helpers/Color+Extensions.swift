@@ -17,4 +17,35 @@ extension Color {
   static var toastWarning = toastColor(named: "ToastWarning")
   static var toastInfo = toastColor(named: "ToastInfo")
   static var toastDefault = toastColor(named: "ToastDefault")
+
+  init(_ hex: String) {
+    var hexString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+    if hexString.hasPrefix("#") {
+      hexString.removeFirst()
+    }
+
+    var rgbValue: UInt64 = 0
+    guard Scanner(string: hexString).scanHexInt64(&rgbValue) else {
+      self = .clear  // or .gray as fallback
+      return
+    }
+
+    switch hexString.count {
+    case 6:
+      self.init(
+        red: Double((rgbValue >> 16) & 0xFF) / 255,
+        green: Double((rgbValue >> 8) & 0xFF) / 255,
+        blue: Double(rgbValue & 0xFF) / 255
+      )
+    case 8:
+      self.init(
+        red: Double((rgbValue >> 16) & 0xFF) / 255,
+        green: Double((rgbValue >> 8) & 0xFF) / 255,
+        blue: Double(rgbValue & 0xFF) / 255,
+        opacity: Double((rgbValue >> 24) & 0xFF) / 255
+      )
+    default:
+      self = .clear
+    }
+  }
 }

@@ -14,6 +14,7 @@ export const DEFAULT_TOAST_CONFIG: NitroToastConfig = {
   presentation: 'alert',
   duration: 3000,
   position: 'bottom',
+  useOverlay: true,
 }
 
 export const showToast = (

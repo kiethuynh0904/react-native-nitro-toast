@@ -45,7 +45,7 @@ fun ToastView(toast: Toast) {
                     contentDescription = null,
                     modifier = Modifier.size(20.dp),
                     alignment = Alignment.Center,
-                    colorFilter = ColorFilter.tint(toast.backgroundColor)
+                    colorFilter = ColorFilter.tint(toast.iconColor)
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -56,14 +56,14 @@ fun ToastView(toast: Toast) {
                         style = TextStyle(
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color.Black
+                            color = toast.titleColor
                         )
                     )
                     BasicText(
                         text = toast.message,
                         style = TextStyle(
                             fontSize = 13.sp,
-                            color = Color.Gray
+                            color = toast.messageColor
                         )
                     )
                 }
