@@ -27,7 +27,7 @@ struct ToastListView: View {
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .padding(.vertical, 15)
+    .padding(.bottom, 15)
     .allowsHitTesting(false)
   }
 }
@@ -64,7 +64,7 @@ private struct ToastView: View {
         RoundedRectangle(cornerRadius: 12, style: .continuous)
           .stroke(toast.backgroundColor, lineWidth: 0.5)
       }
-      .shadow(color: .black.opacity(0.1), radius: 3, x: 0, y: 2)
+      .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 2)
     }
     .padding(.horizontal, 15)
   }
