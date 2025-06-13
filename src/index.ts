@@ -9,7 +9,7 @@ import {
 const NitroToastModule =
   NitroModules.createHybridObject<NitroToast>('NitroToast')
 
-export const DEFAULT_TOAST_CONFIG: NitroToastConfig = {
+export const defaultToastConfig: NitroToastConfig = {
   type: 'default',
   presentation: 'alert',
   duration: 3000,
@@ -22,7 +22,7 @@ export const showToast = (
   config?: Partial<NitroToastConfig>
 ) => {
   const _config: NitroToastConfig = {
-    ...DEFAULT_TOAST_CONFIG,
+    ...defaultToastConfig,
     ...config,
   }
   NitroToastModule.show(message, _config)

@@ -1,7 +1,6 @@
 {
-  "include": ["./**/*"],
-  "compilerOptions": {
-    "outDir": "./lib",
-  },
-  "extends": "../tsconfig"
+  // "include": ["./**/*"],
+  "extends": "../tsconfig.json",
+  "include": ["./**/*.ts", "./**/*.tsx"],
+  "exclude": ["node_modules"]
 }
