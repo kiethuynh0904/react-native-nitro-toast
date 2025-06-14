@@ -24,10 +24,9 @@ fun ToastView(toast: Toast) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp)
-                .shadow(3.dp, RoundedCornerShape(12.dp))
+                .shadow(1.5.dp, RoundedCornerShape(12.dp))
                 .background(Color.White, RoundedCornerShape(12.dp))
                 .border(0.5.dp, toast.backgroundColor, RoundedCornerShape(12.dp))
-
         ) {
             // Overlay semi-transparent layer behind content padding
             Box(

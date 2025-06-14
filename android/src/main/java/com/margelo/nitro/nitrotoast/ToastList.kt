@@ -1,6 +1,7 @@
 package com.margelo.nitro.nitrotoast
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
@@ -9,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.graphics.TransformOrigin
 
 @Composable
 fun ToastList(state: ToastListState) {
@@ -21,13 +23,28 @@ fun ToastList(state: ToastListState) {
         else -> Alignment.BottomCenter
     }
 
+    val transformOrigin = when (toasts.firstOrNull()?.config?.position) {
+        PositionToastType.TOP -> TransformOrigin(0.5f, 0f)
+        else -> TransformOrigin(0.5f, 1f)
+    }
+
     val exitAnimation = when (toasts.firstOrNull()?.config?.position) {
-        PositionToastType.TOP -> slideOutVertically(targetOffsetY = { -it }) + fadeOut()
-        else -> slideOutVertically(targetOffsetY = { it }) + fadeOut()
+        PositionToastType.TOP -> slideOutVertically(
+            targetOffsetY = { -it }) + shrinkVertically() + fadeOut()
+
+        else -> slideOutVertically(targetOffsetY = { it }) + shrinkVertically() + fadeOut()
     }
     val enterAnimation = when (toasts.firstOrNull()?.config?.position) {
-        PositionToastType.TOP -> slideInVertically(initialOffsetY = { -it }) + fadeIn()
-        else -> slideInVertically(initialOffsetY = { it }) + fadeIn()
+        PositionToastType.TOP -> slideInVertically(
+            initialOffsetY = { -it }) + expandVertically(expandFrom = Alignment.Top) + scaleIn(
+            transformOrigin = transformOrigin
+        ) + fadeIn(initialAlpha = 0.3f)
+
+        else -> slideInVertically(
+            initialOffsetY = { it }
+        ) + expandVertically() + scaleIn(
+            transformOrigin = transformOrigin
+        ) + fadeIn(initialAlpha = 0.3f)
     }
 
 
