@@ -33,6 +33,7 @@
   ],
   "exclude": [
     "example",
-    "lib"
+    "lib",
+    "docs",
   ]
 }
