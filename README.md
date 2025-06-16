@@ -4,6 +4,14 @@ A lightweight, native-powered toast notification library for React Native, built
 
 ---
 
+## 📸 Preview
+### 🔔 Alert Style (Default)
+![Toast Demo](./resources/demo.gif)
+
+> 🔥 Fully native, beautifully animated toasts on iOS and Android.
+
+---
+
 ## ✨ Features
 
 - ✅ Fully native: SwiftUI (iOS) & Jetpack Compose (Android)
@@ -14,7 +22,7 @@ A lightweight, native-powered toast notification library for React Native, built
 - ✅ Small footprint — optimized for React Native libraries
 - ✅ Safe area-aware
 - ✅ Optional background opacity control
-- ⚡ Built using TurboModules (no bridge)
+- ⚡ Built using NitroModules (no bridge)
 
 ---
 
@@ -53,7 +61,7 @@ showToast('Upload completed!', {
 | `titleColor`     | `string` (HEX)               | Varies by type      | Custom title color (optional)              |
 | `message`        | `string`                     | (required)  | Toast message                              |
 | `messageColor`   | `string` (HEX)               | Varies by type      | Custom message color (optional)            |
-| `duration`       | `number` (MS)                | `3000`      | Auto-dismiss duration                      |
+| `duration`       | `number` (MS)                | `4000`      | Auto-dismiss duration                      |
 | `position`       | `'top'` \| `'bottom'`        | `'bottom'`  | Toast position                             |
 | `presentation`   | `'stacked'` \| `'alert'`     | `'alert'`   | Display style                              |
 | `backgroundColor`| `string` (HEX)               | Varies by type | Custom background                       |                      |
@@ -83,10 +91,10 @@ Built with:
 
 ## 🧩 Roadmap
 
-- [ ] Custom templates
-- [ ] Accessibility improvements
+- [ ] Support new Glass effect for iOS
 - [ ] Add progress indicator support
-- [ ] RTL support
+- [ ] Add customizable icon support
+- [ ] Auto-dismiss pause on tap
 
 ---
 
