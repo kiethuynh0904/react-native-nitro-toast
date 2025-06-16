@@ -1,6 +1,8 @@
 # 🚀 react-native-nitro-toast
 
-A lightweight, native-powered toast notification library for React Native, built with SwiftUI (iOS) and Jetpack Compose (Android). Fast, flexible, and customizable.
+A lightweight, native-powered toast notification library for React Native, built with SwiftUI (iOS) and Jetpack Compose (Android). Designed for performance, native feel, and simplicity.
+
+> ❗ If you need fully customizable layouts using JSX (e.g., image, input, custom buttons), consider using a JavaScript-based solution like [`react-native-toast-message`](https://github.com/calintamas/react-native-toast-message) instead.
 
 ---
 
@@ -8,15 +10,15 @@ A lightweight, native-powered toast notification library for React Native, built
 ### 🔔 Alert Style (Default)
 ![Toast Demo](./resources/demo.gif)
 
-> 🔥 Fully native, beautifully animated toasts on iOS and Android.
+> 🔥 Seamless native toasts with smooth animations on both iOS and Android.
 
 ---
 
 ## ✨ Features
 
 - ✅ Fully native: SwiftUI (iOS) & Jetpack Compose (Android)
-- ✅ Multiple styles: `stacked`, `alert`, and `custom`
-- ✅ Supports `success`, `error`, `info`, `warning`, or custom types
+- ✅ Multiple styles: `stacked`, `alert`
+- ✅ Supports `success`, `error`, `info`, `warning` and `default` types
 - ✅ Auto-dismiss with configurable duration
 - ✅ Show at `top` or `bottom`
 - ✅ Small footprint — optimized for React Native libraries
@@ -66,15 +68,6 @@ showToast('Upload completed!', {
 | `presentation`   | `'stacked'` \| `'alert'`     | `'alert'`   | Display style                              |
 | `backgroundColor`| `string` (HEX)               | Varies by type | Custom background                       |                      |
 | `useOverlay`     | `boolean`                    | `true`      | Apply semi-transparent overlay             |
-
----
-
-## 📱 Platform Support
-
-| Platform | Status     |
-|----------|------------|
-| iOS      | ✅ SwiftUI |
-| Android  | ✅ Compose |
 
 ---
 
