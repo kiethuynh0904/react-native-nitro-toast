@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "clean": "rm -rf android/build node_modules/**/android/build lib",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
