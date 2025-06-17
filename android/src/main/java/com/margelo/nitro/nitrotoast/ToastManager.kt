@@ -11,73 +11,69 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class ToastListState {
-    private val _toasts = MutableStateFlow<List<Toast>>(emptyList())
+    private val _toasts = MutableStateFlow(emptyList<Toast>())
     val toasts = _toasts.asStateFlow()
 
-    fun addToast(toast: Toast) {
+    fun add(toast: Toast) {
         _toasts.value += toast
     }
 
-    fun updateToastVisibility(toastId: String, isVisible: Boolean) {
+    fun updateVisibility(toastId: String, isVisible: Boolean) {
         _toasts.value = _toasts.value.map {
             if (it.id == toastId) it.copy(isVisible = isVisible) else it
         }
     }
 
-    suspend fun removeToast(toastId: String) {
-        // Set isVisible = false (exit animation trigger)
-        _toasts.value = _toasts.value.map {
-            if (it.id == toastId) it.copy(isVisible = false) else it
-        }
-        delay(300) // wait for animation to finish
-        // Actually remove from list
+    suspend fun removeWithAnimation(toastId: String) {
+        updateVisibility(toastId, false)
+        delay(300)
         _toasts.value = _toasts.value.filterNot { it.id == toastId }
     }
-
 }
 
 object ToastManager {
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var toastContainer: ComposeView? = null
-    private val toastListState = ToastListState()
+    private val state = ToastListState()
 
     @SuppressLint("SuspiciousIndentation")
     fun show(context: Context?, message: String, config: NitroToastConfig) {
         if (context !is Activity) return
 
         val toast = Toast(message = message, config = config, isVisible = false)
-        toastListState.addToast(toast)
+        state.add(toast)
 
         context.runOnUiThread {
-            if (toastContainer == null) {
-                toastContainer = ComposeView(context).apply {
-                    setContent {
-                        ToastList(state = toastListState)
-                    }
-                    layoutParams = ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-                }
-                (context.window?.decorView as? ViewGroup)?.addView(toastContainer)
-            }
+            ensureToastContainer(context)
+            scope.launch { handleToastLifecycle(context, toast, config.duration) }
+        }
+    }
 
-            Log.d("ToastManager", "Showing toast: ${toastListState.toasts.value}")
-            scope.launch {
-                // Delay briefly to allow AnimatedVisibility to detect false -> true transition
-                delay(16)
-                toastListState.updateToastVisibility(toast.id, true)
+    private fun ensureToastContainer(context: Activity) {
+        if (toastContainer != null) return
 
-                delay(config.duration.toLong() - 300)
-                toastListState.removeToast(toast.id)
+        toastContainer = ComposeView(context).apply {
+            setContent { ToastList(state = state) }
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        }
 
-                context.runOnUiThread {
-                    Log.d("ToastManager", "Removing toast: ${toast.id}")
-                    if (toastListState.toasts.value.isEmpty()) {
-                        (context.window?.decorView as? ViewGroup)?.removeView(toastContainer)
-                        toastContainer = null
-                    }
-                }
+        (context.window?.decorView as? ViewGroup)?.addView(toastContainer)
+    }
+
+    private suspend fun handleToastLifecycle(context: Activity, toast: Toast, duration: Double) {
+        delay(16)
+        state.updateVisibility(toast.id, true)
+        delay(duration.toLong() - 300)
+        state.removeWithAnimation(toast.id)
+
+        context.runOnUiThread {
+            Log.d("ToastManager", "Removing toast: ${toast.id}")
+            if (state.toasts.value.isEmpty()) {
+                (context.window?.decorView as? ViewGroup)?.removeView(toastContainer)
+                toastContainer = null
             }
         }
     }
