@@ -4,6 +4,14 @@ A lightweight, native-powered toast notification library for React Native, built
 
 > ⚠️ **Note**: If you need fully customizable layouts using JSX (e.g., image, input, custom buttons), consider using a JavaScript-based solution like [`react-native-toast-message`](https://github.com/calintamas/react-native-toast-message) instead.
 
+## 📋 Requirements
+
+This library is built with [Nitro Modules](https://nitro.margelo.com/), please check the [minimum requirements](https://nitro.margelo.com/docs/minimum-requirements) first.
+
+### System Requirements
+- React Native >= 0.75.0
+- iOS: Xcode >= 16.0
+
 ## 📸 Preview
 
 ### 🔔 Alert Style (Default)
@@ -38,13 +46,14 @@ A lightweight, native-powered toast notification library for React Native, built
 
 ## 📦 Installation
 
-```bash
-# Using npm
-npm install react-native-nitro-toast
+1. Install the package:
+```ssh
+yarn add react-native-nitro-toast react-native-nitro-modules
+```
 
-# Using yarn
-yarn add react-native-nitro-toast
-
+2. Install iOS dependencies:
+```ssh
+cd ios && pod install && cd ..
 ```
 
 ## 🔧 Quick Start
