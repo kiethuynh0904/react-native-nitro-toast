@@ -8,12 +8,12 @@ A lightweight, native-powered toast notification library for React Native, built
 
 ### 🔔 Alert Style (Default)
 
-![iOS Toast Demo](./resources/demo.gif)
+![iOS Toast Demo](./docs/demo.gif)
 
 <details>
 <summary>🟢 Android</summary>
 
-![Android Toast Demo](./resources/demo.gif)
+![Android Toast Demo](./docs/demo-android.gif)
 </details>
 
 > 🔥 Seamless native toasts with smooth animations on both iOS and Android.
