@@ -42,7 +42,9 @@
   },
   "keywords": [
     "react-native",
-    "nitro"
+    "nitro",
+    "toast",
+    "alert"
   ],
   "repository": {
     "type": "git",
