@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-toast",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "react-native-nitro-toast",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
