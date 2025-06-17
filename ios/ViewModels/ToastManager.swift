@@ -23,6 +23,8 @@ class ToastManager: ObservableObject {
       self.toasts.append(toast)
     }
 
+    guard config.duration > 0 else { return }
+
     Task {
       /// Auto dismiss
       var remaining = config.duration / 1000

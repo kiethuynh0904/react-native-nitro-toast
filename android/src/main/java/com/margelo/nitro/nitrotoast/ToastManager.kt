@@ -66,8 +66,11 @@ object ToastManager {
     private suspend fun handleToastLifecycle(context: Activity, toast: Toast, duration: Double) {
         delay(16)
         state.updateVisibility(toast.id, true)
-        delay(duration.toLong() - 300)
-        state.removeWithAnimation(toast.id)
+
+        if(duration > 0) {
+            delay(duration.toLong() - 300)
+            state.removeWithAnimation(toast.id)
+        }
 
         context.runOnUiThread {
             Log.d("ToastManager", "Removing toast: ${toast.id}")

@@ -11,6 +11,7 @@ const ToastStacked = () => {
           showToast('Hello, world!', {
             type: 'default',
             presentation: 'stacked',
+            duration:0,
           });
         }}
       />
