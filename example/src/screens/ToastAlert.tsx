@@ -13,6 +13,7 @@ const ToastAlert = () => {
             title: 'Information',
             type: 'info',
             position: 'top',
+            haptics:true,
           })
         }
       />
@@ -24,6 +25,7 @@ const ToastAlert = () => {
             title: 'Success',
             type: 'success',
             position: 'top',
+            haptics:true,
           })
         }
       />
@@ -35,6 +37,7 @@ const ToastAlert = () => {
             title: 'Warning',
             type: 'warning',
             position: 'top',
+            haptics:true,
           })
         }
       />
@@ -46,6 +49,7 @@ const ToastAlert = () => {
             title: 'Something went wrong',
             type: 'error',
             position: 'top',
+            haptics:true,
           })
         }
       />
@@ -60,6 +64,7 @@ const ToastAlert = () => {
             backgroundColor: '#4169E1',
             titleColor: '#FFFFFF',
             messageColor: '#FFFFFF',
+            haptics:true,
           })
         }
       />

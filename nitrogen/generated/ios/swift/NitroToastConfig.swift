@@ -18,7 +18,7 @@ public extension NitroToastConfig {
   /**
    * Create a new instance of `NitroToastConfig`.
    */
-  init(type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Bool) {
+  init(type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Bool, haptics: Bool?) {
     self.init(type, presentation, duration, { () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = title {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
@@ -43,7 +43,13 @@ public extension NitroToastConfig {
       } else {
         return .init()
       }
-    }(), useOverlay)
+    }(), useOverlay, { () -> bridge.std__optional_bool_ in
+      if let __unwrappedValue = haptics {
+        return bridge.create_std__optional_bool_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }())
   }
 
   var type: AlertToastType {
@@ -190,6 +196,23 @@ public extension NitroToastConfig {
     @inline(__always)
     set {
       self.__useOverlay = newValue
+    }
+  }
+  
+  var haptics: Bool? {
+    @inline(__always)
+    get {
+      return self.__haptics.value
+    }
+    @inline(__always)
+    set {
+      self.__haptics = { () -> bridge.std__optional_bool_ in
+        if let __unwrappedValue = newValue {
+          return bridge.create_std__optional_bool_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
     }
   }
 }
