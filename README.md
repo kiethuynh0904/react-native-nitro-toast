@@ -96,7 +96,7 @@ showToast('Upload completed!', {
 | `presentation`   | `'stacked'` \| `'alert'`     | `'alert'`   | Display style                              |
 | `backgroundColor`| `string` (HEX)               | Varies by type | Custom background                       |
 | `useOverlay`     | `boolean`                    | `true`      | Apply semi-transparent overlay             |
-| `haptics`        | `boolean`                    | `false`     | Enable haptic feedback (iOS only)          |
+| `haptics`        | `boolean`                    | `false`     | Enable haptic feedback           |
 
 ---
 
