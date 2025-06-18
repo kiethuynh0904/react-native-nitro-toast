@@ -36,6 +36,7 @@ This library is built with [Nitro Modules](https://nitro.margelo.com/), please c
   - Position at `top` or `bottom`
   - Background opacity control
   - Custom colors for title and message
+  - Haptic feedback support 
 - ✅ **Performance**:
   - Small footprint — optimized for React Native libraries
   - Built using NitroModules (no bridge)
@@ -71,7 +72,8 @@ showToast('Upload completed!', {
   duration: 3000,
   title: 'Success',
   backgroundColor: '#4CAF50',
-  messageColor: '#FFFFFF'
+  messageColor: '#FFFFFF',
+  haptics: true
 });
 ```
 
@@ -92,8 +94,9 @@ showToast('Upload completed!', {
 | `duration`       | `number` (MS)                | `4000`      | Auto-dismiss duration                      |
 | `position`       | `'top'` \| `'bottom'`        | `'bottom'`  | Toast position                             |
 | `presentation`   | `'stacked'` \| `'alert'`     | `'alert'`   | Display style                              |
-| `backgroundColor`| `string` (HEX)               | Varies by type | Custom background                       |                      |
+| `backgroundColor`| `string` (HEX)               | Varies by type | Custom background                       |
 | `useOverlay`     | `boolean`                    | `true`      | Apply semi-transparent overlay             |
+| `haptics`        | `boolean`                    | `false`     | Enable haptic feedback (iOS only)          |
 
 ---
 
@@ -107,12 +110,13 @@ Built with modern technologies:
 - Kotlin + Swift
 
 ## 🧩 Roadmap
-
+- [x] Haptic feedback support
+- [ ] Add gesture support for dismissal
 - [ ] Support new Glass effect for iOS
 - [ ] Add progress indicator support
 - [ ] Add customizable icon support
 - [ ] Auto-dismiss pause on tap
-- [ ] Add gesture support for dismissal
+
 
 ## 🤝 Contributing
 
