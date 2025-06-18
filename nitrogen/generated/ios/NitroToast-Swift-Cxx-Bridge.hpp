@@ -38,6 +38,15 @@ namespace margelo::nitro::nitrotoast::bridge::swift {
     return std::optional<std::string>(value);
   }
   
+  // pragma MARK: std::optional<bool>
+  /**
+   * Specialized version of `std::optional<bool>`.
+   */
+  using std__optional_bool_ = std::optional<bool>;
+  inline std::optional<bool> create_std__optional_bool_(const bool& value) {
+    return std::optional<bool>(value);
+  }
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastSpec>`.

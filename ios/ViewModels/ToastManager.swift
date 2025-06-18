@@ -19,6 +19,9 @@ class ToastManager: ObservableObject {
 
   func show(message: String, config: NitroToastConfig) {
     let toast = Toast(message: message, config: config)
+    if config.haptics == true {
+      triggerHaptics(for: config.type)
+    }
     withAnimation(.bouncy) {
       self.toasts.append(toast)
     }
@@ -49,6 +52,21 @@ class ToastManager: ObservableObject {
     if toasts.isEmpty {
       onEmpty?()
       isExpanded = false
+    }
+  }
+
+  func triggerHaptics(for type: AlertToastType?) {
+    let generator = UINotificationFeedbackGenerator()
+    switch type {
+    case .success:
+      generator.notificationOccurred(.success)
+    case .error:
+      generator.notificationOccurred(.error)
+    case .warning:
+      generator.notificationOccurred(.warning)
+    default:
+      let light = UIImpactFeedbackGenerator(style: .light)
+      light.impactOccurred()
     }
   }
 }

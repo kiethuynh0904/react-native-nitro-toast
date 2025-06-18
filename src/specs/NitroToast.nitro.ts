@@ -18,6 +18,7 @@ export type NitroToastConfig = {
   titleColor?: string
   messageColor?: string
   useOverlay: boolean
+  haptics?: boolean
 }
 export interface NitroToast
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
