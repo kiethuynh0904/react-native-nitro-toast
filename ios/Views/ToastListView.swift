@@ -13,22 +13,67 @@ struct ToastListView: View {
   var body: some View {
     VStack {
       if manager.toasts.first?.config.position == .top {
-        ForEach($manager.toasts) { $toast in
-          ToastView(toast: toast)
-            .transition(.move(edge: .top).combined(with: .opacity))
+        ForEach(manager.toasts) { toast in
+          ToastRow(
+            toast: toast, position: .top,
+            onRemove: {
+              manager.removeToast(withId: toast.id)
+            })
         }
         Spacer()
       } else {
         Spacer()
-        ForEach($manager.toasts) { $toast in
-          ToastView(toast: toast)
-            .transition(.move(edge: .bottom).combined(with: .opacity))
+        ForEach(manager.toasts) { toast in
+          ToastRow(
+            toast: toast, position: .bottom,
+            onRemove: {
+              manager.removeToast(withId: toast.id)
+            })
         }
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.bottom, 15)
-    .allowsHitTesting(false)
+  }
+}
+
+private struct ToastRow: View {
+  @ObservedObject var toast: Toast
+  let position: PositionToastType
+  let onRemove: () -> Void
+
+  @State private var offsetY: CGFloat = 0
+  @GestureState private var isHolding: Bool = false
+
+  var body: some View {
+    ToastView(toast: toast)
+      .offset(y: offsetY)
+      .gesture(
+        DragGesture(minimumDistance: 0)
+          .onChanged { value in
+            toast.isPaused = true
+            let translation = value.translation.height
+            offsetY = position == .top ? min(translation, 0) : max(translation, 0)
+          }
+          .onEnded { value in
+            toast.isPaused = false
+            let velocity = value.velocity.height
+            let translation = value.translation.height
+            let threshold: CGFloat = 30
+
+            let shouldDismiss =
+              position == .top
+              ? translation < -threshold || velocity < -500
+              : translation > threshold || velocity > 500
+
+            if shouldDismiss {
+              onRemove()
+            } else {
+              offsetY = 0
+            }
+          }
+      )
+      .transition(.move(edge: position == .top ? .top : .bottom).combined(with: .opacity))
   }
 }
 

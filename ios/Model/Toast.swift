@@ -8,14 +8,19 @@
 import Foundation
 import SwiftUI
 
-struct Toast: Identifiable, Equatable {
+final class Toast: Identifiable, ObservableObject {
   let id = UUID().uuidString
   let message: String
   let config: NitroToastConfig
 
   /// View Properties
-  var offsetX: CGFloat = 0
-  var isDeleting: Bool = false
+  @Published var isPaused: Bool = false
+  @Published var isDeleting: Bool = false
+
+  init(message: String, config: NitroToastConfig) {
+    self.message = message
+    self.config = config
+  }
 }
 
 extension NitroToastConfig: Equatable {

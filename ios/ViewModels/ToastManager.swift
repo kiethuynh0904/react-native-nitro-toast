@@ -13,6 +13,8 @@ class ToastManager: ObservableObject {
   static let shared = ToastManager()
 
   @Published var toasts: [Toast] = []
+
+  ///Toast stack props
   @Published var isExpanded: Bool = false
 
   var onEmpty: (() -> Void)?
@@ -35,7 +37,7 @@ class ToastManager: ObservableObject {
 
       while remaining > 0 {
         try? await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000))
-        if !self.isExpanded {
+        if !self.isExpanded && !toast.isPaused {
           remaining -= interval
         }
       }
@@ -69,15 +71,12 @@ class ToastManager: ObservableObject {
       light.impactOccurred()
     }
   }
-}
 
-extension Binding<[Toast]> {
-  func delete(_ id: String) {
-    if let toast = first(where: { $0.id == id }) {
-      toast.wrappedValue.isDeleting = true
-    }
+  func removeToast(withId id: String) {
+    guard let index = toasts.firstIndex(where: { $0.id == id }) else { return }
+    toasts[index].isDeleting = true
     withAnimation(.bouncy) {
-      self.wrappedValue.removeAll(where: { $0.id == id })
+      toasts.removeAll(where: { $0.id == id })
     }
   }
 }
