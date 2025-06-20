@@ -47,6 +47,9 @@ class ToastManager: ObservableObject {
   }
 
   func dismiss(_ toast: Toast) {
+    guard let index = toasts.firstIndex(where: { $0.id == toast.id }) else { return }
+    toasts[index].isDeleting = true
+      
     withAnimation(.bouncy) {
       toasts.removeAll { $0.id == toast.id }
     }
@@ -69,14 +72,6 @@ class ToastManager: ObservableObject {
     default:
       let light = UIImpactFeedbackGenerator(style: .light)
       light.impactOccurred()
-    }
-  }
-
-  func removeToast(withId id: String) {
-    guard let index = toasts.firstIndex(where: { $0.id == id }) else { return }
-    toasts[index].isDeleting = true
-    withAnimation(.bouncy) {
-      toasts.removeAll(where: { $0.id == id })
     }
   }
 }

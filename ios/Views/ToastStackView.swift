@@ -1,5 +1,5 @@
 //
-//  ToastHostView.swift
+//  ToastStackView.swift
 //  NitroToast
 //
 //  Created by kiet.huynh on 6/3/25.
@@ -45,7 +45,7 @@ private struct ToastsView: View {
             (manager.toasts.count - 1)
             - (manager.toasts.firstIndex(where: { $0.id == toast.id }) ?? 0)
           ToastRow(toast: toast, index: index, isExpanded: manager.isExpanded) {
-            manager.removeToast(withId: toast.id)
+              manager.dismiss(toast)
           }
         }
       }

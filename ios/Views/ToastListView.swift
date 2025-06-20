@@ -17,7 +17,7 @@ struct ToastListView: View {
           ToastRow(
             toast: toast, position: .top,
             onRemove: {
-              manager.removeToast(withId: toast.id)
+                manager.dismiss(toast)
             })
         }
         Spacer()
@@ -27,7 +27,7 @@ struct ToastListView: View {
           ToastRow(
             toast: toast, position: .bottom,
             onRemove: {
-              manager.removeToast(withId: toast.id)
+                manager.dismiss(toast)
             })
         }
       }
@@ -43,7 +43,6 @@ private struct ToastRow: View {
   let onRemove: () -> Void
 
   @State private var offsetY: CGFloat = 0
-  @GestureState private var isHolding: Bool = false
 
   var body: some View {
     ToastView(toast: toast)
