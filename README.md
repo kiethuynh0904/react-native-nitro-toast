@@ -107,11 +107,11 @@ Built with modern technologies:
 
 ## 🧩 Roadmap
 - [x] Haptic feedback support
-- [ ] Add gesture support for dismissal
+- [x] Add gesture support for dismissal
+- [x] Auto-dismiss pause on tap
 - [ ] Support new Glass effect for iOS
 - [ ] Add progress indicator support
 - [ ] Add customizable icon support
-- [ ] Auto-dismiss pause on tap
 
 
 ## 🤝 Contributing
