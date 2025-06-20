@@ -36,7 +36,11 @@ This library is built with [Nitro Modules](https://nitro.margelo.com/), please c
   - Position at `top` or `bottom`
   - Background opacity control
   - Custom colors for title and message
-  - Haptic feedback support 
+  - Haptic feedback support  
+    - **Android:** If you enable haptics, you must add the `VIBRATE` permission to your `AndroidManifest.xml`:
+      ```xml
+      <uses-permission android:name="android.permission.VIBRATE" />
+      ```
 - ✅ **Performance**:
   - Small footprint — optimized for React Native libraries
   - Built using NitroModules (no bridge)
@@ -47,15 +51,7 @@ This library is built with [Nitro Modules](https://nitro.margelo.com/), please c
 
 ## 📦 Installation
 
-1. Install the package:
-```ssh
-yarn add react-native-nitro-toast react-native-nitro-modules
-```
-
-2. Install iOS dependencies:
-```ssh
-cd ios && pod install && cd ..
-```
+See [INSTALLATION](./docs/INSTALLATION.md) for full setup instructions.
 
 ## 🔧 Quick Start
 
@@ -96,7 +92,7 @@ showToast('Upload completed!', {
 | `presentation`   | `'stacked'` \| `'alert'`     | `'alert'`   | Display style                              |
 | `backgroundColor`| `string` (HEX)               | Varies by type | Custom background                       |
 | `useOverlay`     | `boolean`                    | `true`      | Apply semi-transparent overlay             |
-| `haptics`        | `boolean`                    | `false`     | Enable haptic feedback           |
+| `haptics`        | `boolean`                    | `false`     | Enable haptic feedback (iOS & Android, Android requires VIBRATE permission) |
 
 ---
 

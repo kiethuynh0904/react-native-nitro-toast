@@ -1,5 +1,5 @@
 //
-//  ToastHostView.swift
+//  ToastStackView.swift
 //  NitroToast
 //
 //  Created by kiet.huynh on 6/3/25.
@@ -25,10 +25,7 @@ struct ToastStackView: View {
 }
 
 private struct ToastsView: View {
-  //  @Binding var toasts: [Toast]
   @ObservedObject var manager = ToastManager.shared
-
-  //  @State private var isExpanded: Bool = false
 
   var body: some View {
     ZStack(alignment: .bottom) {
@@ -43,52 +40,12 @@ private struct ToastsView: View {
       let layout =
         manager.isExpanded ? AnyLayout(VStackLayout(spacing: 10)) : AnyLayout(ZStackLayout())
       layout {
-        ForEach($manager.toasts) { $toast in
+        ForEach(manager.toasts) { toast in
           let index =
             (manager.toasts.count - 1)
             - (manager.toasts.firstIndex(where: { $0.id == toast.id }) ?? 0)
-
-          if #available(iOS 17.0, *) {
-            ToastView(
-              message: toast.message, type: toast.config.type,
-              onRemove: {
-                $manager.toasts.delete(toast.id)
-              }
-            )
-            .offset(x: toast.offsetX)
-            .gesture(
-              DragGesture()
-                .onChanged { value in
-                  let xOffset = value.translation.width < 0 ? value.translation.width : 0
-                  toast.offsetX = xOffset
-                }
-                .onEnded { value in
-                  let xOffset = value.translation.width + (value.velocity.width / 2)
-
-                  if -xOffset > 200 {
-                    ///Remove Toast
-                    $manager.toasts.delete(toast.id)
-                  } else {
-                    /// Reset Toast to it's initial Position
-                    toast.offsetX = 0
-                  }
-                }
-            )
-            .visualEffect { [isExpanded = manager.isExpanded] content, proxy in
-              content
-                .scaleEffect(isExpanded ? 1 : scale(index), anchor: .bottom)
-                .offset(y: isExpanded ? 0 : offsetY(index))
-            }
-            .zIndex(toast.isDeleting ? 1000 : 0)
-            .frame(maxWidth: .infinity)
-            .transition(
-              .asymmetric(
-                insertion: .offset(y: 100),
-                removal: .move(edge: .leading)
-              )
-            )
-          } else {
-            // Fallback on earlier versions
+          ToastRow(toast: toast, index: index, isExpanded: manager.isExpanded) {
+              manager.dismiss(toast)
           }
         }
       }
@@ -102,6 +59,51 @@ private struct ToastsView: View {
       if newValue {
         manager.isExpanded = false
       }
+    }
+  }
+}
+
+private struct ToastRow: View {
+  let toast: Toast
+  let index: Int
+  let isExpanded: Bool
+  let onRemove: () -> Void
+
+  @State private var offsetX: CGFloat = 0
+
+  var body: some View {
+    if #available(iOS 17.0, *) {
+      ToastView(message: toast.message, type: toast.config.type, onRemove: onRemove)
+        .offset(x: offsetX)
+        .gesture(
+          DragGesture()
+            .onChanged { value in
+              offsetX = min(value.translation.width, 0)
+            }
+            .onEnded { value in
+              let predicted = value.translation.width + (value.velocity.width / 2)
+              if -predicted > 200 {
+                onRemove()
+              } else {
+                offsetX = 0
+              }
+            }
+        )
+        .visualEffect { [isExpanded] content, proxy in
+          content
+            .scaleEffect(isExpanded ? 1 : scale(index), anchor: .bottom)
+            .offset(y: isExpanded ? 0 : offsetY(index))
+        }
+        .zIndex(toast.isDeleting ? 1000 : 0)
+        .frame(maxWidth: .infinity)
+        .transition(
+          .asymmetric(
+            insertion: .offset(y: 100),
+            removal: .move(edge: .leading)
+          )
+        )
+    } else {
+      // Fallback on earlier versions
     }
   }
 
@@ -137,16 +139,6 @@ private struct ToastView: View {
   }
 
   var body: some View {
-    //    Text(message)
-    //      .font(.system(size: 16, weight: .medium))
-    //      .foregroundColor(.white)
-    //      .padding(.horizontal, 16)
-    //      .padding(.vertical, 12)
-    //      .background(backgroundColor)
-    //      .cornerRadius(8)
-    //      .shadow(radius: 2)
-    //      .padding(.horizontal, 20)
-    //      .allowsHitTesting(true)
     HStack(spacing: 12) {
       Image(systemName: "square.and.arrow.up.fill")
       Text(message)

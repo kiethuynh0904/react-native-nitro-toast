@@ -24,7 +24,8 @@ const ToastAlert = () => {
           showToast('success', {
             title: 'Success',
             type: 'success',
-            position: 'top',
+            // position: 'top',
+            // duration:0,
             haptics:true,
           })
         }

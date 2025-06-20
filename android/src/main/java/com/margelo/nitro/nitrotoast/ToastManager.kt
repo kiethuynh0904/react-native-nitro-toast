@@ -20,6 +20,9 @@ class ToastListState {
     private val _toasts = MutableStateFlow(emptyList<Toast>())
     val toasts = _toasts.asStateFlow()
 
+    private val _pauseMap = MutableStateFlow<Map<String, Boolean>>(emptyMap())
+    val pauseMap = _pauseMap.asStateFlow()
+
     fun add(toast: Toast) {
         _toasts.value += toast
     }
@@ -27,6 +30,12 @@ class ToastListState {
     fun updateVisibility(toastId: String, isVisible: Boolean) {
         _toasts.value = _toasts.value.map {
             if (it.id == toastId) it.copy(isVisible = isVisible) else it
+        }
+    }
+
+    fun setPaused(toastId: String, paused: Boolean) {
+        _pauseMap.value = _pauseMap.value.toMutableMap().apply {
+            put(toastId, paused)
         }
     }
 
@@ -48,7 +57,7 @@ object ToastManager {
         if (context !is Activity) return
 
         val toast = Toast(message = message, config = config, isVisible = false)
-        if(config.haptics == true) {
+        if (config.haptics == true) {
             triggerHaptics(context, config.type)
         }
         state.add(toast)
@@ -65,9 +74,21 @@ object ToastManager {
         if (vibrator != null && vibrator.hasVibrator()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val effect = when (type) {
-                    AlertToastType.SUCCESS -> VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE)
-                    AlertToastType.ERROR -> VibrationEffect.createOneShot(60, VibrationEffect.DEFAULT_AMPLITUDE)
-                    AlertToastType.WARNING -> VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE)
+                    AlertToastType.SUCCESS -> VibrationEffect.createOneShot(
+                        40,
+                        VibrationEffect.DEFAULT_AMPLITUDE
+                    )
+
+                    AlertToastType.ERROR -> VibrationEffect.createOneShot(
+                        60,
+                        VibrationEffect.DEFAULT_AMPLITUDE
+                    )
+
+                    AlertToastType.WARNING -> VibrationEffect.createOneShot(
+                        50,
+                        VibrationEffect.DEFAULT_AMPLITUDE
+                    )
+
                     else -> VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE)
                 }
                 vibrator.vibrate(effect)
@@ -96,9 +117,17 @@ object ToastManager {
     private suspend fun handleToastLifecycle(context: Activity, toast: Toast, duration: Double) {
         delay(16)
         state.updateVisibility(toast.id, true)
+        Log.d("ToastManager", "Showing toast: $toast")
 
-        if(duration > 0) {
-            delay(duration.toLong() - 300)
+        if (duration > 0) {
+            var remaining = duration.toLong() - 300
+            val interval = 100L
+            while (remaining > 0) {
+                delay(interval)
+//                if (state.pauseMap.value[toast.id] != true) {
+                remaining -= interval
+//                }
+            }
             state.removeWithAnimation(toast.id)
         }
 
