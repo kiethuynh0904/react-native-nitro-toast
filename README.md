@@ -1,3 +1,7 @@
+[![npm](https://img.shields.io/npm/v/react-native-nitro-toast)](https://www.npmjs.com/package/react-native-nitro-toast)
+[![license](https://img.shields.io/npm/l/react-native-nitro-toast)](https://github.com/kiethuynh0904/react-native-nitro-toast/blob/master/LICENSE)
+[![downloads](https://img.shields.io/npm/dm/react-native-nitro-toast)](https://www.npmjs.com/package/react-native-nitro-toast)
+
 # 🚀 react-native-nitro-toast
 
 A lightweight, native-powered toast notification library for React Native, built with SwiftUI (iOS) and Jetpack Compose (Android). Designed for performance, native feel, and simplicity.
