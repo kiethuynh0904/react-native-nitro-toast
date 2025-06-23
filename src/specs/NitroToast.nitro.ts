@@ -53,6 +53,8 @@ export type NitroToastConfig = {
   useOverlay: boolean
   /** Whether to trigger haptic feedback when toast appears */
   haptics?: boolean
+  /** Your custom icon to display in the toast */
+  iconUri?: string
 }
 
 /**

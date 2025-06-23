@@ -58,6 +58,8 @@ namespace margelo::nitro::nitrotoast {
       jboolean useOverlay = this->getFieldValue(fieldUseOverlay);
       static const auto fieldHaptics = clazz->getField<jni::JBoolean>("haptics");
       jni::local_ref<jni::JBoolean> haptics = this->getFieldValue(fieldHaptics);
+      static const auto fieldIconUri = clazz->getField<jni::JString>("iconUri");
+      jni::local_ref<jni::JString> iconUri = this->getFieldValue(fieldIconUri);
       return NitroToastConfig(
         type->toCpp(),
         presentation->toCpp(),
@@ -68,7 +70,8 @@ namespace margelo::nitro::nitrotoast {
         titleColor != nullptr ? std::make_optional(titleColor->toStdString()) : std::nullopt,
         messageColor != nullptr ? std::make_optional(messageColor->toStdString()) : std::nullopt,
         static_cast<bool>(useOverlay),
-        haptics != nullptr ? std::make_optional(static_cast<bool>(haptics->value())) : std::nullopt
+        haptics != nullptr ? std::make_optional(static_cast<bool>(haptics->value())) : std::nullopt,
+        iconUri != nullptr ? std::make_optional(iconUri->toStdString()) : std::nullopt
       );
     }
 
@@ -88,7 +91,8 @@ namespace margelo::nitro::nitrotoast {
         value.titleColor.has_value() ? jni::make_jstring(value.titleColor.value()) : nullptr,
         value.messageColor.has_value() ? jni::make_jstring(value.messageColor.value()) : nullptr,
         value.useOverlay,
-        value.haptics.has_value() ? jni::JBoolean::valueOf(value.haptics.value()) : nullptr
+        value.haptics.has_value() ? jni::JBoolean::valueOf(value.haptics.value()) : nullptr,
+        value.iconUri.has_value() ? jni::make_jstring(value.iconUri.value()) : nullptr
       );
     }
   };

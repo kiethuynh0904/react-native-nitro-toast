@@ -21,6 +21,7 @@ class ToastManager: ObservableObject {
 
   func show(message: String, config: NitroToastConfig) {
     let toast = Toast(message: message, config: config)
+      
     if config.haptics == true {
       triggerHaptics(for: config.type)
     }

@@ -1,19 +1,20 @@
 import React from 'react';
 import {View, Button, StyleSheet} from 'react-native';
 import {showToast} from 'react-native-nitro-toast';
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 
 const ToastAlert = () => {
+  const source = FontAwesome6.getImageSourceSync('brand', 'discord', 20, 'white');
+
   return (
     <View style={styles.container}>
-
       <Button
         title="Alert - Info"
         onPress={() =>
           showToast('info', {
             title: 'Information',
             type: 'info',
-            position: 'top',
-            haptics:true,
+            haptics: true,
           })
         }
       />
@@ -26,7 +27,7 @@ const ToastAlert = () => {
             type: 'success',
             // position: 'top',
             // duration:0,
-            haptics:true,
+            haptics: true,
           })
         }
       />
@@ -37,8 +38,7 @@ const ToastAlert = () => {
           showToast('warning', {
             title: 'Warning',
             type: 'warning',
-            position: 'top',
-            haptics:true,
+            haptics: true,
           })
         }
       />
@@ -49,8 +49,7 @@ const ToastAlert = () => {
           showToast('error', {
             title: 'Something went wrong',
             type: 'error',
-            position: 'top',
-            haptics:true,
+            haptics: true,
           })
         }
       />
@@ -60,12 +59,12 @@ const ToastAlert = () => {
         onPress={() =>
           showToast('simple text', {
             title: 'Custom Title',
-            position: 'top',
             useOverlay: false,
             backgroundColor: '#4169E1',
             titleColor: '#FFFFFF',
             messageColor: '#FFFFFF',
-            haptics:true,
+            haptics: true,
+            iconUri: source?.uri,
           })
         }
       />

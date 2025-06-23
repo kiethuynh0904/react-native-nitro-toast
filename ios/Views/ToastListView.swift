@@ -81,9 +81,7 @@ private struct ToastView: View {
 
   var body: some View {
     HStack(spacing: 12) {
-      Image(systemName: toast.iconName)
-        .font(.system(size: 20))
-        .foregroundColor(toast.iconColor)
+        renderToastIcon(toast)
 
       VStack(alignment: .leading) {
         Text(toast.title)
@@ -112,4 +110,19 @@ private struct ToastView: View {
     }
     .padding(.horizontal, 15)
   }
+    
+    @ViewBuilder
+    private func renderToastIcon(_ toast: Toast) -> some View {
+      if let uri = toast.config.iconUri,
+         let image = UIImage(contentsOfFile: uri) {
+        Image(uiImage: image)
+          .resizable()
+          .frame(width: 20, height: 20)
+          .clipShape(Circle()) // Optional
+      } else {
+        Image(systemName: toast.iconName)
+          .font(.system(size: 20))
+          .foregroundColor(toast.iconColor)
+      }
+    }
 }

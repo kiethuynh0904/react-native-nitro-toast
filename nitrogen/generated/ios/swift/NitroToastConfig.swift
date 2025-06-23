@@ -18,7 +18,7 @@ public extension NitroToastConfig {
   /**
    * Create a new instance of `NitroToastConfig`.
    */
-  init(type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Bool, haptics: Bool?) {
+  init(type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Bool, haptics: Bool?, iconUri: String?) {
     self.init(type, presentation, duration, { () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = title {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
@@ -46,6 +46,12 @@ public extension NitroToastConfig {
     }(), useOverlay, { () -> bridge.std__optional_bool_ in
       if let __unwrappedValue = haptics {
         return bridge.create_std__optional_bool_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_std__string_ in
+      if let __unwrappedValue = iconUri {
+        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
       } else {
         return .init()
       }
@@ -209,6 +215,29 @@ public extension NitroToastConfig {
       self.__haptics = { () -> bridge.std__optional_bool_ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_bool_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+  }
+  
+  var iconUri: String? {
+    @inline(__always)
+    get {
+      return { () -> String? in
+        if let __unwrapped = self.__iconUri.value {
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__iconUri = { () -> bridge.std__optional_std__string_ in
+        if let __unwrappedValue = newValue {
+          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
         } else {
           return .init()
         }
