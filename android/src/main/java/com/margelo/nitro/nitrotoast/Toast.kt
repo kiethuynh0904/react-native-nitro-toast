@@ -36,7 +36,10 @@ data class Toast(
         }
 
     val overlayColor: Color
-        get() = if (config.useOverlay == true) backgroundColor.copy(alpha = 0.08f) else backgroundColor
+        get() = if (config.useOverlay) backgroundColor.copy(alpha = 0.08f) else backgroundColor
+
+    val iconUri: String?
+        get() = config.iconUri
 
     val icon: ImageVector
         get() = when (config.type) {
@@ -47,7 +50,7 @@ data class Toast(
             AlertToastType.DEFAULT -> Icons.Filled.Info
         }
     val iconColor: Color
-        get() = if(config.useOverlay != true) Color.White else backgroundColor
+        get() = if(!config.useOverlay) Color.White else backgroundColor
 
     val title: String
         get() = config.title ?: when (config.type) {
