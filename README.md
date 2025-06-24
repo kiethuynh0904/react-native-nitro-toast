@@ -42,7 +42,7 @@ A lightweight, native-powered toast notification library for React Native, built
   - Position: `top` / `bottom`
   - Duration-based or sticky
   - Color overrides (`titleColor`, `messageColor`, `backgroundColor`)
-  - Custom icon support
+  - [Custom icon support](./docs/CUSTOM_ICON.md) (via `iconUri`)
   - Optional haptic feedback
   - Safe area aware
 - 🤏 **Small Footprint** — zero bridge, TurboModule-native
