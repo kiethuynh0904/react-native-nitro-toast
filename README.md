@@ -6,15 +6,18 @@
 
 A lightweight, native-powered toast notification library for React Native, built with SwiftUI (iOS) and Jetpack Compose (Android). Designed for performance, native feel, and simplicity.
 
-> ⚠️ **Note**: If you need fully customizable layouts using JSX (e.g., image, input, custom buttons), consider using a JavaScript-based solution like [`react-native-toast-message`](https://github.com/calintamas/react-native-toast-message) instead.
+> ⚠️ **Looking for full layout customization (e.g. JSX content)?**  
+> consider using a JavaScript-based solution like [`react-native-toast-message`](https://github.com/calintamas/react-native-toast-message) instead.
 
 ## 📋 Requirements
 
-This library is built with [Nitro Modules](https://nitro.margelo.com/), please check the [minimum requirements](https://nitro.margelo.com/docs/minimum-requirements) first.
+> This package uses [NitroModules](https://nitro.margelo.com/).  
+> Please confirm your setup meets the [minimum requirements](https://nitro.margelo.com/docs/minimum-requirements).
 
 ### System Requirements
-- React Native >= 0.75.0
-- iOS: Xcode >= 16.0
+- React Native: **≥ 0.75.0**
+- iOS: **Xcode ≥ 16.0**
+- Android: API 21+
 
 ## 📸 Preview
 
@@ -28,34 +31,28 @@ This library is built with [Nitro Modules](https://nitro.margelo.com/), please c
 ![Android Toast Demo](./docs/demo-android.gif)
 </details>
 
-> 🔥 Seamless native toasts with smooth animations on both iOS and Android.
+> 🔥 Native animations with ultra-smooth transitions on both platforms.
 
 ## ✨ Features
 
-- ✅ **Fully Native**: Built with SwiftUI (iOS) & Jetpack Compose (Android)
-- ✅ **Multiple Styles**: `stacked` and `alert` presentation modes
-- ✅ **Toast Types**: `success`, `error`, `info`, `warning` and `default`
-- ✅ **Customizable**:
-  - Auto-dismiss with configurable duration
-  - Position at `top` or `bottom`
-  - Background opacity control
-  - Custom colors for title and message
-  - Haptic feedback support  
-    - **Android:** If you enable haptics, you must add the `VIBRATE` permission to your `AndroidManifest.xml`:
-      ```xml
-      <uses-permission android:name="android.permission.VIBRATE" />
-      ```
-- ✅ **Performance**:
-  - Small footprint — optimized for React Native libraries
-  - Built using NitroModules (no bridge)
-- ✅ **User Experience**:
-  - Safe area-aware
-  - Smooth native animations
-  - Native feel on both platforms
+- ⚡ **100% Native UI** — SwiftUI & Jetpack Compose
+- 🔄 **Two Display Styles**: `alert` and `stacked`
+- 🌈 **Predefined Types**: `success`, `error`, `info`, `warning`, `default`
+- 🎨 **Highly Customizable**:
+  - Position: `top` / `bottom`
+  - Duration-based or sticky
+  - Color overrides (`titleColor`, `messageColor`, `backgroundColor`)
+  - Custom icon support
+  - Optional haptic feedback
+  - Safe area aware
+- 🤏 **Small Footprint** — zero bridge, TurboModule-native
+- 🚀 **Smooth Transitions** — native enter/exit animations
+- ✋ **Gesture Dismissal** (swipe to dismiss)
+- 🔕 **Auto Dismiss Pause** when holding
 
 ## 📦 Installation
 
-See [INSTALLATION](./docs/INSTALLATION.md) for full setup instructions.
+Refer to the [INSTALLATION.md](./docs/INSTALLATION.md) guide for full setup, including iOS & Android instructions.
 
 ## 🔧 Quick Start
 
@@ -77,54 +74,43 @@ showToast('Upload completed!', {
 });
 ```
 
-## 🍱 Presentation Types
-
-- 📚 [Stacked](docs/stacked.md) – Queue-based multiple toast system
-- 🔔 Alert – Single toast notification
-
 ## 🛠 Configuration Options
 
 | Prop             | Type                         | Default     | Description                                |
 |------------------|------------------------------|-------------|--------------------------------------------|
 | `type`           | `success`, `error`, `info`, `warning`, `default` | `'default'` | Predefined visual styles                   |
-| `title`          | `string`                     | `null`      | Optional title                             |
-| `titleColor`     | `string` (HEX)               | Varies by type      | Custom title color (optional)              |
 | `message`        | `string`                     | (required)  | Toast message                              |
-| `messageColor`   | `string` (HEX)               | Varies by type      | Custom message color (optional)            |
-| `duration`       | `number` (MS)                | `4000`      | Auto-dismiss duration                      |
+| `title`          | `string`                     | `null`      | Optional title                             |
+| `duration`       | `number` (MS)                | `4000`      | Auto-dismiss duration (0 for sticky)       |
 | `position`       | `'top'` \| `'bottom'`        | `'bottom'`  | Toast position                             |
-| `presentation`   | `'stacked'` \| `'alert'`     | `'alert'`   | Display style                              |
+| `presentation`   | `'stacked'` \| `'alert'`     | `'alert'`   | `alert`: single toast. `stacked`: queue multiple toasts. |
+| `haptics`        | `boolean`                    | `false`     | Enable haptic feedback (requires `VIBRATE` permission on Android) |
+| `iconUri`        | `string` (URI)               | `undefined` | Custom icon image URI. |
 | `backgroundColor`| `string` (HEX)               | Varies by type | Custom background                       |
+| `titleColor`     | `string` (HEX)               | Varies by type      | Custom title color (optional)              |
+| `messageColor`   | `string` (HEX)               | Varies by type      | Custom message color (optional)            |
 | `useOverlay`     | `boolean`                    | `true`      | Apply semi-transparent overlay             |
-| `haptics`        | `boolean`                    | `false`     | Enable haptic feedback (iOS & Android, Android requires VIBRATE permission) |
+
+## 📚 Guides
+
+- **[Custom Icons](./docs/CUSTOM_ICON.md)**: Learn how to use `react-native-vector-icons` or local images.
+- **[Stacked Toasts](./docs/stacked.md)**: See how to manage multiple queued toasts.
 
 ---
-
-## 🧰 Development
-
-Built with modern technologies:
-
-- [NitroModule](https://nitro.margelo.com/) (no JS bridge)
-- SwiftUI (iOS 14+)
-- Jetpack Compose
-- Kotlin + Swift
 
 ## 🧩 Roadmap
 - [x] Haptic feedback support
 - [x] Add gesture support for dismissal
 - [x] Auto-dismiss pause on tap
+- [x] Add customizable icon support
 - [ ] Support new Glass effect for iOS
 - [ ] Add progress indicator support
-- [ ] Add customizable icon support
 
 
-## 🤝 Contributing
-
-PR welcome
-
-## 💬 Feedback & Issues
-
-Found a bug or have a feature request? Please file an issue at [GitHub Issues](https://github.com/kiethuynh0904/react-native-nitro-toast/issues).
+## 🤝 Contributing & Issues
+Contributions are always welcome! If you have an idea, find a bug, or want to help improve the library, please feel free to:
+- [Create an issue](https://github.com/kiethuynh0904/react-native-nitro-toast/issues) to report bugs or suggest features.
+- [Open a pull request](https://github.com/kiethuynh0904/react-native-nitro-toast/pulls) with your improvements.
 
 ## 👨‍💻 Author
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Button, StyleSheet, Image} from 'react-native';
+import {View, Button, StyleSheet} from 'react-native';
 import {showToast} from 'react-native-nitro-toast';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 
@@ -8,7 +8,6 @@ const ToastAlert = () => {
 
   return (
     <View style={styles.container}>
-      <View><Image source={source} style={{width: 20, height: 20}} /></View>
       <Button
         title="Alert - Info"
         onPress={() =>
@@ -66,6 +65,7 @@ const ToastAlert = () => {
             messageColor: '#FFFFFF',
             haptics: true,
             iconUri: source?.uri,
+            position:'top',
           })
         }
       />
