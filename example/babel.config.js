@@ -13,7 +13,7 @@ module.exports = {
             __dirname,
             '..',
             'src',
-            'index.ts'
+            'index.ts',
           ),
         },
       },
