@@ -1,18 +1,13 @@
-name: Publish to npm
+name: Release & Publish to NPM
 
 on:
   push:
     tags:
-      - 'v*.*.*' # Triggers only on version tags like v1.0.2
-
+      - 'v*.*.*' # Runs only when a tag like v1.2.3 is pushed
+  
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      packages: write
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -30,3 +25,6 @@ jobs:
         with:
           token: ${{ secrets.NPM_TOKEN }}
           access: public
+      
+      - name: End message
+        run: echo "🎉 Released!"
