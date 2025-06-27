@@ -33,7 +33,8 @@ namespace margelo::nitro::nitrotoast {
     ERROR      SWIFT_NAME(error) = 1,
     WARNING      SWIFT_NAME(warning) = 2,
     INFO      SWIFT_NAME(info) = 3,
-    DEFAULT      SWIFT_NAME(default) = 4,
+    LOADING      SWIFT_NAME(loading) = 4,
+    DEFAULT      SWIFT_NAME(default) = 5,
   } CLOSED_ENUM;
 
 } // namespace margelo::nitro::nitrotoast
@@ -52,6 +53,7 @@ namespace margelo::nitro {
         case hashString("error"): return AlertToastType::ERROR;
         case hashString("warning"): return AlertToastType::WARNING;
         case hashString("info"): return AlertToastType::INFO;
+        case hashString("loading"): return AlertToastType::LOADING;
         case hashString("default"): return AlertToastType::DEFAULT;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum AlertToastType - invalid value!");
@@ -63,6 +65,7 @@ namespace margelo::nitro {
         case AlertToastType::ERROR: return JSIConverter<std::string>::toJSI(runtime, "error");
         case AlertToastType::WARNING: return JSIConverter<std::string>::toJSI(runtime, "warning");
         case AlertToastType::INFO: return JSIConverter<std::string>::toJSI(runtime, "info");
+        case AlertToastType::LOADING: return JSIConverter<std::string>::toJSI(runtime, "loading");
         case AlertToastType::DEFAULT: return JSIConverter<std::string>::toJSI(runtime, "default");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert AlertToastType to JS - invalid value: "
@@ -79,6 +82,7 @@ namespace margelo::nitro {
         case hashString("error"):
         case hashString("warning"):
         case hashString("info"):
+        case hashString("loading"):
         case hashString("default"):
           return true;
         default:

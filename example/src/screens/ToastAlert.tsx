@@ -1,10 +1,28 @@
 import React from 'react';
 import {View, Button, StyleSheet} from 'react-native';
-import {showToast} from 'react-native-nitro-toast';
+import {dismissToast, showToast} from 'react-native-nitro-toast';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 
 const ToastAlert = () => {
   const source = FontAwesome6.getImageSourceSync('solid', 'face-smile', 20, 'white');
+
+  const showLoadingToast = () => {
+    const id = showToast('Please wait...', {
+      type: 'loading',
+      title: 'Uploading',
+      // backgroundColor: '#4169E1',
+      duration: 0,
+      position: 'top',
+    })
+
+    setTimeout(() => {
+      dismissToast(id)
+      showToast('Your file has been uploaded', {
+        type: 'success',
+        position: 'top',
+      })
+    }, 2000)
+  }
 
   return (
     <View style={styles.container}>
@@ -53,6 +71,7 @@ const ToastAlert = () => {
           })
         }
       />
+      <Button title='Alert - Loading' onPress={showLoadingToast}/>
 
       <Button
         title="Custom"

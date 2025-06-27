@@ -15,6 +15,7 @@ namespace margelo::nitro::nitrotoast {
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridMethod("show", &HybridNitroToastSpec::show);
+      prototype.registerHybridMethod("dismiss", &HybridNitroToastSpec::dismiss);
     });
   }
 

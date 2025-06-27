@@ -101,9 +101,21 @@ public class HybridNitroToastSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func show(message: std.string, config: NitroToastConfig) -> bridge.Result_void_ {
+  public final func show(message: std.string, config: NitroToastConfig) -> bridge.Result_std__string_ {
     do {
-      try self.__implementation.show(message: String(message), config: config)
+      let __result = try self.__implementation.show(message: String(message), config: config)
+      let __resultCpp = std.string(__result)
+      return bridge.create_Result_std__string_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__string_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func dismiss(toastId: std.string) -> bridge.Result_void_ {
+    do {
+      try self.__implementation.dismiss(toastId: String(toastId))
       return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()

@@ -48,9 +48,14 @@ namespace margelo::nitro::nitrotoast {
   
 
   // Methods
-  void JHybridNitroToastSpec::show(const std::string& message, const NitroToastConfig& config) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* message */, jni::alias_ref<JNitroToastConfig> /* config */)>("show");
-    method(_javaPart, jni::make_jstring(message), JNitroToastConfig::fromCpp(config));
+  std::string JHybridNitroToastSpec::show(const std::string& message, const NitroToastConfig& config) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<jni::JString> /* message */, jni::alias_ref<JNitroToastConfig> /* config */)>("show");
+    auto __result = method(_javaPart, jni::make_jstring(message), JNitroToastConfig::fromCpp(config));
+    return __result->toStdString();
+  }
+  void JHybridNitroToastSpec::dismiss(const std::string& toastId) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* toastId */)>("dismiss");
+    method(_javaPart, jni::make_jstring(toastId));
   }
 
 } // namespace margelo::nitro::nitrotoast

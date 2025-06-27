@@ -20,10 +20,14 @@ export const defaultToastConfig: NitroToastConfig = {
 export const showToast = (
   message: string,
   config?: Partial<NitroToastConfig>
-) => {
+): string => {
   const _config: NitroToastConfig = {
     ...defaultToastConfig,
     ...config,
   }
-  NitroToastModule.show(message, _config)
+  return NitroToastModule.show(message, _config)
+}
+
+export const dismissToast = (id: string): void => {
+  NitroToastModule.dismiss(id)
 }

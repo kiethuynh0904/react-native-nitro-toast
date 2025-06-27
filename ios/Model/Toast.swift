@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 final class Toast: Identifiable, ObservableObject {
-  let id = UUID().uuidString
+  let id: String
   let message: String
   let config: NitroToastConfig
 
@@ -17,7 +17,8 @@ final class Toast: Identifiable, ObservableObject {
   @Published var isPaused: Bool = false
   @Published var isDeleting: Bool = false
 
-  init(message: String, config: NitroToastConfig) {
+  init(toastId: String, message: String, config: NitroToastConfig) {
+    self.id = toastId
     self.message = message
     self.config = config
   }
@@ -44,6 +45,8 @@ extension Toast {
       return Color.toastInfo
     case .warning:
       return Color.toastWarning
+    case .loading:
+      return Color.toastDefault
     case .default:
       return Color.toastDefault
     }
@@ -56,7 +59,7 @@ extension Toast {
     return self.backgroundColor
   }
 
-  var iconName: String {
+  var iconName: String? {
     switch config.type {
     case .success:
       return "checkmark.circle.fill"
@@ -68,6 +71,8 @@ extension Toast {
       return "exclamationmark.circle.fill"
     case .default:
       return "bell.fill"
+    case .loading:
+      return nil
     }
   }
 
@@ -91,6 +96,8 @@ extension Toast {
       return "Information"
     case .warning:
       return "Warning"
+    case .loading:
+      return "Loading..."
     case .default:
       return ""
     }

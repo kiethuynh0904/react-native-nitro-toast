@@ -67,8 +67,16 @@ namespace margelo::nitro::nitrotoast {
 
   public:
     // Methods
-    inline void show(const std::string& message, const NitroToastConfig& config) override {
+    inline std::string show(const std::string& message, const NitroToastConfig& config) override {
       auto __result = _swiftPart.show(message, config);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline void dismiss(const std::string& toastId) override {
+      auto __result = _swiftPart.dismiss(toastId);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

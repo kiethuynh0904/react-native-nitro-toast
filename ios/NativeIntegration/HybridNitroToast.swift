@@ -10,19 +10,25 @@ import UIKit
 
 class HybridNitroToast: HybridNitroToastSpec {
 
-  static let shared = HybridNitroToast()
-  private var toastWindow: UIWindow?
-
-  func show(message: String, config: NitroToastConfig) {
+  func show(message: String, config: NitroToastConfig) -> String {
+    let toastId = UUID().uuidString
     DispatchQueue.main.async {
-      self.presentToast(message: message, config: config)
+      self.presentToast(toastId: toastId, message: message, config: config)
+    }
+    return toastId
+  }
+
+  func dismiss(toastId: String) {
+    DispatchQueue.main.async {
+      ToastManager.shared.dismiss(toastId)
     }
   }
-  @MainActor private func presentToast(message: String, config: NitroToastConfig) {
+
+  @MainActor private func presentToast(toastId: String, message: String, config: NitroToastConfig) {
 
     /// If the window already exists, just update the toast content
-    guard toastWindow == nil else {
-      ToastManager.shared.show(message: message, config: config)
+    guard ToastManager.shared.toastWindow == nil else {
+      ToastManager.shared.show(toastId: toastId, message: message, config: config)
       return
     }
 
@@ -36,20 +42,11 @@ class HybridNitroToast: HybridNitroToastSpec {
     toastWindow.windowLevel = .alert + 1
     toastWindow.rootViewController = host
     toastWindow.isHidden = false
-    self.toastWindow = toastWindow
+    ToastManager.shared.toastWindow = toastWindow
 
     /// Show toast after UI is attached
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-      ToastManager.shared.show(message: message, config: config)
-    }
-
-    /// Clean up the window when all toasts are gone
-    ToastManager.shared.onEmpty = { [weak self] in
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-        self?.toastWindow?.isHidden = true
-        self?.toastWindow?.rootViewController = nil
-        self?.toastWindow = nil
-      }
+      ToastManager.shared.show(toastId: toastId, message: message, config: config)
     }
   }
 

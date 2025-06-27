@@ -59,6 +59,15 @@ namespace margelo::nitro::nitrotoast::bridge::swift {
   using std__weak_ptr_margelo__nitro__nitrotoast__HybridNitroToastSpec_ = std::weak_ptr<margelo::nitro::nitrotoast::HybridNitroToastSpec>;
   inline std__weak_ptr_margelo__nitro__nitrotoast__HybridNitroToastSpec_ weakify_std__shared_ptr_margelo__nitro__nitrotoast__HybridNitroToastSpec_(const std::shared_ptr<margelo::nitro::nitrotoast::HybridNitroToastSpec>& strong) { return strong; }
   
+  // pragma MARK: Result<std::string>
+  using Result_std__string_ = Result<std::string>;
+  inline Result_std__string_ create_Result_std__string_(const std::string& value) {
+    return Result<std::string>::withValue(value);
+  }
+  inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) {
+    return Result<std::string>::withError(error);
+  }
+  
   // pragma MARK: Result<void>
   using Result_void_ = Result<void>;
   inline Result_void_ create_Result_void_() {

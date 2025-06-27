@@ -45,7 +45,7 @@ private struct ToastsView: View {
             (manager.toasts.count - 1)
             - (manager.toasts.firstIndex(where: { $0.id == toast.id }) ?? 0)
           ToastRow(toast: toast, index: index, isExpanded: manager.isExpanded) {
-              manager.dismiss(toast)
+              manager.dismiss(toast.id)
           }
         }
       }
@@ -122,21 +122,6 @@ private struct ToastView: View {
   let message: String
   let type: AlertToastType
   let onRemove: () -> Void
-
-  var backgroundColor: Color {
-    switch type {
-    case .success:
-      return .green
-    case .error:
-      return .red
-    case .info:
-      return .blue
-    case .warning:
-      return .yellow
-    case .default:
-      return .white
-    }
-  }
 
   var body: some View {
     HStack(spacing: 12) {

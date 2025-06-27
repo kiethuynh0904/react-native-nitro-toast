@@ -45,6 +45,7 @@ namespace margelo::nitro::nitrotoast {
       static const auto fieldERROR = clazz->getStaticField<JAlertToastType>("ERROR");
       static const auto fieldWARNING = clazz->getStaticField<JAlertToastType>("WARNING");
       static const auto fieldINFO = clazz->getStaticField<JAlertToastType>("INFO");
+      static const auto fieldLOADING = clazz->getStaticField<JAlertToastType>("LOADING");
       static const auto fieldDEFAULT = clazz->getStaticField<JAlertToastType>("DEFAULT");
       
       switch (value) {
@@ -56,6 +57,8 @@ namespace margelo::nitro::nitrotoast {
           return clazz->getStaticFieldValue(fieldWARNING);
         case AlertToastType::INFO:
           return clazz->getStaticFieldValue(fieldINFO);
+        case AlertToastType::LOADING:
+          return clazz->getStaticFieldValue(fieldLOADING);
         case AlertToastType::DEFAULT:
           return clazz->getStaticFieldValue(fieldDEFAULT);
         default:

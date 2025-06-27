@@ -20,6 +20,7 @@ enum class AlertToastType {
   ERROR,
   WARNING,
   INFO,
+  LOADING,
   DEFAULT;
 
   @DoNotStrip
