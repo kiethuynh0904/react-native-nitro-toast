@@ -5,16 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 
 @Composable
 fun ToastList(state: ToastListState) {
     val toasts by state.toasts.collectAsState()
-    val scope = rememberCoroutineScope()
 
     if (toasts.isEmpty()) return
 
@@ -48,9 +45,7 @@ fun ToastList(state: ToastListState) {
                         state.setPaused(toast.id, it)
                     },
                     onDismiss = {
-                        scope.launch {
-                            state.removeWithAnimation(toast.id)
-                        }
+                        ToastManager.dismiss(toast.id)
                     }
                 )
             }

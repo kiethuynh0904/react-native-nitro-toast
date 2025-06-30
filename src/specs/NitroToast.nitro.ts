@@ -6,6 +6,7 @@ import type { HybridObject } from 'react-native-nitro-modules'
  * - `error`: Red toast with error icon
  * - `warning`: Yellow toast with warning icon
  * - `info`: Blue toast with info icon
+ * - `loading`: Gray toast with spinning icon
  * - `default`: Gray toast with default icon
  */
 export type AlertToastType =
@@ -13,6 +14,7 @@ export type AlertToastType =
   | 'error'
   | 'warning'
   | 'info'
+  | 'loading'
   | 'default'
 
 /**
@@ -68,5 +70,11 @@ export interface NitroToast
    * @param message - The text message to display in the toast
    * @param config - Configuration options for the toast
    */
-  show(message: string, config: NitroToastConfig): void
+  show(message: string, config: NitroToastConfig): string
+
+  /**
+   * Dismisses the toast with the given ID.
+   * @param toastId - The ID of the toast to dismiss
+   */
+  dismiss(toastId:string) : void
 }

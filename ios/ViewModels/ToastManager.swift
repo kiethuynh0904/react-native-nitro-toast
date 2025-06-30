@@ -11,17 +11,18 @@ import SwiftUI
 @MainActor
 class ToastManager: ObservableObject {
   static let shared = ToastManager()
+  var toastWindow: UIWindow?
+
+  var isEmpty: Bool { toasts.isEmpty }
 
   @Published var toasts: [Toast] = []
 
   ///Toast stack props
   @Published var isExpanded: Bool = false
 
-  var onEmpty: (() -> Void)?
+  func show(toastId: String, message: String, config: NitroToastConfig) {
+    let toast = Toast(toastId: toastId, message: message, config: config)
 
-  func show(message: String, config: NitroToastConfig) {
-    let toast = Toast(message: message, config: config)
-      
     if config.haptics == true {
       triggerHaptics(for: config.type)
     }
@@ -43,21 +44,31 @@ class ToastManager: ObservableObject {
         }
       }
 
-      self.dismiss(toast)
+      self.dismiss(toast.id)
     }
   }
 
-  func dismiss(_ toast: Toast) {
-    guard let index = toasts.firstIndex(where: { $0.id == toast.id }) else { return }
+  func dismiss(_ toastId: String) {
+    guard let index = toasts.firstIndex(where: { $0.id == toastId }) else { return }
     toasts[index].isDeleting = true
-      
+
     withAnimation(.bouncy) {
-      toasts.removeAll { $0.id == toast.id }
+      toasts.removeAll { $0.id == toastId }
     }
 
-    if toasts.isEmpty {
-      onEmpty?()
+    if isEmpty {
       isExpanded = false
+      cleanWindow()
+    }
+  }
+
+  func cleanWindow() {
+    /// Clean up the window when all toasts are gone
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+      guard self.isEmpty else { return }
+      self.toastWindow?.isHidden = true
+      self.toastWindow?.rootViewController = nil
+      self.toastWindow = nil
     }
   }
 

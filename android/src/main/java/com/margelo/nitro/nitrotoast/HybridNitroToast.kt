@@ -6,10 +6,15 @@ class HybridNitroToast : HybridNitroToastSpec() {
     override val memorySize: Long
         get() = 0L
 
-    override fun show(message: String, config: NitroToastConfig) {
-        val activity = NitroModules.applicationContext?.currentActivity
-        if (activity != null) {
-            ToastManager.show(activity, message, config)
+    override fun show(message: String, config: NitroToastConfig): String {
+        val toastId = java.util.UUID.randomUUID().toString()
+        NitroModules.applicationContext?.currentActivity?.let { activity ->
+            ToastManager.show(activity, toastId, message, config)
         }
+        return toastId
+    }
+
+    override fun dismiss(toastId: String) {
+        ToastManager.dismiss(toastId)
     }
 }

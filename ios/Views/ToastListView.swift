@@ -17,7 +17,7 @@ struct ToastListView: View {
           ToastRow(
             toast: toast, position: .top,
             onRemove: {
-                manager.dismiss(toast)
+              manager.dismiss(toast.id)
             })
         }
         Spacer()
@@ -27,7 +27,7 @@ struct ToastListView: View {
           ToastRow(
             toast: toast, position: .bottom,
             onRemove: {
-                manager.dismiss(toast)
+              manager.dismiss(toast.id)
             })
         }
       }
@@ -81,7 +81,7 @@ private struct ToastView: View {
 
   var body: some View {
     HStack(spacing: 12) {
-        renderToastIcon(toast)
+      renderToastIcon(toast)
 
       VStack(alignment: .leading) {
         Text(toast.title)
@@ -110,19 +110,24 @@ private struct ToastView: View {
     }
     .padding(.horizontal, 15)
   }
-    
-    @ViewBuilder
-    private func renderToastIcon(_ toast: Toast) -> some View {
-      if let uri = toast.config.iconUri,
-         let image = UIImage(contentsOfFile: uri) {
-        Image(uiImage: image)
-          .resizable()
-          .frame(width: 20, height: 20)
-          .clipShape(Circle()) // Optional
-      } else {
-        Image(systemName: toast.iconName)
-          .font(.system(size: 20))
-          .foregroundColor(toast.iconColor)
-      }
+
+  @ViewBuilder
+  private func renderToastIcon(_ toast: Toast) -> some View {
+    if toast.config.type == .loading {
+      ProgressView()
+        .progressViewStyle(CircularProgressViewStyle(tint: toast.iconColor))
+        .frame(width: 20, height: 20)
+    } else if let uri = toast.config.iconUri,
+      let image = UIImage(contentsOfFile: uri)
+    {
+      Image(uiImage: image)
+        .resizable()
+        .frame(width: 20, height: 20)
+        .clipShape(Circle())
+    } else if let systemName = toast.iconName {
+      Image(systemName: systemName)
+        .font(.system(size: 20))
+        .foregroundColor(toast.iconColor)
     }
+  }
 }

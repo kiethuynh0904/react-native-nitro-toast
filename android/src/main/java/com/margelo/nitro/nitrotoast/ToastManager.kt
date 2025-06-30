@@ -15,13 +15,19 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-
 class ToastListState {
     private val _toasts = MutableStateFlow(emptyList<Toast>())
     val toasts = _toasts.asStateFlow()
 
-    private val _pauseMap = MutableStateFlow<Map<String, Boolean>>(emptyMap())
+    val _pauseMap = MutableStateFlow<Map<String,Boolean>>(emptyMap())
+
     val pauseMap = _pauseMap.asStateFlow()
+
+    fun setPaused(toastId:String,paused:Boolean){
+        _pauseMap.value = _pauseMap.value.toMutableMap().apply {
+            put(toastId,paused)
+        }
+    }
 
     fun add(toast: Toast) {
         _toasts.value += toast
@@ -30,12 +36,6 @@ class ToastListState {
     fun updateVisibility(toastId: String, isVisible: Boolean) {
         _toasts.value = _toasts.value.map {
             if (it.id == toastId) it.copy(isVisible = isVisible) else it
-        }
-    }
-
-    fun setPaused(toastId: String, paused: Boolean) {
-        _pauseMap.value = _pauseMap.value.toMutableMap().apply {
-            put(toastId, paused)
         }
     }
 
@@ -51,12 +51,11 @@ object ToastManager {
     private var toastContainer: ComposeView? = null
     private val state = ToastListState()
 
-    @RequiresPermission(Manifest.permission.VIBRATE)
-    @SuppressLint("SuspiciousIndentation")
-    fun show(context: Context?, message: String, config: NitroToastConfig) {
+    @SuppressLint("MissingPermission")
+    fun show(context: Context?, toastId: String, message: String, config: NitroToastConfig) {
         if (context !is Activity) return
 
-        val toast = Toast(message = message, config = config, isVisible = false)
+        val toast = Toast(id = toastId, message = message, config = config, isVisible = false)
         if (config.haptics == true) {
             triggerHaptics(context, config.type)
         }
@@ -64,7 +63,14 @@ object ToastManager {
 
         context.runOnUiThread {
             ensureToastContainer(context)
-            scope.launch { handleToastLifecycle(context, toast, config.duration) }
+            scope.launch { handleToastLifecycle(toast, config.duration) }
+        }
+    }
+
+    fun dismiss(toastId: String) {
+        scope.launch {
+            state.removeWithAnimation(toastId)
+            checkAndRemoveContainer()
         }
     }
 
@@ -74,21 +80,9 @@ object ToastManager {
         if (vibrator != null && vibrator.hasVibrator()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val effect = when (type) {
-                    AlertToastType.SUCCESS -> VibrationEffect.createOneShot(
-                        40,
-                        VibrationEffect.DEFAULT_AMPLITUDE
-                    )
-
-                    AlertToastType.ERROR -> VibrationEffect.createOneShot(
-                        60,
-                        VibrationEffect.DEFAULT_AMPLITUDE
-                    )
-
-                    AlertToastType.WARNING -> VibrationEffect.createOneShot(
-                        50,
-                        VibrationEffect.DEFAULT_AMPLITUDE
-                    )
-
+                    AlertToastType.SUCCESS -> VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE)
+                    AlertToastType.ERROR -> VibrationEffect.createOneShot(60, VibrationEffect.DEFAULT_AMPLITUDE)
+                    AlertToastType.WARNING -> VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE)
                     else -> VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE)
                 }
                 vibrator.vibrate(effect)
@@ -98,7 +92,6 @@ object ToastManager {
             }
         }
     }
-
 
     private fun ensureToastContainer(context: Activity) {
         if (toastContainer != null) return
@@ -114,7 +107,7 @@ object ToastManager {
         (context.window?.decorView as? ViewGroup)?.addView(toastContainer)
     }
 
-    private suspend fun handleToastLifecycle(context: Activity, toast: Toast, duration: Double) {
+    private suspend fun handleToastLifecycle(toast: Toast, duration: Double) {
         delay(16)
         state.updateVisibility(toast.id, true)
         Log.d("ToastManager", "Showing toast: $toast")
@@ -124,15 +117,18 @@ object ToastManager {
             val interval = 100L
             while (remaining > 0) {
                 delay(interval)
-//                if (state.pauseMap.value[toast.id] != true) {
                 remaining -= interval
-//                }
             }
             state.removeWithAnimation(toast.id)
         }
 
-        context.runOnUiThread {
-            Log.d("ToastManager", "Removing toast: ${toast.id}")
+        checkAndRemoveContainer()
+    }
+
+    private fun checkAndRemoveContainer() {
+        val context = toastContainer?.context as? Activity ?: return
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(300)
             if (state.toasts.value.isEmpty()) {
                 (context.window?.decorView as? ViewGroup)?.removeView(toastContainer)
                 toastContainer = null

@@ -1,17 +1,47 @@
 import React from 'react';
 import {View, Button, StyleSheet} from 'react-native';
-import {showToast} from 'react-native-nitro-toast';
+import {dismissToast, showToast} from 'react-native-nitro-toast';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 
 const ToastAlert = () => {
-  const source = FontAwesome6.getImageSourceSync('solid', 'face-smile', 20, 'white');
+  const source = FontAwesome6.getImageSourceSync(
+    'solid',
+    'face-smile',
+    20,
+    'white',
+  );
+
+  const showLoadingToast = async () => {
+    const id = showToast('Please wait...', {
+      type: 'loading',
+      title: 'Uploading',
+      duration: 0,
+      position: 'top',
+    });
+
+    try {
+      // Simulate async upload operation
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      dismissToast(id);
+      showToast('Your file has been uploaded', {
+        type: 'success',
+        position: 'top',
+      });
+    } catch (error) {
+      dismissToast(id);
+      showToast('Upload failed. Please try again.', {
+        type: 'error',
+        position: 'top',
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
       <Button
-        title="Alert - Info"
+        title="Show Info Toast"
         onPress={() =>
-          showToast('info', {
+          showToast('This is an informational message', {
             title: 'Information',
             type: 'info',
             haptics: true,
@@ -20,9 +50,9 @@ const ToastAlert = () => {
       />
 
       <Button
-        title="Alert - Success"
+        title="Show Success Toast"
         onPress={() =>
-          showToast('success', {
+          showToast('Operation completed successfully!', {
             title: 'Success',
             type: 'success',
             // position: 'top',
@@ -33,9 +63,9 @@ const ToastAlert = () => {
       />
 
       <Button
-        title="Alert - Warning"
+        title="Show Warning Toast"
         onPress={() =>
-          showToast('warning', {
+          showToast('Please check your input before proceeding', {
             title: 'Warning',
             type: 'warning',
             haptics: true,
@@ -44,28 +74,29 @@ const ToastAlert = () => {
       />
 
       <Button
-        title="Alert - Error"
+        title="Show Error Toast"
         onPress={() =>
-          showToast('error', {
-            title: 'Something went wrong',
+          showToast('An unexpected error occurred', {
+            title: 'Error',
             type: 'error',
             haptics: true,
           })
         }
       />
+      <Button title="Simulate File Upload" onPress={showLoadingToast} />
 
       <Button
-        title="Custom"
+        title="Show Custom Toast"
         onPress={() =>
-          showToast('simple text', {
-            title: 'Custom Title',
+          showToast('This is a custom styled toast message', {
+            title: 'Custom Style',
             useOverlay: false,
             backgroundColor: '#4169E1',
             titleColor: '#FFFFFF',
             messageColor: '#FFFFFF',
             haptics: true,
             iconUri: source?.uri,
-            position:'top',
+            position: 'top',
           })
         }
       />

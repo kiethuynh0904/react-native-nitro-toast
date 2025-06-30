@@ -25,6 +25,8 @@ public extension AlertToastType {
         self = .warning
       case "info":
         self = .info
+      case "loading":
+        self = .loading
       case "default":
         self = .default
       default:
@@ -45,6 +47,8 @@ public extension AlertToastType {
         return "warning"
       case .info:
         return "info"
+      case .loading:
+        return "loading"
       case .default:
         return "default"
     }
