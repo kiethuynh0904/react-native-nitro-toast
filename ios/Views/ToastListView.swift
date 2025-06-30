@@ -113,21 +113,27 @@ private struct ToastView: View {
 
   @ViewBuilder
   private func renderToastIcon(_ toast: Toast) -> some View {
-    if toast.config.type == .loading {
-      ProgressView()
-        .progressViewStyle(CircularProgressViewStyle(tint: toast.iconColor))
-        .frame(width: 20, height: 20)
-    } else if let uri = toast.config.iconUri,
-      let image = UIImage(contentsOfFile: uri)
-    {
-      Image(uiImage: image)
-        .resizable()
-        .frame(width: 20, height: 20)
-        .clipShape(Circle())
-    } else if let systemName = toast.iconName {
-      Image(systemName: systemName)
+    switch toast.icon {
+    case .system(let name, let color):
+      Image(systemName: name)
         .font(.system(size: 20))
-        .foregroundColor(toast.iconColor)
+        .foregroundColor(color)
+
+    case .image(let uri):
+      if let image = UIImage(contentsOfFile: uri) {
+        Image(uiImage: image)
+          .resizable()
+          .frame(width: 20, height: 20)
+          .clipShape(Circle())
+      }
+
+    case .progress(let color):
+      ProgressView()
+        .progressViewStyle(CircularProgressViewStyle(tint: color))
+        .frame(width: 20, height: 20)
+
+    case .none:
+      EmptyView()
     }
   }
 }

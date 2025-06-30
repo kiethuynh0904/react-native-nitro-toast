@@ -8,6 +8,13 @@
 import Foundation
 import SwiftUI
 
+enum ToastIcon {
+  case system(name: String, color: Color)
+  case image(uri: String)
+  case progress(color: Color)
+  case none
+}
+
 final class Toast: Identifiable, ObservableObject {
   let id: String
   let message: String
@@ -59,23 +66,26 @@ extension Toast {
     return self.backgroundColor
   }
 
-  var iconName: String? {
+  var icon: ToastIcon {
+    if let uri = config.iconUri {
+      return .image(uri: uri)
+    }
+
     switch config.type {
     case .success:
-      return "checkmark.circle.fill"
+      return .system(name: "checkmark.circle.fill", color: iconColor)
     case .error:
-      return "exclamationmark.triangle.fill"
+      return .system(name: "exclamationmark.triangle.fill", color: iconColor)
     case .info:
-      return "info.circle.fill"
+      return .system(name: "info.circle.fill", color: iconColor)
     case .warning:
-      return "exclamationmark.circle.fill"
-    case .default:
-      return "bell.fill"
+      return .system(name: "exclamationmark.circle.fill", color: iconColor)
     case .loading:
-      return nil
+      return .progress(color: iconColor)
+    case .default:
+      return .system(name: "bell.fill", color: iconColor)
     }
   }
-
   var iconColor: Color {
     if config.useOverlay {
       return self.backgroundColor

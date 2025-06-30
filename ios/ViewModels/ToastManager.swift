@@ -15,9 +15,8 @@ class ToastManager: ObservableObject {
 
   var isEmpty: Bool { toasts.isEmpty }
 
+  /// MARK: Published State
   @Published var toasts: [Toast] = []
-
-  ///Toast stack props
   @Published var isExpanded: Bool = false
 
   func show(toastId: String, message: String, config: NitroToastConfig) {
@@ -33,7 +32,6 @@ class ToastManager: ObservableObject {
     guard config.duration > 0 else { return }
 
     Task {
-      /// Auto dismiss
       var remaining = config.duration / 1000
       let interval: TimeInterval = 0.1
 
@@ -45,6 +43,31 @@ class ToastManager: ObservableObject {
       }
 
       self.dismiss(toast.id)
+    }
+  }
+
+  func present(toastId: String, message: String, config: NitroToastConfig) {
+    /// If the window already exists, just update the toast content
+    guard toastWindow == nil else {
+      self.show(toastId: toastId, message: message, config: config)
+      return
+    }
+
+    /// Create and configure the hosting controller
+    let toastHostView = makeToastView(for: config)
+    let host = UIHostingController(rootView: toastHostView)
+    host.view.backgroundColor = .clear
+
+    /// Create and present the toast window
+    let window = PassthroughWindow(frame: UIScreen.main.bounds)
+    window.windowLevel = .alert + 1
+    window.rootViewController = host
+    window.isHidden = false
+    self.toastWindow = window
+
+    /// Show toast after UI is attached
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+      self.show(toastId: toastId, message: message, config: config)
     }
   }
 
@@ -62,8 +85,7 @@ class ToastManager: ObservableObject {
     }
   }
 
-  func cleanWindow() {
-    /// Clean up the window when all toasts are gone
+  private func cleanWindow() {
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
       guard self.isEmpty else { return }
       self.toastWindow?.isHidden = true
@@ -72,7 +94,14 @@ class ToastManager: ObservableObject {
     }
   }
 
-  func triggerHaptics(for type: AlertToastType?) {
+  private func makeToastView(for config: NitroToastConfig) -> some View {
+    switch config.presentation {
+    case .stacked: return AnyView(ToastStackView())
+    case .alert: return AnyView(ToastListView())
+    }
+  }
+
+  private func triggerHaptics(for type: AlertToastType?) {
     let generator = UINotificationFeedbackGenerator()
     switch type {
     case .success:
