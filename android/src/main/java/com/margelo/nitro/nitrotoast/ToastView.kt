@@ -2,6 +2,11 @@ package com.margelo.nitro.nitrotoast
 
 import android.graphics.BitmapFactory
 import android.util.Log
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -22,6 +27,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.foundation.Canvas
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.unit.Dp
 
 @Composable
 fun ToastView(toast: Toast) {
@@ -71,8 +80,13 @@ fun ToastView(toast: Toast) {
 
 @Composable
 private fun ToastIcon(toast: Toast) {
-    val bitmap = remember(toast.config.iconUri) {
-        val uri = toast.config.iconUri?.removePrefix("file://")
+    if (toast.config.type == AlertToastType.LOADING) {
+        MinimalSpinner(color = toast.iconColor)
+        return
+    }
+
+    val bitmap = remember(toast.iconUri) {
+        val uri = toast.iconUri?.removePrefix("file://")
         try {
             uri?.let { BitmapFactory.decodeFile(it) }
         } catch (e: Exception) {
@@ -96,6 +110,31 @@ private fun ToastIcon(toast: Toast) {
             modifier = Modifier.size(20.dp),
             alignment = Alignment.Center,
             colorFilter = ColorFilter.tint(toast.iconColor)
+        )
+    }
+}
+
+@Composable
+fun MinimalSpinner(color: Color, size: Dp = 20.dp) {
+    val infiniteTransition = rememberInfiniteTransition(label = "spinner")
+    val angle by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1000),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "angle"
+    )
+
+    Canvas(modifier = Modifier.size(size)) {
+        val stroke = Stroke(width = 2.dp.toPx())
+        drawArc(
+            color = color,
+            startAngle = angle,
+            sweepAngle = 270f,
+            useCenter = false,
+            style = stroke
         )
     }
 }

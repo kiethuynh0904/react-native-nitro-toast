@@ -19,7 +19,7 @@ fun String.toColorOrNull(): Color? {
 }
 
 data class Toast(
-    val id: String = java.util.UUID.randomUUID().toString(),
+    val id: String,
     val message: String,
     val config: NitroToastConfig,
     var offsetX: Float = 0f,
@@ -32,6 +32,7 @@ data class Toast(
             AlertToastType.ERROR -> Color(0xFFEF4444)
             AlertToastType.INFO -> Color(0xFF3B82F6)
             AlertToastType.WARNING -> Color(0xFFF59E0B)
+            AlertToastType.LOADING -> Color(0xFF6B7280)
             AlertToastType.DEFAULT -> Color(0xFF6B7280)
         }
 
@@ -47,6 +48,7 @@ data class Toast(
             AlertToastType.ERROR -> Icons.Filled.Error
             AlertToastType.WARNING -> Icons.Filled.Warning
             AlertToastType.INFO -> Icons.Filled.Info
+            AlertToastType.LOADING -> Icons.Filled.Info
             AlertToastType.DEFAULT -> Icons.Filled.Info
         }
     val iconColor: Color
@@ -58,6 +60,7 @@ data class Toast(
             AlertToastType.ERROR -> "Error Occurred"
             AlertToastType.INFO -> "Information"
             AlertToastType.WARNING -> "Warning"
+            AlertToastType.LOADING -> "Loading"
             AlertToastType.DEFAULT -> ""
         }
 
