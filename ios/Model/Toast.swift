@@ -109,7 +109,7 @@ extension Toast {
     case .loading:
       return "Loading..."
     case .default:
-      return ""
+      return "Notice"
     }
   }
 
