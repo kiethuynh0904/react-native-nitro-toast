@@ -1,11 +1,5 @@
 package com.margelo.nitro.nitrotoast
 
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.toColorInt
 
@@ -39,20 +33,20 @@ data class Toast(
     val overlayColor: Color
         get() = if (config.useOverlay) backgroundColor.copy(alpha = 0.08f) else backgroundColor
 
-    val iconUri: String?
-        get() = config.iconUri
-
-    val icon: ImageVector
-        get() = when (config.type) {
-            AlertToastType.SUCCESS -> Icons.Filled.CheckCircle
-            AlertToastType.ERROR -> Icons.Filled.Error
-            AlertToastType.WARNING -> Icons.Filled.Warning
-            AlertToastType.INFO -> Icons.Filled.Info
-            AlertToastType.LOADING -> Icons.Filled.Info
-            AlertToastType.DEFAULT -> Icons.Filled.Info
+    val icon: ToastIcon
+        get() {
+            config.iconUri?.let { return ToastIcon.Image(it) }
+            return when (config.type) {
+                AlertToastType.SUCCESS -> ToastIcon.System("checkmark", iconColor)
+                AlertToastType.ERROR -> ToastIcon.System("error", iconColor)
+                AlertToastType.WARNING -> ToastIcon.System("warning", iconColor)
+                AlertToastType.INFO -> ToastIcon.System("info", iconColor)
+                AlertToastType.LOADING -> ToastIcon.Progress(iconColor)
+                AlertToastType.DEFAULT -> ToastIcon.System("bell", iconColor)
+            }
         }
-    val iconColor: Color
-        get() = if(!config.useOverlay) Color.White else backgroundColor
+    private val iconColor: Color
+        get() = if (config.useOverlay) backgroundColor else Color.White
 
     val title: String
         get() = config.title ?: when (config.type) {
@@ -60,8 +54,8 @@ data class Toast(
             AlertToastType.ERROR -> "Error Occurred"
             AlertToastType.INFO -> "Information"
             AlertToastType.WARNING -> "Warning"
-            AlertToastType.LOADING -> "Loading"
-            AlertToastType.DEFAULT -> ""
+            AlertToastType.LOADING -> "Loading..."
+            AlertToastType.DEFAULT -> "Notice"
         }
 
 

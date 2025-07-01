@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 
 @Composable
@@ -53,7 +54,7 @@ fun ToastView(toast: Toast) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 15.dp)
         ) {
-            ToastIcon(toast)
+            RenderToastIcon(toast)
 
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -78,39 +79,53 @@ fun ToastView(toast: Toast) {
     }
 }
 
+/**
+ * Renders the icon for the toast, based on a sealed ToastIcon model.
+ */
 @Composable
-private fun ToastIcon(toast: Toast) {
-    if (toast.config.type == AlertToastType.LOADING) {
-        MinimalSpinner(color = toast.iconColor)
-        return
-    }
-
-    val bitmap = remember(toast.iconUri) {
-        val uri = toast.iconUri?.removePrefix("file://")
-        try {
-            uri?.let { BitmapFactory.decodeFile(it) }
-        } catch (e: Exception) {
-            Log.e("ToastIcon", "Failed to decode image: $uri", e)
-            null
+private fun RenderToastIcon(toast: Toast) {
+    when (val icon = toast.icon) {
+        is ToastIcon.Progress -> {
+            MinimalSpinner(color = icon.color)
+            return
         }
-    }
 
-    if (bitmap != null) {
-        Image(
-            bitmap = bitmap.asImageBitmap(),
-            contentDescription = null,
-            modifier = Modifier
-                .size(20.dp)
-                .clip(CircleShape)
-        )
-    } else {
-        Image(
-            imageVector = toast.icon,
-            contentDescription = null,
-            modifier = Modifier.size(20.dp),
-            alignment = Alignment.Center,
-            colorFilter = ColorFilter.tint(toast.iconColor)
-        )
+        is ToastIcon.Image -> {
+            val bitmap = remember(icon.uri) {
+                val uri = icon.uri.removePrefix("file://")
+                try {
+                    BitmapFactory.decodeFile(uri)
+                } catch (e: Exception) {
+                    Log.e("ToastIcon", "Failed to decode image: $uri", e)
+                    null
+                }
+            }
+            if (bitmap != null) {
+                Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clip(CircleShape)
+                )
+            }
+            return
+        }
+
+        is ToastIcon.System -> {
+            val imageVector: ImageVector? =
+                resolveSystemIcon(icon.name) // You need to define this mapping
+            imageVector?.let {
+                Image(
+                    imageVector = it,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                    alignment = Alignment.Center,
+                    colorFilter = ColorFilter.tint(icon.color)
+                )
+                return
+            }
+        }
     }
 }
 
