@@ -1,3 +1,12 @@
+# 📋 Requirements
+
+> This package uses [NitroModules](https://nitro.margelo.com/).  
+> Please confirm your setup meets the [minimum requirements](https://nitro.margelo.com/docs/minimum-requirements).
+
+### System Requirements
+- React Native: **≥ 0.75.0**
+- iOS: **Xcode ≥ 16.0**
+
 # 📦 Installation
 
 1. **Install peer dependencies:**

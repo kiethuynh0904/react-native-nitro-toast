@@ -21,12 +21,18 @@ A lightweight, native-powered toast notification library for React Native, built
 ![Android Toast Demo](./docs/android-demo.gif)
 </details>
 
+### 🍞 Stacked Presentation
+
+https://github.com/user-attachments/assets/a4ba0016-3b17-4b50-9b58-09357eb10047
+
+Check out the [stacked presentation guide](./docs/stacked.md) for more info.
+
 > 🔥 Native animations with ultra-smooth transitions on both platforms.
 
 ## ✨ Features
 
 - ⚡ **100% Native UI** — SwiftUI & Jetpack Compose
-- 🔄 **Two Display Styles**: `alert` and `stacked`
+- 🔄 **Two Display Styles**: `alert` and `stacked` (queue multiple toasts)
 - 🌈 **Predefined Types**: `success`, `error`, `info`, `warning`, `default`
 - 🎨 **Highly Customizable**:
   - Position: `top` / `bottom`
@@ -40,19 +46,9 @@ A lightweight, native-powered toast notification library for React Native, built
 - ✋ **Gesture Dismissal** (swipe to dismiss)
 - 🔕 **Auto Dismiss Pause** when holding
 
-## 📋 Requirements
-
-> This package uses [NitroModules](https://nitro.margelo.com/).  
-> Please confirm your setup meets the [minimum requirements](https://nitro.margelo.com/docs/minimum-requirements).
-
-### System Requirements
-- React Native: **≥ 0.75.0**
-- iOS: **Xcode ≥ 16.0**
-- Android: API 21+
-
 ## 📦 Installation
 
-Refer to the [INSTALLATION.md](./docs/INSTALLATION.md) guide for full setup, including iOS & Android instructions.
+See the [INSTALLATION.md](./docs/INSTALLATION.md) guide for full setup, requirements, and platform instructions.
 
 ## 🔧 Quick Start
 
@@ -78,7 +74,6 @@ showToast('Upload completed!', {
 
 - **[Custom Icons](./docs/CUSTOM_ICON.md)**: Learn how to use `react-native-vector-icons` or local images.
 - **[Stacked Toasts](./docs/stacked.md)**: See how to manage multiple queued toasts.
-
 
 ## 🛠 Configuration Options
 
