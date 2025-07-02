@@ -44,6 +44,7 @@ const ToastAlert = () => {
           showToast('This is an informational message', {
             title: 'Information',
             type: 'info',
+            position: 'top',
             haptics: true,
           })
         }
@@ -55,8 +56,7 @@ const ToastAlert = () => {
           showToast('Operation completed successfully!', {
             title: 'Success',
             type: 'success',
-            // position: 'top',
-            // duration:0,
+            position: 'top',
             haptics: true,
           })
         }
@@ -68,6 +68,7 @@ const ToastAlert = () => {
           showToast('Please check your input before proceeding', {
             title: 'Warning',
             type: 'warning',
+            position: 'top',
             haptics: true,
           })
         }
@@ -79,6 +80,7 @@ const ToastAlert = () => {
           showToast('An unexpected error occurred', {
             title: 'Error',
             type: 'error',
+            position: 'top',
             haptics: true,
           })
         }

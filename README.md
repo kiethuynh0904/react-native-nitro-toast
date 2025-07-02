@@ -9,26 +9,16 @@ A lightweight, native-powered toast notification library for React Native, built
 > ⚠️ **Looking for full layout customization (e.g. JSX content)?**  
 > consider using a JavaScript-based solution like [`react-native-toast-message`](https://github.com/calintamas/react-native-toast-message) instead.
 
-## 📋 Requirements
-
-> This package uses [NitroModules](https://nitro.margelo.com/).  
-> Please confirm your setup meets the [minimum requirements](https://nitro.margelo.com/docs/minimum-requirements).
-
-### System Requirements
-- React Native: **≥ 0.75.0**
-- iOS: **Xcode ≥ 16.0**
-- Android: API 21+
-
 ## 📸 Preview
 
 ### 🔔 Alert Style (Default)
 
-![iOS Toast Demo](./docs/demo.gif)
+![iOS Toast Demo](./docs/ios-demo.gif)
 
 <details>
 <summary>🟢 Android</summary>
 
-![Android Toast Demo](./docs/demo-android.gif)
+![Android Toast Demo](./docs/android-demo.gif)
 </details>
 
 > 🔥 Native animations with ultra-smooth transitions on both platforms.
@@ -49,6 +39,16 @@ A lightweight, native-powered toast notification library for React Native, built
 - 🚀 **Smooth Transitions** — native enter/exit animations
 - ✋ **Gesture Dismissal** (swipe to dismiss)
 - 🔕 **Auto Dismiss Pause** when holding
+
+## 📋 Requirements
+
+> This package uses [NitroModules](https://nitro.margelo.com/).  
+> Please confirm your setup meets the [minimum requirements](https://nitro.margelo.com/docs/minimum-requirements).
+
+### System Requirements
+- React Native: **≥ 0.75.0**
+- iOS: **Xcode ≥ 16.0**
+- Android: API 21+
 
 ## 📦 Installation
 
@@ -74,6 +74,12 @@ showToast('Upload completed!', {
 });
 ```
 
+## 📚 Guides
+
+- **[Custom Icons](./docs/CUSTOM_ICON.md)**: Learn how to use `react-native-vector-icons` or local images.
+- **[Stacked Toasts](./docs/stacked.md)**: See how to manage multiple queued toasts.
+
+
 ## 🛠 Configuration Options
 
 | Prop             | Type                         | Default     | Description                                |
@@ -90,11 +96,6 @@ showToast('Upload completed!', {
 | `titleColor`     | `string` (HEX)               | Varies by type      | Custom title color (optional)              |
 | `messageColor`   | `string` (HEX)               | Varies by type      | Custom message color (optional)            |
 | `useOverlay`     | `boolean`                    | `true`      | Apply semi-transparent overlay             |
-
-## 📚 Guides
-
-- **[Custom Icons](./docs/CUSTOM_ICON.md)**: Learn how to use `react-native-vector-icons` or local images.
-- **[Stacked Toasts](./docs/stacked.md)**: See how to manage multiple queued toasts.
 
 ---
 

@@ -1,8 +1,7 @@
 # 🖼️ Custom Icon Guide for react-native-nitro-toast
 *Preview: Toast with a custom vector icon*
+
 ![Custom Icon Preview](./custom-icon.gif)
-
-
 
 You can display a custom icon in your toast using the `iconUri` prop. This works great with vector icons or local images.
 

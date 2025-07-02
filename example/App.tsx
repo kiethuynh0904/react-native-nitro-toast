@@ -13,6 +13,9 @@ import ToastStacked from './src/screens/ToastStacked';
 import Home from './src/screens/Home';
 
 const RootStack = createNativeStackNavigator({
+  screenOptions: {
+    headerShown: false,
+  },
   screens: {
     Home: Home,
     ToastAlert: ToastAlert,
