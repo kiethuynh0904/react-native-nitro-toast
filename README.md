@@ -33,7 +33,8 @@ Check out the [stacked presentation guide](./docs/stacked.md) for more info.
 
 - ⚡ **100% Native UI** — SwiftUI & Jetpack Compose
 - 🔄 **Two Display Styles**: `alert` and `stacked` (queue multiple toasts)
-- 🌈 **Predefined Types**: `success`, `error`, `info`, `warning`, `default`
+- 🌈 **Predefined Types**: `success`, `error`, `info`, `warning`, `default`, `loading`
+- ⏳ **Loading Toast & Manual Dismiss**: Show a persistent loading indicator and dismiss it programmatically when needed
 - 🎨 **Highly Customizable**:
   - Position: `top` / `bottom`
   - Duration-based or sticky
@@ -53,7 +54,7 @@ See the [INSTALLATION.md](./docs/INSTALLATION.md) guide for full setup, requirem
 ## 🔧 Quick Start
 
 ```tsx
-import { showToast } from 'react-native-nitro-toast';
+import { showToast, dismissToast } from 'react-native-nitro-toast';
 
 // Basic usage
 showToast('Upload completed!');
@@ -68,6 +69,13 @@ showToast('Upload completed!', {
   messageColor: '#FFFFFF',
   haptics: true
 });
+
+// Show a loading toast (sticky)
+const id = showToast('Loading...', { type: 'loading', duration: 0 });
+
+// Manually dismiss the current toast
+// (useful for loading or sticky toasts)
+dismissToast(id);
 ```
 
 ## 📚 Guides
@@ -79,10 +87,10 @@ showToast('Upload completed!', {
 
 | Prop             | Type                         | Default     | Description                                |
 |------------------|------------------------------|-------------|--------------------------------------------|
-| `type`           | `success`, `error`, `info`, `warning`, `default` | `'default'` | Predefined visual styles                   |
+| `type`           | `success`, `error`, `info`, `warning`, `default`, `loading` | `'default'` | Predefined visual styles, including loading indicator |
 | `message`        | `string`                     | (required)  | Toast message                              |
 | `title`          | `string`                     | `null`      | Optional title                             |
-| `duration`       | `number` (MS)                | `4000`      | Auto-dismiss duration (0 for sticky)       |
+| `duration`       | `number` (MS)                | `4000`      | Auto-dismiss duration (0 for sticky/manual)       |
 | `position`       | `'top'` \| `'bottom'`        | `'bottom'`  | Toast position                             |
 | `presentation`   | `'stacked'` \| `'alert'`     | `'alert'`   | `alert`: single toast. `stacked`: queue multiple toasts. |
 | `haptics`        | `boolean`                    | `false`     | Enable haptic feedback (requires `VIBRATE` permission on Android) |
@@ -99,8 +107,9 @@ showToast('Upload completed!', {
 - [x] Add gesture support for dismissal
 - [x] Auto-dismiss pause on tap
 - [x] Add customizable icon support
+- [x] Add loading indicator support
+- [ ] Responsive layout support
 - [ ] Support new Glass effect for iOS
-- [ ] Add progress indicator support
 
 
 ## 🤝 Contributing & Issues
