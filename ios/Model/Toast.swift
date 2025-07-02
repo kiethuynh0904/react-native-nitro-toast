@@ -73,17 +73,17 @@ extension Toast {
 
     switch config.type {
     case .success:
-      return .system(name: "checkmark.circle.fill", color: iconColor)
+      return .system(name: "checkmark.circle", color: iconColor)
     case .error:
-      return .system(name: "exclamationmark.triangle.fill", color: iconColor)
+      return .system(name: "exclamationmark.circle", color: iconColor)
     case .info:
-      return .system(name: "info.circle.fill", color: iconColor)
+      return .system(name: "info.circle", color: iconColor)
     case .warning:
-      return .system(name: "exclamationmark.circle.fill", color: iconColor)
+      return .system(name: "exclamationmark.triangle", color: iconColor)
     case .loading:
       return .progress(color: iconColor)
     case .default:
-      return .system(name: "bell.fill", color: iconColor)
+      return .system(name: "bell", color: iconColor)
     }
   }
   var iconColor: Color {
