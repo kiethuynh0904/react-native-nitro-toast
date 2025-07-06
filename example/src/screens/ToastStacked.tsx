@@ -12,7 +12,7 @@ const ToastStacked = () => {
         title="Show Success Toast"
         color="#22C55E"
         onPress={() => {
-          showToast('Operation successful!', {
+          showToast('Operation successful! Operation successful! Operation successful!', {
             type: 'success',
             presentation: 'stacked',
             duration: 0,

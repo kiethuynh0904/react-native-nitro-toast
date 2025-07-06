@@ -1,6 +1,9 @@
 import React from 'react';
 import {View, Button, StyleSheet} from 'react-native';
-import {dismissToast, showToast} from 'react-native-nitro-toast';
+import {
+  showToast,
+  showToastPromise,
+} from 'react-native-nitro-toast';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 
 const ToastAlert = () => {
@@ -11,43 +14,41 @@ const ToastAlert = () => {
     'white',
   );
 
-  const showLoadingToast = async () => {
-    const id = showToast('Please wait...', {
-      type: 'loading',
-      title: 'Uploading',
-      duration: 0,
-      position: 'top',
-    });
-
-    try {
-      // Simulate async upload operation
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      // Randomly throw an error to simulate failure
-      if (Math.random() < 0.5) {
-        throw new Error('Simulated upload failure');
-      }
-
-      showToast('Your file has been uploaded successfully!', {
-        toastId: id,
-        type: 'success',
-        haptics: true,
-        position: 'top',
-      });
-    } catch (error) {
-      // You can customize the error message here
-      showToast(
-        error instanceof Error
-          ? error.message
-          : 'Upload failed. Please try again.',
-        {
-          toastId: id,
-          haptics: true,
-          type: 'error',
-          position: 'top',
+  // Fake API function
+  const fakeUploadAPI = (): Promise<{message: string}> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // Randomly throw an error to simulate failure
+        if (Math.random() < 0.4) {
+          reject(new Error('Simulated upload failure'));
+        } else {
+          resolve({
+            message: 'Your file has been uploaded successfully!',
+          });
         }
-      );
-    }
+      }, 2000);
+    });
+  };
+
+  const showLoadingToast = async () => {
+    await showToastPromise(
+      fakeUploadAPI(),
+      {
+        loading: 'Your file is being uploaded...',
+        success: result => result.message,
+        error: error =>
+          error instanceof Error
+            ? error.message
+            : 'Upload failed. Please try again.',
+      },
+      {
+        position: 'top',
+        haptics: true,
+        loading: {
+          title: 'Uploading',         
+        },
+      },
+    );
   };
 
   return (
@@ -113,11 +114,11 @@ const ToastAlert = () => {
             haptics: true,
             position: 'top',
           };
-          
+
           if (source?.uri) {
             config.iconUri = source.uri;
           }
-          
+
           showToast('This is a custom styled toast message', config);
         }}
       />
