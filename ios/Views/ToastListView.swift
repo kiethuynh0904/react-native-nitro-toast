@@ -73,11 +73,13 @@ private struct ToastRow: View {
           }
       )
       .transition(.move(edge: position == .top ? .top : .bottom).combined(with: .opacity))
+      .scaleEffect(toast.isUpdating ? 1.05 : 1.0)
+        .animation(.easeInOut(duration: 0.3), value: toast.isUpdating)
   }
 }
 
 private struct ToastView: View {
-  let toast: Toast
+  @ObservedObject var toast: Toast
 
   var body: some View {
     HStack(spacing: 12) {
@@ -109,6 +111,8 @@ private struct ToastView: View {
       .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 2)
     }
     .padding(.horizontal, 15)
+    // Animate main view scale for update
+    
   }
 }
 

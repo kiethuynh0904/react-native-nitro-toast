@@ -19,11 +19,11 @@ namespace margelo::nitro::nitrotoast { enum class PositionToastType; }
 #include <string>
 #include "NitroToastConfig.hpp"
 #include "JNitroToastConfig.hpp"
+#include <optional>
 #include "AlertToastType.hpp"
 #include "JAlertToastType.hpp"
 #include "PresentationToastType.hpp"
 #include "JPresentationToastType.hpp"
-#include <optional>
 #include "PositionToastType.hpp"
 #include "JPositionToastType.hpp"
 

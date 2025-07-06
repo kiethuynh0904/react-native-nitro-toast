@@ -16,11 +16,12 @@ enum ToastIcon {
 }
 
 final class Toast: Identifiable, ObservableObject {
-  let id: String
-  let message: String
-  let config: NitroToastConfig
+  var id: String
+  @Published var message: String
+  @Published var config: NitroToastConfig
 
   /// View Properties
+    @Published var isUpdating: Bool = false
   @Published var isPaused: Bool = false
   @Published var isDeleting: Bool = false
 

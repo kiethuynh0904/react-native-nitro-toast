@@ -20,13 +20,22 @@ class ToastManager: ObservableObject {
   @Published var isExpanded: Bool = false
 
   func show(toastId: String, message: String, config: NitroToastConfig) {
-    let toast = Toast(toastId: toastId, message: message, config: config)
-
+    let toast: Toast
+    if let existing = toasts.first(where: { $0.id == toastId }) {
+      updateToast(existing, with: message, config: config)
+      toast = existing
+    } else {
+      let newToast = Toast(toastId: toastId, message: message, config: config)
+      withAnimation(.bouncy) {
+        toasts.append(newToast)
+      }
+      toast = newToast
+    }
+    for toast in toasts {
+      print("Toast ID: \(toast.id), Message: \(toast.message)")
+    }
     if config.haptics == true {
       triggerHaptics(for: config.type)
-    }
-    withAnimation(.bouncy) {
-      self.toasts.append(toast)
     }
 
     guard config.duration > 0 else { return }
@@ -45,6 +54,19 @@ class ToastManager: ObservableObject {
       self.dismiss(toast.id)
     }
   }
+
+  private func updateToast(_ existing: Toast, with message: String, config: NitroToastConfig) {
+    existing.isUpdating = true
+    withAnimation {
+      existing.message = message
+      existing.config = config
+    }
+    Task {
+      try? await Task.sleep(nanoseconds: 300_000_000)
+      existing.isUpdating = false
+    }
+  }
+  
 
   func present(toastId: String, message: String, config: NitroToastConfig) {
     /// If the window already exists, just update the toast content

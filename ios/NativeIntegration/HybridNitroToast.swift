@@ -11,7 +11,7 @@ import UIKit
 class HybridNitroToast: HybridNitroToastSpec {
 
   func show(message: String, config: NitroToastConfig) -> String {
-    let toastId = UUID().uuidString
+      let toastId = config.toastId ?? UUID().uuidString
     DispatchQueue.main.async {
       ToastManager.shared.present(toastId: toastId, message: message, config: config)
     }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ToastIconView: View {
-    let toast: Toast
+    @ObservedObject var toast: Toast
 
     var body: some View {
       switch toast.icon {

@@ -20,6 +20,7 @@ data class NitroToastConfig
   @DoNotStrip
   @Keep
   constructor(
+    val toastId: String?,
     val type: AlertToastType,
     val presentation: PresentationToastType,
     val duration: Double,

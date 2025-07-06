@@ -25,10 +25,10 @@ namespace margelo::nitro::nitrotoast { enum class PresentationToastType; }
 // Forward declaration of `PositionToastType` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { enum class PositionToastType; }
 
-#include "AlertToastType.hpp"
-#include "PresentationToastType.hpp"
 #include <optional>
 #include <string>
+#include "AlertToastType.hpp"
+#include "PresentationToastType.hpp"
 #include "PositionToastType.hpp"
 
 namespace margelo::nitro::nitrotoast {
@@ -38,6 +38,7 @@ namespace margelo::nitro::nitrotoast {
    */
   struct NitroToastConfig {
   public:
+    std::optional<std::string> toastId     SWIFT_PRIVATE;
     AlertToastType type     SWIFT_PRIVATE;
     PresentationToastType presentation     SWIFT_PRIVATE;
     double duration     SWIFT_PRIVATE;
@@ -52,7 +53,7 @@ namespace margelo::nitro::nitrotoast {
 
   public:
     NitroToastConfig() = default;
-    explicit NitroToastConfig(AlertToastType type, PresentationToastType presentation, double duration, std::optional<std::string> title, PositionToastType position, std::optional<std::string> backgroundColor, std::optional<std::string> titleColor, std::optional<std::string> messageColor, bool useOverlay, std::optional<bool> haptics, std::optional<std::string> iconUri): type(type), presentation(presentation), duration(duration), title(title), position(position), backgroundColor(backgroundColor), titleColor(titleColor), messageColor(messageColor), useOverlay(useOverlay), haptics(haptics), iconUri(iconUri) {}
+    explicit NitroToastConfig(std::optional<std::string> toastId, AlertToastType type, PresentationToastType presentation, double duration, std::optional<std::string> title, PositionToastType position, std::optional<std::string> backgroundColor, std::optional<std::string> titleColor, std::optional<std::string> messageColor, bool useOverlay, std::optional<bool> haptics, std::optional<std::string> iconUri): toastId(toastId), type(type), presentation(presentation), duration(duration), title(title), position(position), backgroundColor(backgroundColor), titleColor(titleColor), messageColor(messageColor), useOverlay(useOverlay), haptics(haptics), iconUri(iconUri) {}
   };
 
 } // namespace margelo::nitro::nitrotoast
@@ -67,6 +68,7 @@ namespace margelo::nitro {
     static inline NitroToastConfig fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return NitroToastConfig(
+        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "toastId")),
         JSIConverter<AlertToastType>::fromJSI(runtime, obj.getProperty(runtime, "type")),
         JSIConverter<PresentationToastType>::fromJSI(runtime, obj.getProperty(runtime, "presentation")),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "duration")),
@@ -82,6 +84,7 @@ namespace margelo::nitro {
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const NitroToastConfig& arg) {
       jsi::Object obj(runtime);
+      obj.setProperty(runtime, "toastId", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.toastId));
       obj.setProperty(runtime, "type", JSIConverter<AlertToastType>::toJSI(runtime, arg.type));
       obj.setProperty(runtime, "presentation", JSIConverter<PresentationToastType>::toJSI(runtime, arg.presentation));
       obj.setProperty(runtime, "duration", JSIConverter<double>::toJSI(runtime, arg.duration));
@@ -100,6 +103,7 @@ namespace margelo::nitro {
         return false;
       }
       jsi::Object obj = value.getObject(runtime);
+      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "toastId"))) return false;
       if (!JSIConverter<AlertToastType>::canConvert(runtime, obj.getProperty(runtime, "type"))) return false;
       if (!JSIConverter<PresentationToastType>::canConvert(runtime, obj.getProperty(runtime, "presentation"))) return false;
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "duration"))) return false;

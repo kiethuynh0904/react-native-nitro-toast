@@ -23,9 +23,9 @@ namespace margelo::nitro::nitrotoast { enum class PositionToastType; }
 
 #include <string>
 #include "NitroToastConfig.hpp"
+#include <optional>
 #include "AlertToastType.hpp"
 #include "PresentationToastType.hpp"
-#include <optional>
 #include "PositionToastType.hpp"
 
 #include "NitroToast-Swift-Cxx-Umbrella.hpp"

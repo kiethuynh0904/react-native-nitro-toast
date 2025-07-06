@@ -22,17 +22,31 @@ const ToastAlert = () => {
     try {
       // Simulate async upload operation
       await new Promise(resolve => setTimeout(resolve, 2000));
-      dismissToast(id);
-      showToast('Your file has been uploaded', {
+
+      // Randomly throw an error to simulate failure
+      if (Math.random() < 0.5) {
+        throw new Error('Simulated upload failure');
+      }
+
+      showToast('Your file has been uploaded successfully!', {
+        toastId: id,
         type: 'success',
+        haptics: true,
         position: 'top',
       });
     } catch (error) {
-      dismissToast(id);
-      showToast('Upload failed. Please try again.', {
-        type: 'error',
-        position: 'top',
-      });
+      // You can customize the error message here
+      showToast(
+        error instanceof Error
+          ? error.message
+          : 'Upload failed. Please try again.',
+        {
+          toastId: id,
+          haptics: true,
+          type: 'error',
+          position: 'top',
+        }
+      );
     }
   };
 
@@ -89,18 +103,23 @@ const ToastAlert = () => {
 
       <Button
         title="Show Custom Toast"
-        onPress={() =>
-          showToast('This is a custom styled toast message', {
+        onPress={() => {
+          const config: any = {
             title: 'Custom Style',
             useOverlay: false,
             backgroundColor: '#4169E1',
             titleColor: '#FFFFFF',
             messageColor: '#FFFFFF',
             haptics: true,
-            iconUri: source?.uri,
             position: 'top',
-          })
-        }
+          };
+          
+          if (source?.uri) {
+            config.iconUri = source.uri;
+          }
+          
+          showToast('This is a custom styled toast message', config);
+        }}
       />
     </View>
   );

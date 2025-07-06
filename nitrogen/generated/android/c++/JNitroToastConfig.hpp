@@ -38,6 +38,8 @@ namespace margelo::nitro::nitrotoast {
     [[nodiscard]]
     NitroToastConfig toCpp() const {
       static const auto clazz = javaClassStatic();
+      static const auto fieldToastId = clazz->getField<jni::JString>("toastId");
+      jni::local_ref<jni::JString> toastId = this->getFieldValue(fieldToastId);
       static const auto fieldType = clazz->getField<JAlertToastType>("type");
       jni::local_ref<JAlertToastType> type = this->getFieldValue(fieldType);
       static const auto fieldPresentation = clazz->getField<JPresentationToastType>("presentation");
@@ -61,6 +63,7 @@ namespace margelo::nitro::nitrotoast {
       static const auto fieldIconUri = clazz->getField<jni::JString>("iconUri");
       jni::local_ref<jni::JString> iconUri = this->getFieldValue(fieldIconUri);
       return NitroToastConfig(
+        toastId != nullptr ? std::make_optional(toastId->toStdString()) : std::nullopt,
         type->toCpp(),
         presentation->toCpp(),
         duration,
@@ -82,6 +85,7 @@ namespace margelo::nitro::nitrotoast {
     [[maybe_unused]]
     static jni::local_ref<JNitroToastConfig::javaobject> fromCpp(const NitroToastConfig& value) {
       return newInstance(
+        value.toastId.has_value() ? jni::make_jstring(value.toastId.value()) : nullptr,
         JAlertToastType::fromCpp(value.type),
         JPresentationToastType::fromCpp(value.presentation),
         value.duration,

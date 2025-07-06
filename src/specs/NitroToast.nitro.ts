@@ -35,6 +35,8 @@ export type PositionToastType = 'top' | 'bottom'
  * Configuration options for toast notifications.
  */
 export type NitroToastConfig = {
+  /** Unique identifier for the toast, used to dismiss/update the toast */
+  toastId?:string
   /** Type of toast to display */
   type: AlertToastType
   /** How the toast should be presented */
