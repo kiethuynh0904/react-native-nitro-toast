@@ -4,10 +4,17 @@
 
 # 🚀 react-native-nitro-toast
 
-A lightweight, native-powered toast notification library for React Native, built with SwiftUI (iOS) and Jetpack Compose (Android). Designed for performance, native feel, and simplicity.
+## Why Nitro Toast?
+
+**react-native-nitro-toast** is a lightweight, native-powered toast notification library for React Native, built with SwiftUI (iOS) and Jetpack Compose (Android). It is designed for:
+
+- ⚡ **100% Native UI** — zero bridge, TurboModule-native
+- 🚀 **Smooth Animations** — powered by SwiftUI & Compose
+- 🎯 **Simple API** — with sensible defaults and full TypeScript support
+- 🎨 **Highly Customizable** — override colors, icons, positions, haptics
 
 > ⚠️ **Looking for full layout customization (e.g. JSX content)?**  
-> consider using a JavaScript-based solution like [`react-native-toast-message`](https://github.com/calintamas/react-native-toast-message) instead.
+> Consider using a JavaScript-based solution like [`react-native-toast-message`](https://github.com/calintamas/react-native-toast-message) instead.
 
 ## 📸 Preview
 
@@ -31,19 +38,16 @@ Check out the [stacked presentation guide](./docs/stacked.md) for more info.
 
 ## ✨ Features
 
-- ⚡ **100% Native UI** — SwiftUI & Jetpack Compose
-- 🔄 **Two Display Styles**: `alert` and `stacked` (queue multiple toasts)
+- 📦 Display modes: `alert` or `stacked`
 - 🌈 **Predefined Types**: `success`, `error`, `info`, `warning`, `default`, `loading`
-- ⏳ **Loading Toast & Manual Dismiss**: Show a persistent loading indicator and dismiss it programmatically when needed
+- ⏳ **Promise-based toasts** (loading → success/error)
 - 🎨 **Highly Customizable**:
   - Position: `top` / `bottom`
   - Duration-based or sticky
   - Color overrides (`titleColor`, `messageColor`, `backgroundColor`)
   - [Custom icon support](./docs/CUSTOM_ICON.md) (via `iconUri`)
   - Optional haptic feedback
-  - Safe area aware
-- 🤏 **Small Footprint** — zero bridge, TurboModule-native
-- 🚀 **Smooth Transitions** — native enter/exit animations
+- 📱 **Safe-area aware**
 - ✋ **Gesture Dismissal** (swipe to dismiss)
 - 🔕 **Auto Dismiss Pause** when holding
 
@@ -67,18 +71,40 @@ showToast('Upload completed!', {
   title: 'Success',
   backgroundColor: '#4CAF50',
   messageColor: '#FFFFFF',
-  haptics: true
+  haptics: true,
 });
 
-// Show a loading toast (sticky)
+// Manual loading toast (sticky)
 const id = showToast('Loading...', { type: 'loading', duration: 0 });
-
-// Manually dismiss the current toast
+// Dismiss the toast when your async work is done
 // (useful for loading or sticky toasts)
 dismissToast(id);
 ```
 
-## 📚 Guides
+### ⏳ Promise-based Toasts
+
+```tsx
+import { showToastPromise } from 'react-native-nitro-toast';
+
+// Example: Show a toast for an async upload process
+function handleUpload() {
+  showToastPromise(
+    uploadFile(), // Replace with your async function returning a promise
+    {
+      loading: 'Uploading your file...',
+      success: result => result.message,
+      error: error => error instanceof Error ? error.message : 'Upload failed. Please try again.',
+    },
+    {
+      position: 'top',
+      haptics: true,
+      loading: { title: 'Uploading' },
+    }
+  );
+}
+```
+
+## 📚 Guides & Documentation
 
 - **[Custom Icons](./docs/CUSTOM_ICON.md)**: Learn how to use `react-native-vector-icons` or local images.
 - **[Stacked Toasts](./docs/stacked.md)**: See how to manage multiple queued toasts.
@@ -100,8 +126,6 @@ dismissToast(id);
 | `messageColor`   | `string` (HEX)               | Varies by type      | Custom message color (optional)            |
 | `useOverlay`     | `boolean`                    | `true`      | Apply semi-transparent overlay             |
 
----
-
 ## 🧩 Roadmap
 - [x] Haptic feedback support
 - [x] Add gesture support for dismissal
@@ -110,7 +134,6 @@ dismissToast(id);
 - [x] Add loading indicator support
 - [ ] Responsive layout support
 - [ ] Support new Glass effect for iOS
-
 
 ## 🤝 Contributing & Issues
 Contributions are always welcome! If you have an idea, find a bug, or want to help improve the library, please feel free to:
@@ -121,6 +144,11 @@ Contributions are always welcome! If you have an idea, find a bug, or want to he
 
 Made with ❤️ by [Kiet Huynh](https://github.com/kiethuynh0904)
 
+## 📝 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for release notes and version history.
+
 ## 📝 License
 
 [MIT](./LICENSE)
+
