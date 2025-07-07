@@ -57,6 +57,8 @@ See the [INSTALLATION.md](./docs/INSTALLATION.md) guide for full setup, requirem
 
 ## 🔧 Quick Start
 
+Check out the [example app](./example) for a full working demo.
+
 ```tsx
 import { showToast, dismissToast } from 'react-native-nitro-toast';
 
@@ -103,7 +105,6 @@ function handleUpload() {
   );
 }
 ```
-
 ## 📚 Guides & Documentation
 
 - **[Custom Icons](./docs/CUSTOM_ICON.md)**: Learn how to use `react-native-vector-icons` or local images.
@@ -151,4 +152,5 @@ See [CHANGELOG.md](./CHANGELOG.md) for release notes and version history.
 ## 📝 License
 
 [MIT](./LICENSE)
+
 
