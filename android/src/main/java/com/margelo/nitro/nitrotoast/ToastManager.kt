@@ -39,6 +39,18 @@ class ToastListState {
         }
     }
 
+    fun setUpdating(toastId: String, isUpdating: Boolean) {
+        _toasts.value = _toasts.value.map {
+            if (it.id == toastId) it.copy(isUpdating = isUpdating) else it
+        }
+    }
+
+    fun updateToast(toastId: String, message: String, config: NitroToastConfig) {
+        _toasts.value = _toasts.value.map {
+            if (it.id == toastId) it.copy(message = message, config = config) else it
+        }
+    }
+
     suspend fun removeWithAnimation(toastId: String) {
         updateVisibility(toastId, false)
         delay(300)
@@ -50,29 +62,54 @@ object ToastManager {
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var toastContainer: ComposeView? = null
     private val state = ToastListState()
+    private val lifecycleJobs = mutableMapOf<String, Job>()
 
     @SuppressLint("MissingPermission")
     fun show(context: Context?, toastId: String, message: String, config: NitroToastConfig) {
         if (context !is Activity) return
 
-        val toast = Toast(id = toastId, message = message, config = config, isVisible = false)
+        // Always trigger haptics if requested, regardless of new or updating
         if (config.haptics == true) {
             triggerHaptics(context, config.type)
         }
-        state.add(toast)
 
-        context.runOnUiThread {
-            ensureToastContainer(context)
-            scope.launch { handleToastLifecycle(toast, config.duration) }
+        val existingToast = state.toasts.value.find { it.id == toastId }
+        if (existingToast != null) {
+            updateToast(toastId, message, config)
+        } else {
+            val toast = Toast(id = toastId, message = message, config = config, isVisible = false)
+            state.add(toast)
+            context.runOnUiThread {
+                ensureToastContainer(context)
+                lifecycleJobs[toastId] = scope.launch { handleToastLifecycle(toast, config.duration) }
+            }
+        }
+    }
+
+    // Helper function to update toast content and trigger animation
+    private fun updateToast(toastId: String, message: String, config: NitroToastConfig) {
+        state.updateToast(toastId, message, config)
+        state.setUpdating(toastId,true)
+        scope.launch {
+            delay(300)
+            state.setUpdating(toastId,false)
+        }
+        lifecycleJobs[toastId]?.cancel()
+        val updatedToast = state.toasts.value.find { it.id == toastId }
+        if (updatedToast != null) {
+            lifecycleJobs[toastId] = scope.launch { handleToastLifecycle(updatedToast, config.duration) }
         }
     }
 
     fun dismiss(toastId: String) {
         scope.launch {
             state.removeWithAnimation(toastId)
+            lifecycleJobs[toastId]?.cancel()
+            lifecycleJobs.remove(toastId)
             checkAndRemoveContainer()
         }
     }
+
 
     @RequiresPermission(Manifest.permission.VIBRATE)
     private fun triggerHaptics(context: Context, type: AlertToastType?) {

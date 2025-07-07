@@ -7,7 +7,7 @@ class HybridNitroToast : HybridNitroToastSpec() {
         get() = 0L
 
     override fun show(message: String, config: NitroToastConfig): String {
-        val toastId = java.util.UUID.randomUUID().toString()
+        val toastId = config.toastId ?: java.util.UUID.randomUUID().toString()
         NitroModules.applicationContext?.currentActivity?.let { activity ->
             ToastManager.show(activity, toastId, message, config)
         }

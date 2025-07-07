@@ -18,7 +18,8 @@ data class Toast(
     val config: NitroToastConfig,
     var offsetX: Float = 0f,
     var isVisible: Boolean = false,
-    var isPaused: Boolean = false
+    var isPaused: Boolean = false,
+    var isUpdating: Boolean = false
 ) {
     val backgroundColor: Color
         get() = config.backgroundColor?.toColorOrNull() ?: when (config.type) {

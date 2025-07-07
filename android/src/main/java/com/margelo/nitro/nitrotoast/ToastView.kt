@@ -7,12 +7,14 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.animation.Crossfade
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,6 +37,10 @@ import androidx.compose.ui.unit.Dp
 
 @Composable
 fun ToastView(toast: Toast) {
+//    val scale by animateFloatAsState(if (toast.isUpdating) 1.05f else 1.0f)
+
+    // Animate overlayColor
+    val animatedOverlayColor by animateColorAsState(targetValue = toast.overlayColor, label = "overlayColor")
 
     val containerModifier = Modifier
         .fillMaxWidth()
@@ -47,7 +53,7 @@ fun ToastView(toast: Toast) {
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(toast.overlayColor, RoundedCornerShape(12.dp))
+                .background(animatedOverlayColor, RoundedCornerShape(12.dp))
         )
 
         Row(
@@ -59,21 +65,31 @@ fun ToastView(toast: Toast) {
             Spacer(modifier = Modifier.width(12.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                BasicText(
-                    text = toast.title,
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = toast.titleColor
+                Crossfade(
+                    targetState = toast.title,
+                    label = "toastTitle"
+                ) { title ->
+                    BasicText(
+                        text = title,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = toast.titleColor
+                        )
                     )
-                )
-                BasicText(
-                    text = toast.message,
-                    style = TextStyle(
-                        fontSize = 13.sp,
-                        color = toast.messageColor
+                }
+                Crossfade(
+                    targetState = toast.message,
+                    label = "toastMessage"
+                ) { message ->
+                    BasicText(
+                        text = message,
+                        style = TextStyle(
+                            fontSize = 13.sp,
+                            color = toast.messageColor
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -84,46 +100,43 @@ fun ToastView(toast: Toast) {
  */
 @Composable
 private fun RenderToastIcon(toast: Toast) {
-    when (val icon = toast.icon) {
-        is ToastIcon.Progress -> {
-            MinimalSpinner(color = icon.color)
-            return
-        }
-
-        is ToastIcon.Image -> {
-            val bitmap = remember(icon.uri) {
-                val uri = icon.uri.removePrefix("file://")
-                try {
-                    BitmapFactory.decodeFile(uri)
-                } catch (e: Exception) {
-                    Log.e("ToastIcon", "Failed to decode image: $uri", e)
-                    null
+    Crossfade(targetState = toast.icon, label = "toastIcon") { icon ->
+        when (icon) {
+            is ToastIcon.Progress -> {
+                MinimalSpinner(color = icon.color)
+            }
+            is ToastIcon.Image -> {
+                val bitmap = remember(icon.uri) {
+                    val uri = icon.uri.removePrefix("file://")
+                    try {
+                        BitmapFactory.decodeFile(uri)
+                    } catch (e: Exception) {
+                        Log.e("ToastIcon", "Failed to decode image: $uri", e)
+                        null
+                    }
+                }
+                if (bitmap != null) {
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clip(CircleShape)
+                    )
                 }
             }
-            if (bitmap != null) {
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape)
-                )
-            }
-            return
-        }
-
-        is ToastIcon.System -> {
-            val imageVector: ImageVector? =
-                resolveSystemIcon(icon.name) // You need to define this mapping
-            imageVector?.let {
-                Image(
-                    imageVector = it,
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp),
-                    alignment = Alignment.Center,
-                    colorFilter = ColorFilter.tint(icon.color)
-                )
-                return
+            is ToastIcon.System -> {
+                val imageVector: ImageVector? =
+                    resolveSystemIcon(icon.name)
+                imageVector?.let {
+                    Image(
+                        imageVector = it,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        alignment = Alignment.Center,
+                        colorFilter = ColorFilter.tint(icon.color)
+                    )
+                }
             }
         }
     }

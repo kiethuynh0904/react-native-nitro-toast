@@ -3,6 +3,11 @@ package com.margelo.nitro.nitrotoast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.EaseInOut
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -21,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.IntOffset
 
@@ -32,7 +38,19 @@ fun DraggableToast(
     onDismiss: () -> Unit
 ) {
     var offsetY by remember { mutableFloatStateOf(0f) }
-
+    val animatedOffsetY by animateFloatAsState(
+        targetValue = offsetY,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
+        label = "offsetY"
+    )
+    val scale by animateFloatAsState(
+        targetValue = if (toast.isUpdating) 1.05f else 1.0f,
+        animationSpec = tween(durationMillis = 300, easing = EaseInOut),
+        label = "scale"
+    )
     val enterAnimation = getEnterAnimation(position)
     val exitAnimation = getExitAnimation(position)
 
@@ -43,7 +61,7 @@ fun DraggableToast(
     ) {
         Box(
             modifier = Modifier
-                .offset { IntOffset(0, offsetY.toInt()) }
+                .offset { IntOffset(0, animatedOffsetY.toInt()) }
                 .pointerInput(Unit) {
                     detectVerticalDragGestures(
                         onDragStart = {
@@ -71,6 +89,7 @@ fun DraggableToast(
                         }
                     )
                 }
+                .graphicsLayer(scaleX = scale, scaleY = scale)
         ) {
             ToastView(toast)
         }
