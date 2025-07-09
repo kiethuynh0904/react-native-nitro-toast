@@ -9,7 +9,7 @@ export type ToastPromiseMessages<T> = {
   error: ValueOrFunction<string, any>
 }
 
-export type ToastPromiseConfig = Partial<NitroToastConfig> & {
+export type ToastPromiseConfig = Partial<Omit<NitroToastConfig, 'type'>> & {
   loading?: Partial<NitroToastConfig>
   success?: Partial<NitroToastConfig>
   error?: Partial<NitroToastConfig>

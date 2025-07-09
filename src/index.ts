@@ -28,6 +28,10 @@ export const showToast = (
   message: string,
   config?: Partial<NitroToastConfig>
 ): string => {
+  const isLoading = config?.type === 'loading'
+  if (isLoading) {
+    defaultToastConfig.duration = 0
+  }
   const _config: NitroToastConfig = {
     ...defaultToastConfig,
     ...config,
@@ -66,10 +70,9 @@ export async function showToastPromise<T>(
   config: ToastPromiseConfig
 ): Promise<T> {
   const toastId = showToast(messages.loading, {
+    type: 'loading',
     ...config,
     ...config?.loading,
-    type: 'loading',
-    duration: 0,
   })
 
   if (typeof promise === 'function') {
@@ -80,21 +83,19 @@ export async function showToastPromise<T>(
     const result = await promise
 
     showToast(resolveMessage(messages.success, result), {
+      type: 'success',
       ...config,
       ...config?.success,
       toastId,
-      type: 'success',
-      duration: 3000,
     })
 
     return result
   } catch (err) {
     showToast(resolveMessage(messages.error, err), {
+      type: 'error',
       ...config,
       ...config?.error,
       toastId,
-      type: 'error',
-      duration: 3000,
     })
     throw err
   }

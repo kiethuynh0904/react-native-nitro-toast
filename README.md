@@ -77,7 +77,7 @@ showToast('Upload completed!', {
 });
 
 // Manual loading toast (sticky)
-const id = showToast('Loading...', { type: 'loading', duration: 0 });
+const id = showToast('Loading...', { type: 'loading' });
 // Dismiss the toast when your async work is done
 // (useful for loading or sticky toasts)
 dismissToast(id);
