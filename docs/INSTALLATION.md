@@ -6,6 +6,7 @@
 **System Requirements**
 - React Native: **≥ 0.75.0**
 - iOS: **Xcode ≥ 16.0**
+- Android: **Kotlin ≥ 2.0.0**
 
 ---
 
