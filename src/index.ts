@@ -28,15 +28,13 @@ export const showToast = (
   message: string,
   config?: Partial<NitroToastConfig>
 ): string => {
-  const isLoading = config?.type === 'loading'
-  if (isLoading) {
-    defaultToastConfig.duration = 0
-  }
+
   const _config: NitroToastConfig = {
     ...defaultToastConfig,
     ...config,
-  }
-  return NitroToastModule.show(message, _config)
+    duration: config?.duration ?? (config?.type === 'loading' ? 0 : defaultToastConfig.duration),
+  };
+  return NitroToastModule.show(message, _config);
 }
 
 /**
