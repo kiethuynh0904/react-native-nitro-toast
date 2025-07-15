@@ -1,15 +1,15 @@
 //
-//  SwiftUIView.swift
+//  HybridNitroToastView.swift
 //  NitroToast
 //
 //  Created by kiet.huynh on 6/3/25.
 //
 
-//import Foundation
-//import SwiftUI
-//import UIKit
+// import Foundation
+// import SwiftUI
+// import UIKit
 
-//class HybridNitroToastView: HybridNitroToastViewSpec {
+// class HybridNitroToastView: HybridNitroToastViewSpec {
 //  var view: UIView = UIView()
 
 //  private let hostingController: UIHostingController<ToastHostView<EmptyView>>
@@ -32,4 +32,4 @@
 //      hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 //    ])
 //  }
-//}
+// }

@@ -9,18 +9,17 @@ import SwiftUI
 import UIKit
 
 class HybridNitroToast: HybridNitroToastSpec {
-
-  func show(message: String, config: NitroToastConfig) -> String {
-      let toastId = config.toastId ?? UUID().uuidString
-    DispatchQueue.main.async {
-      ToastManager.shared.present(toastId: toastId, message: message, config: config)
+    func show(message: String, config: NitroToastConfig) -> String {
+        let toastId = config.toastId ?? UUID().uuidString
+        DispatchQueue.main.async {
+            ToastViewModel.shared.present(toastId: toastId, message: message, config: config)
+        }
+        return toastId
     }
-    return toastId
-  }
 
-  func dismiss(toastId: String) {
-    DispatchQueue.main.async {
-      ToastManager.shared.dismiss(toastId)
+    func dismiss(toastId: String) {
+        DispatchQueue.main.async {
+            ToastViewModel.shared.dismiss(toastId)
+        }
     }
-  }
 }

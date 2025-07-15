@@ -11,27 +11,27 @@ struct ToastIconView: View {
     @ObservedObject var toast: Toast
 
     var body: some View {
-      switch toast.icon {
-      case .system(let name, let color):
-        Image(systemName: name)
-          .font(.system(size: 20))
-          .foregroundColor(color)
+        switch toast.icon {
+        case let .system(name, color):
+            Image(systemName: name)
+                .font(.system(size: 20))
+                .foregroundColor(color)
 
-      case .image(let uri):
-        if let image = UIImage(contentsOfFile: uri) {
-          Image(uiImage: image)
-            .resizable()
-            .frame(width: 20, height: 20)
-            .clipShape(Circle())
+        case let .image(uri):
+            if let image = UIImage(contentsOfFile: uri) {
+                Image(uiImage: image)
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .clipShape(Circle())
+            }
+
+        case let .progress(color):
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: color))
+                .frame(width: 20, height: 20)
+
+        case .none:
+            EmptyView()
         }
-
-      case .progress(let color):
-        ProgressView()
-          .progressViewStyle(CircularProgressViewStyle(tint: color))
-          .frame(width: 20, height: 20)
-
-      case .none:
-        EmptyView()
-      }
     }
 }

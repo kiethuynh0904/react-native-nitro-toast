@@ -14,7 +14,7 @@ import Home from './src/screens/Home';
 
 const RootStack = createNativeStackNavigator({
   screenOptions: {
-    headerShown: false,
+    headerShown: true,
   },
   screens: {
     Home: Home,
