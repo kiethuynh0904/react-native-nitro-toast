@@ -31,25 +31,26 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.IntOffset
 
 @Composable
-fun DraggableToast(
+fun draggableToast(
     toast: Toast,
     position: Alignment,
     onPaused: (Boolean) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     var offsetY by remember { mutableFloatStateOf(0f) }
     val animatedOffsetY by animateFloatAsState(
         targetValue = offsetY,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioLowBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
-        label = "offsetY"
+        animationSpec =
+            spring(
+                dampingRatio = Spring.DampingRatioLowBouncy,
+                stiffness = Spring.StiffnessLow,
+            ),
+        label = "offsetY",
     )
     val scale by animateFloatAsState(
         targetValue = if (toast.isUpdating) 1.05f else 1.0f,
         animationSpec = tween(durationMillis = 300, easing = EaseInOut),
-        label = "scale"
+        label = "scale",
     )
     val enterAnimation = getEnterAnimation(position)
     val exitAnimation = getExitAnimation(position)
@@ -60,65 +61,70 @@ fun DraggableToast(
         exit = exitAnimation,
     ) {
         Box(
-            modifier = Modifier
-                .offset { IntOffset(0, animatedOffsetY.toInt()) }
-                .pointerInput(Unit) {
-                    detectVerticalDragGestures(
-                        onDragStart = {
+            modifier =
+                Modifier
+                    .offset { IntOffset(0, animatedOffsetY.toInt()) }
+                    .pointerInput(Unit) {
+                        detectVerticalDragGestures(
+                            onDragStart = {
 //                            onPaused(true)
-                        },
-                        onVerticalDrag = { _, dragAmount ->
-                            offsetY += dragAmount
-                            offsetY = when (toast.config.position) {
-                                PositionToastType.TOP -> minOf(offsetY, 0f)
-                                PositionToastType.BOTTOM -> maxOf(offsetY, 0f)
-                            }
-                        },
-                        onDragEnd = {
+                            },
+                            onVerticalDrag = { _, dragAmount ->
+                                offsetY += dragAmount
+                                offsetY =
+                                    when (toast.config.position) {
+                                        PositionToastType.TOP -> minOf(offsetY, 0f)
+                                        PositionToastType.BOTTOM -> maxOf(offsetY, 0f)
+                                    }
+                            },
+                            onDragEnd = {
 //                            onPaused(false)
-                            val threshold = 50f
-                            val shouldDismiss = when (toast.config.position) {
-                                PositionToastType.TOP -> offsetY < -threshold
-                                PositionToastType.BOTTOM -> offsetY > threshold
-                            }
-                            if (shouldDismiss) {
-                                onDismiss()
-                            } else {
-                                offsetY = 0f
-                            }
-                        }
-                    )
-                }
-                .graphicsLayer(scaleX = scale, scaleY = scale)
+                                val threshold = 50f
+                                val shouldDismiss =
+                                    when (toast.config.position) {
+                                        PositionToastType.TOP -> offsetY < -threshold
+                                        PositionToastType.BOTTOM -> offsetY > threshold
+                                    }
+                                if (shouldDismiss) {
+                                    onDismiss()
+                                } else {
+                                    offsetY = 0f
+                                }
+                            },
+                        )
+                    }.graphicsLayer(scaleX = scale, scaleY = scale),
         ) {
-            ToastView(toast)
+            toastView(toast)
         }
     }
 }
 
 @Composable
 private fun getEnterAnimation(position: Alignment): EnterTransition {
-    val transformOrigin = if (position == Alignment.TopCenter)
-        TransformOrigin(0.5f, 0f) else TransformOrigin(0.5f, 1f)
+    val transformOrigin =
+        if (position == Alignment.TopCenter) {
+            TransformOrigin(0.5f, 0f)
+        } else {
+            TransformOrigin(0.5f, 1f)
+        }
 
     return if (position == Alignment.TopCenter) {
         slideInVertically(initialOffsetY = { -it }) +
-                expandVertically(expandFrom = Alignment.Top) +
-                scaleIn(transformOrigin = transformOrigin) +
-                fadeIn(initialAlpha = 0.3f)
+            expandVertically(expandFrom = Alignment.Top) +
+            scaleIn(transformOrigin = transformOrigin) +
+            fadeIn(initialAlpha = 0.3f)
     } else {
         slideInVertically(initialOffsetY = { it }) +
-                expandVertically() +
-                scaleIn(transformOrigin = transformOrigin) +
-                fadeIn(initialAlpha = 0.3f)
+            expandVertically() +
+            scaleIn(transformOrigin = transformOrigin) +
+            fadeIn(initialAlpha = 0.3f)
     }
 }
 
 @Composable
-private fun getExitAnimation(position: Alignment): ExitTransition {
-    return if (position == Alignment.TopCenter) {
+private fun getExitAnimation(position: Alignment): ExitTransition =
+    if (position == Alignment.TopCenter) {
         slideOutVertically(targetOffsetY = { -it }) + shrinkVertically() + fadeOut()
     } else {
         slideOutVertically(targetOffsetY = { it }) + shrinkVertically() + fadeOut()
     }
-}

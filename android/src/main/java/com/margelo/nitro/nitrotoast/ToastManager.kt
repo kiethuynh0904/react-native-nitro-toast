@@ -11,44 +11,65 @@ import android.util.Log
 import android.view.ViewGroup
 import androidx.annotation.RequiresPermission
 import androidx.compose.ui.platform.ComposeView
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class ToastListState {
     private val _toasts = MutableStateFlow(emptyList<Toast>())
     val toasts = _toasts.asStateFlow()
 
-    val _pauseMap = MutableStateFlow<Map<String,Boolean>>(emptyMap())
-
+    private val _pauseMap = MutableStateFlow<Map<String, Boolean>>(emptyMap())
     val pauseMap = _pauseMap.asStateFlow()
 
-    fun setPaused(toastId:String,paused:Boolean){
-        _pauseMap.value = _pauseMap.value.toMutableMap().apply {
-            put(toastId,paused)
-        }
+    fun setPaused(
+        toastId: String,
+        paused: Boolean,
+    ) {
+        _pauseMap.value =
+            _pauseMap.value.toMutableMap().apply {
+                put(toastId, paused)
+            }
     }
 
     fun add(toast: Toast) {
         _toasts.value += toast
     }
 
-    fun updateVisibility(toastId: String, isVisible: Boolean) {
-        _toasts.value = _toasts.value.map {
-            if (it.id == toastId) it.copy(isVisible = isVisible) else it
-        }
+    fun updateVisibility(
+        toastId: String,
+        isVisible: Boolean,
+    ) {
+        _toasts.value =
+            _toasts.value.map {
+                if (it.id == toastId) it.copy(isVisible = isVisible) else it
+            }
     }
 
-    fun setUpdating(toastId: String, isUpdating: Boolean) {
-        _toasts.value = _toasts.value.map {
-            if (it.id == toastId) it.copy(isUpdating = isUpdating) else it
-        }
+    fun setUpdating(
+        toastId: String,
+        isUpdating: Boolean,
+    ) {
+        _toasts.value =
+            _toasts.value.map {
+                if (it.id == toastId) it.copy(isUpdating = isUpdating) else it
+            }
     }
 
-    fun updateToast(toastId: String, message: String, config: NitroToastConfig) {
-        _toasts.value = _toasts.value.map {
-            if (it.id == toastId) it.copy(message = message, config = config) else it
-        }
+    fun updateToast(
+        toastId: String,
+        message: String,
+        config: NitroToastConfig,
+    ) {
+        _toasts.value =
+            _toasts.value.map {
+                if (it.id == toastId) it.copy(message = message, config = config) else it
+            }
     }
 
     suspend fun removeWithAnimation(toastId: String) {
@@ -65,7 +86,12 @@ object ToastManager {
     private val lifecycleJobs = mutableMapOf<String, Job>()
 
     @SuppressLint("MissingPermission")
-    fun show(context: Context?, toastId: String, message: String, config: NitroToastConfig) {
+    fun show(
+        context: Context?,
+        toastId: String,
+        message: String,
+        config: NitroToastConfig,
+    ) {
         if (context !is Activity) return
 
         // Always trigger haptics if requested, regardless of new or updating
@@ -87,12 +113,16 @@ object ToastManager {
     }
 
     // Helper function to update toast content and trigger animation
-    private fun updateToast(toastId: String, message: String, config: NitroToastConfig) {
+    private fun updateToast(
+        toastId: String,
+        message: String,
+        config: NitroToastConfig,
+    ) {
         state.updateToast(toastId, message, config)
-        state.setUpdating(toastId,true)
+        state.setUpdating(toastId, true)
         scope.launch {
             delay(300)
-            state.setUpdating(toastId,false)
+            state.setUpdating(toastId, false)
         }
         lifecycleJobs[toastId]?.cancel()
         val updatedToast = state.toasts.value.find { it.id == toastId }
@@ -110,18 +140,21 @@ object ToastManager {
         }
     }
 
-
     @RequiresPermission(Manifest.permission.VIBRATE)
-    private fun triggerHaptics(context: Context, type: AlertToastType?) {
+    private fun triggerHaptics(
+        context: Context,
+        type: AlertToastType?,
+    ) {
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
         if (vibrator != null && vibrator.hasVibrator()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val effect = when (type) {
-                    AlertToastType.SUCCESS -> VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE)
-                    AlertToastType.ERROR -> VibrationEffect.createOneShot(60, VibrationEffect.DEFAULT_AMPLITUDE)
-                    AlertToastType.WARNING -> VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE)
-                    else -> VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE)
-                }
+                val effect =
+                    when (type) {
+                        AlertToastType.SUCCESS -> VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE)
+                        AlertToastType.ERROR -> VibrationEffect.createOneShot(60, VibrationEffect.DEFAULT_AMPLITUDE)
+                        AlertToastType.WARNING -> VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE)
+                        else -> VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE)
+                    }
                 vibrator.vibrate(effect)
             } else {
                 @Suppress("DEPRECATION")
@@ -133,18 +166,23 @@ object ToastManager {
     private fun ensureToastContainer(context: Activity) {
         if (toastContainer != null) return
 
-        toastContainer = ComposeView(context).apply {
-            setContent { ToastList(state = state) }
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-        }
+        toastContainer =
+            ComposeView(context).apply {
+                setContent { toastList(state = state) }
+                layoutParams =
+                    ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                    )
+            }
 
         (context.window?.decorView as? ViewGroup)?.addView(toastContainer)
     }
 
-    private suspend fun handleToastLifecycle(toast: Toast, duration: Double) {
+    private suspend fun handleToastLifecycle(
+        toast: Toast,
+        duration: Double,
+    ) {
         delay(16)
         state.updateVisibility(toast.id, true)
         Log.d("ToastManager", "Showing toast: $toast")

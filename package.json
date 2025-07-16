@@ -34,6 +34,7 @@
     "postinstall": "tsc || exit 0;",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "format:ios": "swiftformat ios/",
+    "format:android": "ktlint -F android/src/**/*.kt",
     "clean": "rm -rf android/build node_modules/**/android/build lib",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "typescript": "tsc",
