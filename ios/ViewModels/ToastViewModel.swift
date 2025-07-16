@@ -32,9 +32,7 @@ class ToastViewModel: ObservableObject {
             }
             toast = newToast
         }
-        for toast in toasts {
-            print("Toast ID: \(toast.id), Message: \(toast.message)")
-        }
+        
         if config.haptics == true {
             triggerHaptics(for: config.type)
         }
