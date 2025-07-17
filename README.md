@@ -127,15 +127,6 @@ function handleUpload() {
 | `messageColor`   | `string` (HEX)               | Varies by type      | Custom message color (optional)            |
 | `useOverlay`     | `boolean`                    | `true`      | Apply semi-transparent overlay             |
 
-## 🧩 Roadmap
-- [x] Haptic feedback support
-- [x] Add gesture support for dismissal
-- [x] Auto-dismiss pause on tap
-- [x] Add customizable icon support
-- [x] Add loading indicator support
-- [ ] Responsive layout support
-- [ ] Support new Glass effect for iOS
-
 ## 🤝 Contributing & Issues
 Contributions are always welcome! If you have an idea, find a bug, or want to help improve the library, please feel free to:
 - [Create an issue](https://github.com/kiethuynh0904/react-native-nitro-toast/issues) to report bugs or suggest features.
