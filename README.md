@@ -38,18 +38,18 @@ Check out the [stacked presentation guide](./docs/stacked.md) for more info.
 
 ## ✨ Features
 
-- 📦 Display modes: `alert` or `stacked`
-- 🌈 **Predefined Types**: `success`, `error`, `info`, `warning`, `default`, `loading`
-- ⏳ **Promise-based toasts** (loading → success/error)
-- 🎨 **Highly Customizable**:
+- **Display modes**: `alert` or `stacked`
+- **Predefined Types**: `success`, `error`, `info`, `warning`, `default`, `loading`
+- **Promise-based toasts** (loading → success/error)
+- **Highly Customizable**:
   - Position: `top` / `bottom`
   - Duration-based or sticky
   - Color overrides (`titleColor`, `messageColor`, `backgroundColor`)
   - [Custom icon support](./docs/CUSTOM_ICON.md) (via `iconUri`)
   - Optional haptic feedback
-- 📱 **Safe-area aware**
-- ✋ **Gesture Dismissal** (swipe to dismiss)
-- 🔕 **Auto Dismiss Pause** when holding
+- **Safe-area aware**
+- **Gesture Dismissal** (swipe to dismiss)
+- **Auto Dismiss Pause** when holding
 
 ## 📦 Installation
 
