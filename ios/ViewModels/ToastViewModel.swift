@@ -117,11 +117,11 @@ class ToastViewModel: ObservableObject {
     private func makeToastView(for config: NitroToastConfig) -> some View {
         switch config.presentation {
         case .stacked: return AnyView(ToastStackView())
-        case .alert: return AnyView(ToastListView())
+        case .default: return AnyView(ToastListView())
         }
     }
 
-    private func triggerHaptics(for type: AlertToastType?) {
+    private func triggerHaptics(for type: ToastType?) {
         let generator = UINotificationFeedbackGenerator()
         switch type {
         case .success:

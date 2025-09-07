@@ -18,18 +18,18 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `AlertToastType` to properly resolve imports.
-namespace margelo::nitro::nitrotoast { enum class AlertToastType; }
+// Forward declaration of `ToastType` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { enum class ToastType; }
 // Forward declaration of `PresentationToastType` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { enum class PresentationToastType; }
-// Forward declaration of `PositionToastType` to properly resolve imports.
-namespace margelo::nitro::nitrotoast { enum class PositionToastType; }
+// Forward declaration of `ToastPosition` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { enum class ToastPosition; }
 
 #include <optional>
 #include <string>
-#include "AlertToastType.hpp"
+#include "ToastType.hpp"
 #include "PresentationToastType.hpp"
-#include "PositionToastType.hpp"
+#include "ToastPosition.hpp"
 
 namespace margelo::nitro::nitrotoast {
 
@@ -39,11 +39,11 @@ namespace margelo::nitro::nitrotoast {
   struct NitroToastConfig {
   public:
     std::optional<std::string> toastId     SWIFT_PRIVATE;
-    AlertToastType type     SWIFT_PRIVATE;
+    ToastType type     SWIFT_PRIVATE;
     PresentationToastType presentation     SWIFT_PRIVATE;
     double duration     SWIFT_PRIVATE;
     std::optional<std::string> title     SWIFT_PRIVATE;
-    PositionToastType position     SWIFT_PRIVATE;
+    ToastPosition position     SWIFT_PRIVATE;
     std::optional<std::string> backgroundColor     SWIFT_PRIVATE;
     std::optional<std::string> titleColor     SWIFT_PRIVATE;
     std::optional<std::string> messageColor     SWIFT_PRIVATE;
@@ -53,7 +53,7 @@ namespace margelo::nitro::nitrotoast {
 
   public:
     NitroToastConfig() = default;
-    explicit NitroToastConfig(std::optional<std::string> toastId, AlertToastType type, PresentationToastType presentation, double duration, std::optional<std::string> title, PositionToastType position, std::optional<std::string> backgroundColor, std::optional<std::string> titleColor, std::optional<std::string> messageColor, bool useOverlay, std::optional<bool> haptics, std::optional<std::string> iconUri): toastId(toastId), type(type), presentation(presentation), duration(duration), title(title), position(position), backgroundColor(backgroundColor), titleColor(titleColor), messageColor(messageColor), useOverlay(useOverlay), haptics(haptics), iconUri(iconUri) {}
+    explicit NitroToastConfig(std::optional<std::string> toastId, ToastType type, PresentationToastType presentation, double duration, std::optional<std::string> title, ToastPosition position, std::optional<std::string> backgroundColor, std::optional<std::string> titleColor, std::optional<std::string> messageColor, bool useOverlay, std::optional<bool> haptics, std::optional<std::string> iconUri): toastId(toastId), type(type), presentation(presentation), duration(duration), title(title), position(position), backgroundColor(backgroundColor), titleColor(titleColor), messageColor(messageColor), useOverlay(useOverlay), haptics(haptics), iconUri(iconUri) {}
   };
 
 } // namespace margelo::nitro::nitrotoast
@@ -69,11 +69,11 @@ namespace margelo::nitro {
       jsi::Object obj = arg.asObject(runtime);
       return NitroToastConfig(
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "toastId")),
-        JSIConverter<AlertToastType>::fromJSI(runtime, obj.getProperty(runtime, "type")),
+        JSIConverter<ToastType>::fromJSI(runtime, obj.getProperty(runtime, "type")),
         JSIConverter<PresentationToastType>::fromJSI(runtime, obj.getProperty(runtime, "presentation")),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "duration")),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "title")),
-        JSIConverter<PositionToastType>::fromJSI(runtime, obj.getProperty(runtime, "position")),
+        JSIConverter<ToastPosition>::fromJSI(runtime, obj.getProperty(runtime, "position")),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "backgroundColor")),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "titleColor")),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "messageColor")),
@@ -85,11 +85,11 @@ namespace margelo::nitro {
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const NitroToastConfig& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "toastId", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.toastId));
-      obj.setProperty(runtime, "type", JSIConverter<AlertToastType>::toJSI(runtime, arg.type));
+      obj.setProperty(runtime, "type", JSIConverter<ToastType>::toJSI(runtime, arg.type));
       obj.setProperty(runtime, "presentation", JSIConverter<PresentationToastType>::toJSI(runtime, arg.presentation));
       obj.setProperty(runtime, "duration", JSIConverter<double>::toJSI(runtime, arg.duration));
       obj.setProperty(runtime, "title", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.title));
-      obj.setProperty(runtime, "position", JSIConverter<PositionToastType>::toJSI(runtime, arg.position));
+      obj.setProperty(runtime, "position", JSIConverter<ToastPosition>::toJSI(runtime, arg.position));
       obj.setProperty(runtime, "backgroundColor", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.backgroundColor));
       obj.setProperty(runtime, "titleColor", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.titleColor));
       obj.setProperty(runtime, "messageColor", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.messageColor));
@@ -104,11 +104,11 @@ namespace margelo::nitro {
       }
       jsi::Object obj = value.getObject(runtime);
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "toastId"))) return false;
-      if (!JSIConverter<AlertToastType>::canConvert(runtime, obj.getProperty(runtime, "type"))) return false;
+      if (!JSIConverter<ToastType>::canConvert(runtime, obj.getProperty(runtime, "type"))) return false;
       if (!JSIConverter<PresentationToastType>::canConvert(runtime, obj.getProperty(runtime, "presentation"))) return false;
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "duration"))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "title"))) return false;
-      if (!JSIConverter<PositionToastType>::canConvert(runtime, obj.getProperty(runtime, "position"))) return false;
+      if (!JSIConverter<ToastPosition>::canConvert(runtime, obj.getProperty(runtime, "position"))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "backgroundColor"))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "titleColor"))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "messageColor"))) return false;

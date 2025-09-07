@@ -16,7 +16,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 @DoNotStrip
 @Keep
 enum class PresentationToastType {
-  ALERT,
+  DEFAULT,
   STACKED;
 
   @DoNotStrip

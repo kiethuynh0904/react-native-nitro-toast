@@ -10,12 +10,12 @@
 #include <fbjni/fbjni.h>
 #include "NitroToastConfig.hpp"
 
-#include "AlertToastType.hpp"
-#include "JAlertToastType.hpp"
-#include "JPositionToastType.hpp"
 #include "JPresentationToastType.hpp"
-#include "PositionToastType.hpp"
+#include "JToastPosition.hpp"
+#include "JToastType.hpp"
 #include "PresentationToastType.hpp"
+#include "ToastPosition.hpp"
+#include "ToastType.hpp"
 #include <optional>
 #include <string>
 
@@ -40,16 +40,16 @@ namespace margelo::nitro::nitrotoast {
       static const auto clazz = javaClassStatic();
       static const auto fieldToastId = clazz->getField<jni::JString>("toastId");
       jni::local_ref<jni::JString> toastId = this->getFieldValue(fieldToastId);
-      static const auto fieldType = clazz->getField<JAlertToastType>("type");
-      jni::local_ref<JAlertToastType> type = this->getFieldValue(fieldType);
+      static const auto fieldType = clazz->getField<JToastType>("type");
+      jni::local_ref<JToastType> type = this->getFieldValue(fieldType);
       static const auto fieldPresentation = clazz->getField<JPresentationToastType>("presentation");
       jni::local_ref<JPresentationToastType> presentation = this->getFieldValue(fieldPresentation);
       static const auto fieldDuration = clazz->getField<double>("duration");
       double duration = this->getFieldValue(fieldDuration);
       static const auto fieldTitle = clazz->getField<jni::JString>("title");
       jni::local_ref<jni::JString> title = this->getFieldValue(fieldTitle);
-      static const auto fieldPosition = clazz->getField<JPositionToastType>("position");
-      jni::local_ref<JPositionToastType> position = this->getFieldValue(fieldPosition);
+      static const auto fieldPosition = clazz->getField<JToastPosition>("position");
+      jni::local_ref<JToastPosition> position = this->getFieldValue(fieldPosition);
       static const auto fieldBackgroundColor = clazz->getField<jni::JString>("backgroundColor");
       jni::local_ref<jni::JString> backgroundColor = this->getFieldValue(fieldBackgroundColor);
       static const auto fieldTitleColor = clazz->getField<jni::JString>("titleColor");
@@ -86,11 +86,11 @@ namespace margelo::nitro::nitrotoast {
     static jni::local_ref<JNitroToastConfig::javaobject> fromCpp(const NitroToastConfig& value) {
       return newInstance(
         value.toastId.has_value() ? jni::make_jstring(value.toastId.value()) : nullptr,
-        JAlertToastType::fromCpp(value.type),
+        JToastType::fromCpp(value.type),
         JPresentationToastType::fromCpp(value.presentation),
         value.duration,
         value.title.has_value() ? jni::make_jstring(value.title.value()) : nullptr,
-        JPositionToastType::fromCpp(value.position),
+        JToastPosition::fromCpp(value.position),
         value.backgroundColor.has_value() ? jni::make_jstring(value.backgroundColor.value()) : nullptr,
         value.titleColor.has_value() ? jni::make_jstring(value.titleColor.value()) : nullptr,
         value.messageColor.has_value() ? jni::make_jstring(value.messageColor.value()) : nullptr,

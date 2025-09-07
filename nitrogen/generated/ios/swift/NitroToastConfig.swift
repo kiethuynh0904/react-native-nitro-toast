@@ -18,7 +18,7 @@ public extension NitroToastConfig {
   /**
    * Create a new instance of `NitroToastConfig`.
    */
-  init(toastId: String?, type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Bool, haptics: Bool?, iconUri: String?) {
+  init(toastId: String?, type: ToastType, presentation: PresentationToastType, duration: Double, title: String?, position: ToastPosition, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Bool, haptics: Bool?, iconUri: String?) {
     self.init({ () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = toastId {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
@@ -87,7 +87,7 @@ public extension NitroToastConfig {
     }
   }
   
-  var type: AlertToastType {
+  var type: ToastType {
     @inline(__always)
     get {
       return self.__type
@@ -143,7 +143,7 @@ public extension NitroToastConfig {
     }
   }
   
-  var position: PositionToastType {
+  var position: ToastPosition {
     @inline(__always)
     get {
       return self.__position

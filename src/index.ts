@@ -12,7 +12,7 @@ const NitroToastModule =
 
 export const defaultToastConfig: NitroToastConfig = {
   type: 'default',
-  presentation: 'alert',
+  presentation: 'default',
   duration: 4000,
   position: 'bottom',
   useOverlay: true,

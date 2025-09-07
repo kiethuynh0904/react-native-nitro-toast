@@ -17,8 +17,8 @@ public extension PresentationToastType {
    */
   init?(fromString string: String) {
     switch string {
-      case "alert":
-        self = .alert
+      case "default":
+        self = .default
       case "stacked":
         self = .stacked
       default:
@@ -31,8 +31,8 @@ public extension PresentationToastType {
    */
   var stringValue: String {
     switch self {
-      case .alert:
-        return "alert"
+      case .default:
+        return "default"
       case .stacked:
         return "stacked"
     }

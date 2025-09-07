@@ -14,19 +14,19 @@ namespace NitroToast { class HybridNitroToastSpec_cxx; }
 
 // Forward declaration of `NitroToastConfig` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { struct NitroToastConfig; }
-// Forward declaration of `AlertToastType` to properly resolve imports.
-namespace margelo::nitro::nitrotoast { enum class AlertToastType; }
+// Forward declaration of `ToastType` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { enum class ToastType; }
 // Forward declaration of `PresentationToastType` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { enum class PresentationToastType; }
-// Forward declaration of `PositionToastType` to properly resolve imports.
-namespace margelo::nitro::nitrotoast { enum class PositionToastType; }
+// Forward declaration of `ToastPosition` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { enum class ToastPosition; }
 
 #include <string>
 #include "NitroToastConfig.hpp"
 #include <optional>
-#include "AlertToastType.hpp"
+#include "ToastType.hpp"
 #include "PresentationToastType.hpp"
-#include "PositionToastType.hpp"
+#include "ToastPosition.hpp"
 
 #include "NitroToast-Swift-Cxx-Umbrella.hpp"
 

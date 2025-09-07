@@ -41,12 +41,12 @@ namespace margelo::nitro::nitrotoast {
     [[maybe_unused]]
     static jni::alias_ref<JPresentationToastType> fromCpp(PresentationToastType value) {
       static const auto clazz = javaClassStatic();
-      static const auto fieldALERT = clazz->getStaticField<JPresentationToastType>("ALERT");
+      static const auto fieldDEFAULT = clazz->getStaticField<JPresentationToastType>("DEFAULT");
       static const auto fieldSTACKED = clazz->getStaticField<JPresentationToastType>("STACKED");
       
       switch (value) {
-        case PresentationToastType::ALERT:
-          return clazz->getStaticFieldValue(fieldALERT);
+        case PresentationToastType::DEFAULT:
+          return clazz->getStaticFieldValue(fieldDEFAULT);
         case PresentationToastType::STACKED:
           return clazz->getStaticFieldValue(fieldSTACKED);
         default:

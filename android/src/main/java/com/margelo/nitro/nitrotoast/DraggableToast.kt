@@ -73,8 +73,8 @@ fun draggableToast(
                                 offsetY += dragAmount
                                 offsetY =
                                     when (toast.config.position) {
-                                        PositionToastType.TOP -> minOf(offsetY, 0f)
-                                        PositionToastType.BOTTOM -> maxOf(offsetY, 0f)
+                                        ToastPosition.TOP -> minOf(offsetY, 0f)
+                                        ToastPosition.BOTTOM -> maxOf(offsetY, 0f)
                                     }
                             },
                             onDragEnd = {
@@ -82,8 +82,8 @@ fun draggableToast(
                                 val threshold = 50f
                                 val shouldDismiss =
                                     when (toast.config.position) {
-                                        PositionToastType.TOP -> offsetY < -threshold
-                                        PositionToastType.BOTTOM -> offsetY > threshold
+                                        ToastPosition.TOP -> offsetY < -threshold
+                                        ToastPosition.BOTTOM -> offsetY > threshold
                                     }
                                 if (shouldDismiss) {
                                     onDismiss()

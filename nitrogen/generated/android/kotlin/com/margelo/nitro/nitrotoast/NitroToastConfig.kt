@@ -21,11 +21,11 @@ data class NitroToastConfig
   @Keep
   constructor(
     val toastId: String?,
-    val type: AlertToastType,
+    val type: ToastType,
     val presentation: PresentationToastType,
     val duration: Double,
     val title: String?,
-    val position: PositionToastType,
+    val position: ToastPosition,
     val backgroundColor: String?,
     val titleColor: String?,
     val messageColor: String?,

@@ -41,7 +41,7 @@ struct ToastListView: View {
 
 private struct ToastRow: View {
     @ObservedObject var toast: Toast
-    let position: PositionToastType
+    let position: ToastPosition
     let onRemove: () -> Void
 
     @State private var offsetY: CGFloat = 0

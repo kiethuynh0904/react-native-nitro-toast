@@ -29,7 +29,7 @@ namespace margelo::nitro::nitrotoast {
    * An enum which can be represented as a JavaScript union (PresentationToastType).
    */
   enum class PresentationToastType {
-    ALERT      SWIFT_NAME(alert) = 0,
+    DEFAULT      SWIFT_NAME(default) = 0,
     STACKED      SWIFT_NAME(stacked) = 1,
   } CLOSED_ENUM;
 
@@ -45,7 +45,7 @@ namespace margelo::nitro {
     static inline PresentationToastType fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("alert"): return PresentationToastType::ALERT;
+        case hashString("default"): return PresentationToastType::DEFAULT;
         case hashString("stacked"): return PresentationToastType::STACKED;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum PresentationToastType - invalid value!");
@@ -53,7 +53,7 @@ namespace margelo::nitro {
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, PresentationToastType arg) {
       switch (arg) {
-        case PresentationToastType::ALERT: return JSIConverter<std::string>::toJSI(runtime, "alert");
+        case PresentationToastType::DEFAULT: return JSIConverter<std::string>::toJSI(runtime, "default");
         case PresentationToastType::STACKED: return JSIConverter<std::string>::toJSI(runtime, "stacked");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert PresentationToastType to JS - invalid value: "
@@ -66,7 +66,7 @@ namespace margelo::nitro {
       }
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, value);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("alert"):
+        case hashString("default"):
         case hashString("stacked"):
           return true;
         default:

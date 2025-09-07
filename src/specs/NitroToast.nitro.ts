@@ -9,7 +9,7 @@ import type { HybridObject } from 'react-native-nitro-modules'
  * - `loading`: Gray toast with spinning icon
  * - `default`: Gray toast with default icon
  */
-export type AlertToastType =
+export type ToastType =
   | 'success'
   | 'error'
   | 'warning'
@@ -19,17 +19,17 @@ export type AlertToastType =
 
 /**
  * How the toast should be presented on screen.
- * - `alert`: Single toast notification
+ * - `default`: toast notification
  * - `stacked`: Multiple toasts stacked on top of each other
  */
-export type PresentationToastType = 'alert' | 'stacked'
+export type PresentationToastType = 'default' | 'stacked'
 
 /**
  * Position of the toast on screen.
  * - `top`: Toast appears at the top of the screen
  * - `bottom`: Toast appears at the bottom of the screen
  */
-export type PositionToastType = 'top' | 'bottom'
+export type ToastPosition = 'top' | 'bottom'
 
 /**
  * Configuration options for toast notifications.
@@ -38,7 +38,7 @@ export type NitroToastConfig = {
   /** Unique identifier for the toast, used to dismiss/update the toast */
   toastId?:string
   /** Type of toast to display */
-  type: AlertToastType
+  type: ToastType
   /** How the toast should be presented */
   presentation: PresentationToastType
   /** Duration in milliseconds before toast auto-dismisses (0 for no auto-dismiss) */
@@ -46,7 +46,7 @@ export type NitroToastConfig = {
   /** Optional title text to display above the message */
   title?: string
   /** Position of the toast on screen */
-  position: PositionToastType
+  position: ToastPosition
   /** Custom background color in HEX format (e.g. '#FF0000') */
   backgroundColor?: string
   /** Custom title text color in HEX format */

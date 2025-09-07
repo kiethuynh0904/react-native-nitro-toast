@@ -143,16 +143,16 @@ object ToastManager {
     @RequiresPermission(Manifest.permission.VIBRATE)
     private fun triggerHaptics(
         context: Context,
-        type: AlertToastType?,
+        type: ToastType?,
     ) {
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
         if (vibrator != null && vibrator.hasVibrator()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val effect =
                     when (type) {
-                        AlertToastType.SUCCESS -> VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE)
-                        AlertToastType.ERROR -> VibrationEffect.createOneShot(60, VibrationEffect.DEFAULT_AMPLITUDE)
-                        AlertToastType.WARNING -> VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE)
+                        ToastType.SUCCESS -> VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE)
+                        ToastType.ERROR -> VibrationEffect.createOneShot(60, VibrationEffect.DEFAULT_AMPLITUDE)
+                        ToastType.WARNING -> VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE)
                         else -> VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE)
                     }
                 vibrator.vibrate(effect)

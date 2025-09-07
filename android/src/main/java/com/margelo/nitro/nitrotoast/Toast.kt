@@ -22,12 +22,12 @@ data class Toast(
     val backgroundColor: Color
         get() =
             config.backgroundColor?.toColorOrNull() ?: when (config.type) {
-                AlertToastType.SUCCESS -> Color(0xFF22C55E)
-                AlertToastType.ERROR -> Color(0xFFEF4444)
-                AlertToastType.INFO -> Color(0xFF3B82F6)
-                AlertToastType.WARNING -> Color(0xFFF59E0B)
-                AlertToastType.LOADING -> Color(0xFF6B7280)
-                AlertToastType.DEFAULT -> Color(0xFF6B7280)
+                ToastType.SUCCESS -> Color(0xFF22C55E)
+                ToastType.ERROR -> Color(0xFFEF4444)
+                ToastType.INFO -> Color(0xFF3B82F6)
+                ToastType.WARNING -> Color(0xFFF59E0B)
+                ToastType.LOADING -> Color(0xFF6B7280)
+                ToastType.DEFAULT -> Color(0xFF6B7280)
             }
 
     val overlayColor: Color
@@ -37,12 +37,12 @@ data class Toast(
         get() {
             config.iconUri?.let { return ToastIcon.Image(it) }
             return when (config.type) {
-                AlertToastType.SUCCESS -> ToastIcon.System("checkmark", iconColor)
-                AlertToastType.ERROR -> ToastIcon.System("error", iconColor)
-                AlertToastType.WARNING -> ToastIcon.System("warning", iconColor)
-                AlertToastType.INFO -> ToastIcon.System("info", iconColor)
-                AlertToastType.LOADING -> ToastIcon.Progress(iconColor)
-                AlertToastType.DEFAULT -> ToastIcon.System("bell", iconColor)
+                ToastType.SUCCESS -> ToastIcon.System("checkmark", iconColor)
+                ToastType.ERROR -> ToastIcon.System("error", iconColor)
+                ToastType.WARNING -> ToastIcon.System("warning", iconColor)
+                ToastType.INFO -> ToastIcon.System("info", iconColor)
+                ToastType.LOADING -> ToastIcon.Progress(iconColor)
+                ToastType.DEFAULT -> ToastIcon.System("bell", iconColor)
             }
         }
     private val iconColor: Color
@@ -51,12 +51,12 @@ data class Toast(
     val title: String
         get() =
             config.title ?: when (config.type) {
-                AlertToastType.SUCCESS -> "Success"
-                AlertToastType.ERROR -> "Error Occurred"
-                AlertToastType.INFO -> "Information"
-                AlertToastType.WARNING -> "Warning"
-                AlertToastType.LOADING -> "Loading..."
-                AlertToastType.DEFAULT -> "Notice"
+                ToastType.SUCCESS -> "Success"
+                ToastType.ERROR -> "Error Occurred"
+                ToastType.INFO -> "Information"
+                ToastType.WARNING -> "Warning"
+                ToastType.LOADING -> "Loading..."
+                ToastType.DEFAULT -> "Notice"
             }
 
     val titleColor: Color

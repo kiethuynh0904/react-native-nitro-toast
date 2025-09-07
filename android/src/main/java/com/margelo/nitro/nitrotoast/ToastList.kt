@@ -25,7 +25,7 @@ fun toastList(state: ToastListState) {
 
     val position =
         when (toasts.firstOrNull()?.config?.position) {
-            PositionToastType.TOP -> Alignment.TopCenter
+            ToastPosition.TOP -> Alignment.TopCenter
             else -> Alignment.BottomCenter
         }
 
