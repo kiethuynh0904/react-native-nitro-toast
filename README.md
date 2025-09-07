@@ -18,7 +18,7 @@
 
 ## 📸 Preview
 
-### 🔔 Alert Style (Default)
+### 🔔 Notification Style (Default)
 
 ![iOS Toast Demo](./docs/ios-demo.gif)
 
@@ -38,7 +38,7 @@ Check out the [stacked presentation guide](./docs/stacked.md) for more info.
 
 ## ✨ Features
 
-- **Display modes**: `alert` or `stacked`
+- **Display modes**: `default` or `stacked`
 - **Predefined Types**: `success`, `error`, `info`, `warning`, `default`, `loading`
 - **Promise-based toasts** (loading → success/error)
 - **Highly Customizable**:
@@ -118,7 +118,7 @@ function handleUpload() {
 | `title`          | `string`                     | `null`      | Optional title                             |
 | `duration`       | `number` (MS)                | `4000`      | Auto-dismiss duration (0 for sticky/manual)       |
 | `position`       | `'top'` \| `'bottom'`        | `'bottom'`  | Toast position                             |
-| `presentation`   | `'stacked'` \| `'alert'`     | `'alert'`   | `alert`: single toast. `stacked`: queue multiple toasts. |
+| `presentation`   | `'stacked'` \| `'default'`     | `'default'`   | `default`: toast notification. `stacked`: queue multiple toasts. |
 | `haptics`        | `boolean`                    | `false`     | Enable haptic feedback (requires `VIBRATE` permission on Android) |
 | `iconUri`        | `string` (URI)               | `undefined` | Custom icon image URI. |
 | `backgroundColor`| `string` (HEX)               | Varies by type | Custom background                       |
