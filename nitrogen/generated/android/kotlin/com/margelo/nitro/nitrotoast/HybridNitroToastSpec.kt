@@ -47,6 +47,10 @@ abstract class HybridNitroToastSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun dismiss(toastId: String): Unit
+  
+  @DoNotStrip
+  @Keep
+  abstract fun showAlert(title: String, message: String, config: NitroToastAlertConfig): Unit
 
   private external fun initHybrid(): HybridData
 

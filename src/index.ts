@@ -3,6 +3,7 @@ export * from './specs/NitroToast.nitro'
 import { NitroModules } from 'react-native-nitro-modules'
 import {
   type NitroToast,
+  type NitroToastAlertConfig,
   type NitroToastConfig,
 } from './specs/NitroToast.nitro'
 import type { ToastPromiseMessages, ToastPromiseConfig } from './types'
@@ -18,6 +19,12 @@ export const defaultToastConfig: NitroToastConfig = {
   useOverlay: true,
 }
 
+export const defaultAlertConfig: NitroToastAlertConfig = {
+  type: 'default',
+  duration: 2000,
+  allowsTapToDismiss: true,
+}
+
 /**
  * Shows a toast message.
  * @param message The message to display.
@@ -28,13 +35,14 @@ export const showToast = (
   message: string,
   config?: Partial<NitroToastConfig>
 ): string => {
-
   const _config: NitroToastConfig = {
     ...defaultToastConfig,
     ...config,
-    duration: config?.duration ?? (config?.type === 'loading' ? 0 : defaultToastConfig.duration),
-  };
-  return NitroToastModule.show(message, _config);
+    duration:
+      config?.duration ??
+      (config?.type === 'loading' ? 0 : defaultToastConfig.duration),
+  }
+  return NitroToastModule.show(message, _config)
 }
 
 /**
@@ -97,4 +105,17 @@ export async function showToastPromise<T>(
     })
     throw err
   }
+}
+
+export const showAlert = (
+  title: string,
+  message: string,
+  config?: Partial<NitroToastAlertConfig>
+): void => {
+  const _config: NitroToastAlertConfig = {
+    ...defaultAlertConfig,
+    ...config,
+    duration: config?.duration ?? defaultAlertConfig.duration,
+  }
+  NitroToastModule.showAlert(title, message, _config)
 }

@@ -10,6 +10,8 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridNitroToastSpec` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { class HybridNitroToastSpec; }
+// Forward declaration of `NitroToastAlertConfig` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { struct NitroToastAlertConfig; }
 // Forward declaration of `NitroToastConfig` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { struct NitroToastConfig; }
 // Forward declaration of `PresentationToastType` to properly resolve imports.
@@ -21,6 +23,7 @@ namespace margelo::nitro::nitrotoast { enum class ToastType; }
 
 // Include C++ defined types
 #include "HybridNitroToastSpec.hpp"
+#include "NitroToastAlertConfig.hpp"
 #include "NitroToastConfig.hpp"
 #include "PresentationToastType.hpp"
 #include "ToastPosition.hpp"

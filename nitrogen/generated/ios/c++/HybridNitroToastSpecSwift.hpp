@@ -20,6 +20,8 @@ namespace margelo::nitro::nitrotoast { enum class ToastType; }
 namespace margelo::nitro::nitrotoast { enum class PresentationToastType; }
 // Forward declaration of `ToastPosition` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { enum class ToastPosition; }
+// Forward declaration of `NitroToastAlertConfig` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { struct NitroToastAlertConfig; }
 
 #include <string>
 #include "NitroToastConfig.hpp"
@@ -27,6 +29,7 @@ namespace margelo::nitro::nitrotoast { enum class ToastPosition; }
 #include "ToastType.hpp"
 #include "PresentationToastType.hpp"
 #include "ToastPosition.hpp"
+#include "NitroToastAlertConfig.hpp"
 
 #include "NitroToast-Swift-Cxx-Umbrella.hpp"
 
@@ -77,6 +80,12 @@ namespace margelo::nitro::nitrotoast {
     }
     inline void dismiss(const std::string& toastId) override {
       auto __result = _swiftPart.dismiss(toastId);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+    }
+    inline void showAlert(const std::string& title, const std::string& message, const NitroToastAlertConfig& config) override {
+      auto __result = _swiftPart.showAlert(title, message, config);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

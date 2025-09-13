@@ -15,6 +15,8 @@ namespace margelo::nitro::nitrotoast { enum class ToastType; }
 namespace margelo::nitro::nitrotoast { enum class PresentationToastType; }
 // Forward declaration of `ToastPosition` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { enum class ToastPosition; }
+// Forward declaration of `NitroToastAlertConfig` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { struct NitroToastAlertConfig; }
 
 #include <string>
 #include "NitroToastConfig.hpp"
@@ -26,6 +28,8 @@ namespace margelo::nitro::nitrotoast { enum class ToastPosition; }
 #include "JPresentationToastType.hpp"
 #include "ToastPosition.hpp"
 #include "JToastPosition.hpp"
+#include "NitroToastAlertConfig.hpp"
+#include "JNitroToastAlertConfig.hpp"
 
 namespace margelo::nitro::nitrotoast {
 
@@ -56,6 +60,10 @@ namespace margelo::nitro::nitrotoast {
   void JHybridNitroToastSpec::dismiss(const std::string& toastId) {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* toastId */)>("dismiss");
     method(_javaPart, jni::make_jstring(toastId));
+  }
+  void JHybridNitroToastSpec::showAlert(const std::string& title, const std::string& message, const NitroToastAlertConfig& config) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* title */, jni::alias_ref<jni::JString> /* message */, jni::alias_ref<JNitroToastAlertConfig> /* config */)>("showAlert");
+    method(_javaPart, jni::make_jstring(title), jni::make_jstring(message), JNitroToastAlertConfig::fromCpp(config));
   }
 
 } // namespace margelo::nitro::nitrotoast

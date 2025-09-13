@@ -36,7 +36,7 @@ export type ToastPosition = 'top' | 'bottom'
  */
 export type NitroToastConfig = {
   /** Unique identifier for the toast, used to dismiss/update the toast */
-  toastId?:string
+  toastId?: string
   /** Type of toast to display */
   type: ToastType
   /** How the toast should be presented */
@@ -61,6 +61,27 @@ export type NitroToastConfig = {
   iconUri?: string
 }
 
+export type NitroToastAlertConfig = {
+  /** Unique identifier for the alert, used to dismiss/update the alert */
+  alertId?: string
+  /** Type of alert to display */
+  type: ToastType
+  /** Duration in milliseconds before toast auto-dismisses (0 for no auto-dismiss) */
+  duration: number
+  /** Custom background color in HEX format (e.g. '#FF0000') */
+  backgroundColor?: string
+  /** Custom title text color in HEX format */
+  titleColor?: string
+  /** Custom message text color in HEX format */
+  messageColor?: string
+  /** Whether to show a semi-transparent overlay behind the toast */
+  haptics?: boolean
+  /** Whether to allow tapping to dismiss the alert */
+  allowsTapToDismiss: boolean
+  /** Custom icon tint color in HEX format */
+  iconTint?: string
+}
+
 /**
  * Native toast module interface.
  * Handles the actual display of toast notifications on iOS and Android.
@@ -78,5 +99,12 @@ export interface NitroToast
    * Dismisses the toast with the given ID.
    * @param toastId - The ID of the toast to dismiss
    */
-  dismiss(toastId:string) : void
+  dismiss(toastId: string): void
+
+  /**
+   * Shows an alert with the given message and configuration.
+   * @param message - The text message to display in the alert
+   * @param config - Configuration options for the alert
+   */
+  showAlert(title: string, message: string, config: NitroToastAlertConfig): void
 }

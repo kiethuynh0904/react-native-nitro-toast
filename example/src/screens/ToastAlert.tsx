@@ -1,9 +1,6 @@
 import React from 'react';
 import {View, Button, StyleSheet} from 'react-native';
-import {
-  showToast,
-  showToastPromise,
-} from 'react-native-nitro-toast';
+import {showAlert, showToast, showToastPromise} from 'react-native-nitro-toast';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 
 const ToastAlert = () => {
@@ -45,7 +42,7 @@ const ToastAlert = () => {
         position: 'top',
         haptics: true,
         loading: {
-          title: 'Uploading',         
+          title: 'Uploading',
         },
       },
     );
@@ -53,6 +50,12 @@ const ToastAlert = () => {
 
   return (
     <View style={styles.container}>
+      <Button
+        title="Show Alert"
+        onPress={() =>
+          showAlert('Alert', 'This is an alert message', {type: 'info'})
+        }
+      />
       <Button
         title="Show Info Toast"
         onPress={() =>

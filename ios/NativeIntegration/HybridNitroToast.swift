@@ -9,6 +9,12 @@ import SwiftUI
 import UIKit
 
 class HybridNitroToast: HybridNitroToastSpec {
+    func showAlert(title: String, message: String, config: NitroToastAlertConfig)  {
+        DispatchQueue.main.async {
+            CenterAlertViewModel.shared.showAlert(title: title, message: message, config:config)
+        }
+    }
+    
     func show(message: String, config: NitroToastConfig) -> String {
         let toastId = config.toastId ?? UUID().uuidString
         DispatchQueue.main.async {
@@ -22,4 +28,6 @@ class HybridNitroToast: HybridNitroToastSpec {
             ToastViewModel.shared.dismiss(toastId)
         }
     }
+    
+    
 }

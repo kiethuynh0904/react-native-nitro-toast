@@ -15,9 +15,12 @@
 
 // Forward declaration of `NitroToastConfig` to properly resolve imports.
 namespace margelo::nitro::nitrotoast { struct NitroToastConfig; }
+// Forward declaration of `NitroToastAlertConfig` to properly resolve imports.
+namespace margelo::nitro::nitrotoast { struct NitroToastAlertConfig; }
 
 #include <string>
 #include "NitroToastConfig.hpp"
+#include "NitroToastAlertConfig.hpp"
 
 namespace margelo::nitro::nitrotoast {
 
@@ -52,6 +55,7 @@ namespace margelo::nitro::nitrotoast {
       // Methods
       virtual std::string show(const std::string& message, const NitroToastConfig& config) = 0;
       virtual void dismiss(const std::string& toastId) = 0;
+      virtual void showAlert(const std::string& title, const std::string& message, const NitroToastAlertConfig& config) = 0;
 
     protected:
       // Hybrid Setup
