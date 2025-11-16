@@ -33,18 +33,25 @@ private struct ToastsView: View {
                         viewModel.isExpanded = false
                     }
             }
-            let layout =
-                viewModel.isExpanded ? AnyLayout(VStackLayout(spacing: 10)) : AnyLayout(ZStackLayout())
-            layout {
-                ForEach(Array(viewModel.toasts.enumerated()), id: \.element.id) { idx, toast in
-                    let index = viewModel.toasts.count - 1 - idx
-                    let yOffset = offsetY(index)
-                    let scale = scale(index)
+            let content = ForEach(Array(viewModel.toasts.enumerated()), id: \.element.id) { idx, toast in
+                let index = viewModel.toasts.count - 1 - idx
+                let yOffset = offsetY(index)
+                let scale = scale(index)
 
-                    ToastRow(toast: toast, offsetY: yOffset, scale: scale, isExpanded: viewModel.isExpanded) {
-                        viewModel.dismiss(toast.id)
+                ToastRow(toast: toast, offsetY: yOffset, scale: scale, isExpanded: viewModel.isExpanded) {
+                    viewModel.dismiss(toast.id)
+                }
+                .zIndex(Double(idx))
+            }
+            Group {
+                if viewModel.isExpanded {
+                    VStack(spacing: 10) {
+                        content
                     }
-                    .zIndex(Double(idx))
+                } else {
+                    ZStack {
+                        content
+                    }
                 }
             }
             .onTapGesture {
