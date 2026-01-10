@@ -75,24 +75,26 @@ fun toastView(toast: Toast) {
             Spacer(modifier = Modifier.width(12.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Crossfade(
-                    targetState = toast.title,
-                    label = "toastTitle",
-                ) { title ->
-                    BasicText(
-                        text = title,
-                        style =
-                            TextStyle(
-                                fontSize = 14.sp,
-                                color = toast.titleColor,
-                                fontFamily =
-                                    resolveFontFamilyFromReact(
-                                        context,
-                                        toast.config.fontFamily,
-                                        android.graphics.Typeface.BOLD,
-                                    ),
-                            ),
-                    )
+                if (toast.title.isNotEmpty()) {
+                    Crossfade(
+                        targetState = toast.title,
+                        label = "toastTitle",
+                    ) { title ->
+                        BasicText(
+                            text = title,
+                            style =
+                                TextStyle(
+                                    fontSize = 14.sp,
+                                    color = toast.titleColor,
+                                    fontFamily =
+                                        resolveFontFamilyFromReact(
+                                            context,
+                                            toast.config.fontFamily,
+                                            android.graphics.Typeface.BOLD,
+                                        ),
+                                ),
+                        )
+                    }
                 }
                 Crossfade(
                     targetState = toast.message,

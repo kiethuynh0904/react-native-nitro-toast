@@ -88,14 +88,16 @@ private struct ToastView: View {
             ToastIconView(toast: toast)
 
             VStack(alignment: .leading) {
-                Text(toast.title)
-                    .font(
-                        toast.config.fontFamily != nil
-                            ? Font.custom(toast.config.fontFamily!, size: 13)
-                            : .footnote
-                    )
-                    .fontWeight(.semibold)
-                    .foregroundStyle(toast.titleColor)
+                if !toast.title.isEmpty {
+                    Text(toast.title)
+                        .font(
+                            toast.config.fontFamily != nil
+                                ? Font.custom(toast.config.fontFamily!, size: 13)
+                                : .footnote
+                        )
+                        .fontWeight(.semibold)
+                        .foregroundStyle(toast.titleColor)
+                }
                 Text(toast.message)
                     .font(
                         toast.config.fontFamily != nil

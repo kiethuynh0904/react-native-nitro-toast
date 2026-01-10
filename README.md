@@ -77,6 +77,12 @@ showToast('Upload completed!', {
   haptics: true,
 });
 
+// Hide title completely
+showToast('Just a message, no title', {
+  title: '',
+  backgroundColor: '#333',
+});
+
 // Manual loading toast (useful for loading or sticky toasts)
 const id = showToast('Loading...', { type: 'loading' });
 // Dismiss the toast when your async work is done
@@ -116,7 +122,7 @@ function handleUpload() {
 |------------------|------------------------------|-------------|--------------------------------------------|
 | `type`           | `success`, `error`, `info`, `warning`, `default`, `loading` | `'default'` | Predefined visual styles, including loading indicator |
 | `message`        | `string`                     | (required)  | Toast message                              |
-| `title`          | `string`                     | `null`      | Optional title                             |
+| `title`          | `string`                     | `null`      | Optional title. Pass empty string `""` to hide title completely |
 | `fontFamily`     | `string`                     | `null`      | Custom font family (e.g. `Rubik, Delius...`)    |
 | `duration`       | `number` (MS)                | `4000`      | Auto-dismiss duration (0 for sticky/manual)       |
 | `position`       | `'top'` \| `'bottom'`        | `'bottom'`  | Toast position                             |
