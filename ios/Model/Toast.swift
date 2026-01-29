@@ -119,7 +119,7 @@ extension Toast {
         if let hex = config.titleColor {
             return Color(hex)
         }
-        return .black
+        return .primary
     }
 
     var messageColor: Color {
