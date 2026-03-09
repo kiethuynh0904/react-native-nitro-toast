@@ -74,14 +74,14 @@
     "react": "19.0.0",
     "react-native": "0.78.2",
     "react-native-builder-bob": "^0.30.0",
-    "react-native-nitro-modules": "*",
+    "react-native-nitro-modules": ">=0.35.0",
     "release-it": "^19.0.3",
     "typescript": "^5.5.4"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-nitro-modules": "*"
+    "react-native-nitro-modules": ">=0.35.0"
   },
   "eslintConfig": {
     "root": true,

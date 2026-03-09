@@ -1,4 +1,5 @@
 buildscript {
+  def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : '2.1.20'
   repositories {
     google()
     mavenCentral()
@@ -6,6 +7,8 @@ buildscript {
 
   dependencies {
     classpath "com.android.tools.build:gradle:8.9.2"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:$kotlin_version"
   }
 }
 
@@ -18,13 +21,9 @@ def isNewArchitectureEnabled() {
   return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
 }
 
-// apply plugin: "com.android.library"
-// apply plugin: 'org.jetbrains.kotlin.android'
-plugins {
-  id 'com.android.library'
-  id 'org.jetbrains.kotlin.android'
-  id("org.jetbrains.kotlin.plugin.compose") version "2.0.0"
-}
+apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 apply from: '../nitrogen/generated/android/NitroToast+autolinking.gradle'
 
 if (isNewArchitectureEnabled()) {
@@ -101,10 +100,6 @@ android {
     compose true
   }
 
-  composeOptions {
-    kotlinCompilerExtensionVersion = "2.0.0" // ✅ Compose Compiler version
-  }
-
   buildTypes {
     release {
       minifyEnabled false
@@ -168,5 +163,4 @@ if (isNewArchitectureEnabled()) {
         codegenJavaPackageName = "com.margelo.nitro.nitrotoast"
     }
 }
-
 
