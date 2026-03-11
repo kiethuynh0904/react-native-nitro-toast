@@ -32,12 +32,6 @@ final class Toast: Identifiable, ObservableObject {
     }
 }
 
-extension NitroToastConfig: Equatable {
-    public static func == (lhs: NitroToastConfig, rhs: NitroToastConfig) -> Bool {
-        return lhs.presentation == rhs.presentation && lhs.type == rhs.type
-    }
-}
-
 extension Toast {
     var backgroundColor: Color {
         if let hex = config.backgroundColor {
