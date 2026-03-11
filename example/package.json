@@ -41,7 +41,7 @@
     "react-test-renderer": "19.0.0",
     "typescript": "5.0.4",
     "react-native-builder-bob": "^0.30.0",
-    "react-native-nitro-modules": "^0.25.2"
+    "react-native-nitro-modules": "0.35.0"
   },
   "engines": {
     "node": ">=18"
