@@ -15,6 +15,10 @@ class ToastViewModel: ObservableObject {
     /// Duration of the toast enter/exit and update animations.
     private static let animationDuration: TimeInterval = 0.3
 
+    /// Per-toast auto-dismiss countdown tasks, so they can be cancelled on
+    /// dismiss/update instead of running to completion.
+    private var countdownTasks: [String: Task<Void, Never>] = [:]
+
     var toastWindow: UIWindow?
 
     var isEmpty: Bool { toasts.isEmpty }
@@ -41,14 +45,21 @@ class ToastViewModel: ObservableObject {
             triggerHaptics(for: config.type)
         }
 
-        guard config.duration > 0 else { return }
+        // Cancel any in-flight countdown for this toast (e.g. on update).
+        countdownTasks[toast.id]?.cancel()
 
-        Task {
+        guard config.duration > 0 else {
+            countdownTasks[toast.id] = nil
+            return
+        }
+
+        countdownTasks[toast.id] = Task {
             var remaining = config.duration / 1000
             let interval: TimeInterval = 0.1
 
             while remaining > 0 {
                 try? await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000))
+                if Task.isCancelled { return }
                 if !self.isExpanded && !toast.isPaused {
                     remaining -= interval
                 }
@@ -97,6 +108,8 @@ class ToastViewModel: ObservableObject {
 
     func dismiss(_ toastId: String) {
         guard let index = toasts.firstIndex(where: { $0.id == toastId }) else { return }
+        countdownTasks[toastId]?.cancel()
+        countdownTasks[toastId] = nil
         toasts[index].isDeleting = true
 
         withAnimation(.bouncy) {
