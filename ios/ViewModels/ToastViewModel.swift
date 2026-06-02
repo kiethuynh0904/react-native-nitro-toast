@@ -53,19 +53,66 @@ class ToastViewModel: ObservableObject {
             return
         }
 
-        countdownTasks[toast.id] = Task {
+        countdownTasks[toast.id] = Task { [weak self] in
+            guard let self else { return }
             var remaining = config.duration / 1000
-            let interval: TimeInterval = 0.1
+            let paused = self.pausedStream(for: toast)
 
             while remaining > 0 {
-                try? await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000))
                 if Task.isCancelled { return }
-                if !self.isExpanded && !toast.isPaused {
-                    remaining -= interval
+
+                // Suspend (no polling) until the toast is not paused. CombineLatest
+                // emits the current value immediately, so this returns at once if
+                // the toast is already active.
+                for await isPaused in paused.values {
+                    if Task.isCancelled { return }
+                    if !isPaused { break }
+                }
+
+                let start = Date()
+                // Sleep for the remaining time, waking early if it becomes paused.
+                let interrupted = await Self.sleep(remaining, interruptedBy: paused)
+                if Task.isCancelled { return }
+                if interrupted {
+                    remaining -= Date().timeIntervalSince(start)
+                } else {
+                    remaining = 0
                 }
             }
 
             self.dismiss(toast.id)
+        }
+    }
+
+    /// A stream of the "effective paused" state for a toast: paused while the
+    /// stack is expanded or the toast is being held. Emits on every change.
+    private func pausedStream(for toast: Toast) -> AnyPublisher<Bool, Never> {
+        Publishers.CombineLatest($isExpanded, toast.$isPaused)
+            .map { expanded, paused in expanded || paused }
+            .removeDuplicates()
+            .eraseToAnyPublisher()
+    }
+
+    /// Sleeps for `seconds`, returning `false` if the full time elapsed, or
+    /// `true` if `pausedStream` reported a paused state first.
+    private static func sleep(
+        _ seconds: TimeInterval,
+        interruptedBy pausedStream: AnyPublisher<Bool, Never>
+    ) async -> Bool {
+        await withTaskGroup(of: Bool.self) { group in
+            group.addTask {
+                try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+                return false
+            }
+            group.addTask {
+                for await isPaused in pausedStream.values where isPaused {
+                    return true
+                }
+                return false
+            }
+            let result = await group.next() ?? false
+            group.cancelAll()
+            return result
         }
     }
 

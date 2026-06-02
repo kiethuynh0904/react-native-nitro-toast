@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.os.SystemClock
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.ViewGroup
@@ -17,7 +18,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
 /** Duration of the toast enter/exit and update animations, in milliseconds. */
 private const val ANIMATION_DURATION_MS = 300L
@@ -190,12 +193,20 @@ object ToastManager {
 
         if (duration > 0) {
             var remaining = duration.toLong() - ANIMATION_DURATION_MS
-            val interval = 100L
             while (remaining > 0) {
-                delay(interval)
-                // Honor hold-to-pause: only count down while not paused (matches iOS).
-                if (state.pauseMap.value[toast.id] != true) {
-                    remaining -= interval
+                // Suspend (no polling) until the toast is not paused.
+                state.pauseMap.first { it[toast.id] != true }
+                val start = SystemClock.elapsedRealtime()
+                // Sleep for the remaining time, waking early only if it becomes paused.
+                val becamePaused =
+                    withTimeoutOrNull(remaining) {
+                        state.pauseMap.first { it[toast.id] == true }
+                        true
+                    }
+                if (becamePaused == null) {
+                    remaining = 0
+                } else {
+                    remaining -= SystemClock.elapsedRealtime() - start
                 }
             }
             state.removeWithAnimation(toast.id)
