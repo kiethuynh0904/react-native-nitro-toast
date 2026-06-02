@@ -5,9 +5,9 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.os.SystemClock
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
 import android.view.ViewGroup
 import androidx.annotation.RequiresPermission
 import androidx.compose.ui.platform.ComposeView
@@ -18,7 +18,12 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
+
+/** Duration of the toast enter/exit and update animations, in milliseconds. */
+private const val ANIMATION_DURATION_MS = 300L
 
 class ToastListState {
     private val _toasts = MutableStateFlow(emptyList<Toast>())
@@ -74,7 +79,7 @@ class ToastListState {
 
     suspend fun removeWithAnimation(toastId: String) {
         updateVisibility(toastId, false)
-        delay(300)
+        delay(ANIMATION_DURATION_MS)
         _toasts.value = _toasts.value.filterNot { it.id == toastId }
     }
 }
@@ -121,7 +126,7 @@ object ToastManager {
         state.updateToast(toastId, message, config)
         state.setUpdating(toastId, true)
         scope.launch {
-            delay(300)
+            delay(ANIMATION_DURATION_MS)
             state.setUpdating(toastId, false)
         }
         lifecycleJobs[toastId]?.cancel()
@@ -185,14 +190,24 @@ object ToastManager {
     ) {
         delay(16)
         state.updateVisibility(toast.id, true)
-        Log.d("ToastManager", "Showing toast: $toast")
 
         if (duration > 0) {
-            var remaining = duration.toLong() - 300
-            val interval = 100L
+            var remaining = duration.toLong() - ANIMATION_DURATION_MS
             while (remaining > 0) {
-                delay(interval)
-                remaining -= interval
+                // Suspend (no polling) until the toast is not paused.
+                state.pauseMap.first { it[toast.id] != true }
+                val start = SystemClock.elapsedRealtime()
+                // Sleep for the remaining time, waking early only if it becomes paused.
+                val becamePaused =
+                    withTimeoutOrNull(remaining) {
+                        state.pauseMap.first { it[toast.id] == true }
+                        true
+                    }
+                if (becamePaused == null) {
+                    remaining = 0
+                } else {
+                    remaining -= SystemClock.elapsedRealtime() - start
+                }
             }
             state.removeWithAnimation(toast.id)
         }
@@ -202,8 +217,8 @@ object ToastManager {
 
     private fun checkAndRemoveContainer() {
         val context = toastContainer?.context as? Activity ?: return
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(300)
+        scope.launch {
+            delay(ANIMATION_DURATION_MS)
             if (state.toasts.value.isEmpty()) {
                 (context.window?.decorView as? ViewGroup)?.removeView(toastContainer)
                 toastContainer = null
