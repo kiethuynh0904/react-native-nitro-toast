@@ -1,29 +1,36 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
+ * Nitro Toast — example app
  */
 
-import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createStaticNavigation, type StaticParamList } from '@react-navigation/native';
-import ToastAlert from './src/screens/ToastAlert';
-import ToastStacked from './src/screens/ToastStacked';
-import Home from './src/screens/Home';
+import React from 'react'
+import { useColorScheme } from 'react-native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import {
+  createStaticNavigation,
+  DefaultTheme,
+  DarkTheme,
+  type StaticParamList,
+} from '@react-navigation/native'
+import Home from './src/screens/Home'
+import Playground from './src/screens/Playground'
+import Showcase from './src/screens/Showcase'
 
 const RootStack = createNativeStackNavigator({
   screenOptions: {
     headerShown: true,
+    headerLargeTitle: true,
   },
   screens: {
-    Home: Home,
-    ToastAlert: ToastAlert,
-    ToastStacked: ToastStacked,
+    Home: {
+      screen: Home,
+      options: { title: 'Nitro Toast' },
+    },
+    Playground: Playground,
+    Showcase: Showcase,
   },
-});
+})
 
-type RootStackParamList = StaticParamList<typeof RootStack>;
+type RootStackParamList = StaticParamList<typeof RootStack>
 
 declare global {
   namespace ReactNavigation {
@@ -31,10 +38,11 @@ declare global {
   }
 }
 
-const Navigation = createStaticNavigation(RootStack);
+const Navigation = createStaticNavigation(RootStack)
 
 function App(): React.JSX.Element {
-  return <Navigation />;
+  const scheme = useColorScheme()
+  return <Navigation theme={scheme === 'dark' ? DarkTheme : DefaultTheme} />
 }
 
-export default App;
+export default App
