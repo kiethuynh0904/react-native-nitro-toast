@@ -203,7 +203,7 @@ object ToastManager {
 
     private fun checkAndRemoveContainer() {
         val context = toastContainer?.context as? Activity ?: return
-        CoroutineScope(Dispatchers.Main).launch {
+        scope.launch {
             delay(ANIMATION_DURATION_MS)
             if (state.toasts.value.isEmpty()) {
                 (context.window?.decorView as? ViewGroup)?.removeView(toastContainer)
