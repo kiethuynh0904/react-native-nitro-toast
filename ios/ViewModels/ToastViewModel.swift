@@ -11,6 +11,10 @@ import SwiftUI
 @MainActor
 class ToastViewModel: ObservableObject {
     static let shared = ToastViewModel()
+
+    /// Duration of the toast enter/exit and update animations.
+    private static let animationDuration: TimeInterval = 0.3
+
     var toastWindow: UIWindow?
 
     var isEmpty: Bool { toasts.isEmpty }
@@ -61,7 +65,7 @@ class ToastViewModel: ObservableObject {
             existing.config = config
         }
         Task {
-            try? await Task.sleep(nanoseconds: 300_000_000)
+            try? await Task.sleep(nanoseconds: UInt64(Self.animationDuration * 1_000_000_000))
             existing.isUpdating = false
         }
     }
@@ -106,7 +110,7 @@ class ToastViewModel: ObservableObject {
     }
 
     private func cleanWindow() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.animationDuration) {
             guard self.isEmpty else { return }
             self.toastWindow?.isHidden = true
             self.toastWindow?.rootViewController = nil
