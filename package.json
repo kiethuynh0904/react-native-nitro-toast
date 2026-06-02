@@ -31,7 +31,6 @@
     "README.md"
   ],
   "scripts": {
-    "postinstall": "tsc || exit 0;",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "format:ios": "swiftformat ios/",
     "format:android": "ktlint -F android/src/**/*.kt",
