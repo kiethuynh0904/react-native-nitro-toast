@@ -193,7 +193,10 @@ object ToastManager {
             val interval = 100L
             while (remaining > 0) {
                 delay(interval)
-                remaining -= interval
+                // Honor hold-to-pause: only count down while not paused (matches iOS).
+                if (state.pauseMap.value[toast.id] != true) {
+                    remaining -= interval
+                }
             }
             state.removeWithAnimation(toast.id)
         }
