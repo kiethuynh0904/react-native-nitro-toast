@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   check:
-    name: Typecheck, lint & build
+    name: Typecheck, lint, test & build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -29,6 +29,9 @@ jobs:
 
       - name: Lint
         run: bun run lint:ci
+
+      - name: Test
+        run: bun run test
 
       - name: Build (bob)
         run: bun run prepare
