@@ -3,10 +3,10 @@
   "git": {
     "commitMessage": "chore(release): v${version}",
     "tagName": "v${version}",
-    "requireCleanWorkingDir": false
+    "requireCleanWorkingDir": true
   },
   "hooks":{
-    "before:init": ["git pull", "bun run lint"],
+    "before:init": ["git pull", "bun run lint:ci"],
     "after:bump": ["bunx auto-changelog -p"]
   },
   "github": {

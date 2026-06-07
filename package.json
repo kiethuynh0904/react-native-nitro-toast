@@ -54,6 +54,9 @@
   },
   "author": "Kiet Huynh <kiethuynh0904@gmail.com> (https://github.com/kiethuynh0904)",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "bugs": {
     "url": "https://github.com/kiethuynh0904/react-native-nitro-toast/issues"
   },
