@@ -26,7 +26,6 @@
     "ios/**/*.cpp",
     "ios/**/*.swift",
     "ios/Assets.xcassets",
-    "app.plugin.js",
     "*.podspec",
     "README.md"
   ],
@@ -38,7 +37,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "lint:ci": "eslint \"**/*.{js,ts,tsx}\"",
     "typescript": "tsc",
-    "specs": "typescript && nitro-codegen --logLevel=\"debug\"",
+    "specs": "tsc && nitro-codegen --logLevel=\"debug\"",
     "release": "release-it",
     "prepare": "bob build"
   },
