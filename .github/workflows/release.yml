@@ -4,27 +4,39 @@ on:
   push:
     tags:
       - 'v*.*.*' # Runs only when a tag like v1.2.3 is pushed
-  
+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use Bun
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      - name: Install dependencies with Bun
-        run: bun install
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
 
-      - name: Publish to npm using JS-DevTools/npm-publish
+      # Verify the exact tagged commit before publishing — fail fast on a broken build.
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Lint
+        run: bun run lint:ci
+
+      - name: Build
+        run: bun run prepare
+
+      # NPM_TOKEN must be an npm Automation token with publish access.
+      # (A read-only or expired token fails publish with a misleading 404.)
+      - name: Publish to npm
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           access: public
-      
+
       - name: End message
         run: echo "🎉 Released!"

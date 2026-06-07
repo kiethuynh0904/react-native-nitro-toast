@@ -56,6 +56,20 @@ Check out the [stacked presentation guide](./docs/stacked.md) for more info.
 
 See the [INSTALLATION.md](./docs/INSTALLATION.md) guide for full setup, requirements, and platform instructions.
 
+## ✅ Compatibility
+
+| | Requirement |
+|---|---|
+| React Native | **>= 0.78** |
+| React | >= 18 |
+| `react-native-nitro-modules` | >= 0.35 |
+| **New Architecture** | **Required** |
+| iOS | >= 15.1 (follows React Native's minimum) · visionOS 1.0 |
+| Android | `minSdk` 23 |
+
+> Built on [Nitro Modules](https://nitro.margelo.com), which require React Native's
+> **New Architecture**. The legacy bridge (old architecture) is not supported.
+
 ## 🔧 Quick Start
 
 Check out the [example app](./example) for a full working demo.
