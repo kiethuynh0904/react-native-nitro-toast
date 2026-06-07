@@ -80,6 +80,4 @@ lib/
 # Claude Code personal workflow (skills, MCP settings, permissions)
 .claude/
 
-# v2 planning working docs (maintainer-only; ROADMAP.md stays tracked)
-docs/v2/IMPLEMENTATION.md
-docs/v2/plans/
+docs/internal
