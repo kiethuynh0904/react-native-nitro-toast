@@ -78,8 +78,8 @@
     "typescript": "^5.5.4"
   },
   "peerDependencies": {
-    "react": "*",
-    "react-native": "*",
+    "react": ">=18.0.0",
+    "react-native": ">=0.78.0",
     "react-native-nitro-modules": ">=0.35.0"
   },
   "eslintConfig": {
