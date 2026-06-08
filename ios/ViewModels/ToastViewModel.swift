@@ -39,6 +39,14 @@ class ToastViewModel: ObservableObject {
                 toasts.append(newToast)
             }
             toast = newToast
+
+            // Enforce maxToasts: dismiss the oldest beyond the cap.
+            if let max = config.maxToasts, max >= 1 {
+                while toasts.count > Int(max) {
+                    guard let oldest = toasts.first(where: { $0.id != newToast.id }) else { break }
+                    dismiss(oldest.id)
+                }
+            }
         }
 
         if config.haptics == true {

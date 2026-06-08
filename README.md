@@ -162,6 +162,8 @@ function handleUpload() {
 | `messageColor`   | `string` (HEX)               | Varies by type      | Custom message color (optional)            |
 | `useOverlay`     | `boolean`                    | `true`      | Apply semi-transparent overlay             |
 | `maxWidth`       | `number` (pt/dp)             | `480`       | Max toast width; caps + centers on large screens (iPad/tablet), no-op on phones |
+| `maxToasts`      | `number`                     | unlimited   | Max toasts kept on screen; the oldest is dismissed past the limit |
+| `offset`         | `number` (pt/dp)             | `0`         | Extra distance from the edge on the `position` side (added to the safe-area inset) |
 
 ## 🤝 Contributing & Issues
 Contributions are always welcome! If you have an idea, find a bug, or want to help improve the library, please feel free to:

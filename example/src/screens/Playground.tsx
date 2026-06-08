@@ -44,6 +44,18 @@ const MAX_WIDTHS: readonly { label: string; value?: number }[] = [
   { label: '600', value: 600 },
 ]
 
+const MAX_TOASTS: readonly { label: string; value?: number }[] = [
+  { label: 'Unlimited', value: undefined },
+  { label: '2', value: 2 },
+  { label: '3', value: 3 },
+]
+
+const OFFSETS: readonly { label: string; value?: number }[] = [
+  { label: '0', value: undefined },
+  { label: '24', value: 24 },
+  { label: '64', value: 64 },
+]
+
 const Playground = () => {
   const t = useTheme()
 
@@ -64,6 +76,8 @@ const Playground = () => {
   const [useOverlay, setUseOverlay] = useState(true)
   const [bg, setBg] = useState<string | undefined>(undefined)
   const [maxWidth, setMaxWidth] = useState<number | undefined>(undefined)
+  const [maxToasts, setMaxToasts] = useState<number | undefined>(undefined)
+  const [offset, setOffset] = useState<number | undefined>(undefined)
   const [title, setTitle] = useState('')
   const [message, setMessage] = useState('Your changes have been saved.')
   const [lastId, setLastId] = useState<string | null>(null)
@@ -84,6 +98,8 @@ const Playground = () => {
       config.messageColor = '#FFFFFF'
     }
     if (maxWidth !== undefined) config.maxWidth = maxWidth
+    if (maxToasts !== undefined) config.maxToasts = maxToasts
+    if (offset !== undefined) config.offset = offset
     const id = showToast(message || 'Hello from Nitro Toast', config)
     setLastId(id)
   }
@@ -153,6 +169,32 @@ const Playground = () => {
                 label={m.label}
                 active={maxWidth === m.value}
                 onPress={() => setMaxWidth(m.value)}
+              />
+            ))}
+          </Row>
+        </View>
+        <View>
+          <FieldLabel>Max toasts (stacked)</FieldLabel>
+          <Row>
+            {MAX_TOASTS.map((m) => (
+              <Chip
+                key={m.label}
+                label={m.label}
+                active={maxToasts === m.value}
+                onPress={() => setMaxToasts(m.value)}
+              />
+            ))}
+          </Row>
+        </View>
+        <View>
+          <FieldLabel>Offset</FieldLabel>
+          <Row>
+            {OFFSETS.map((o) => (
+              <Chip
+                key={o.label}
+                label={o.label}
+                active={offset === o.value}
+                onPress={() => setOffset(o.value)}
               />
             ))}
           </Row>

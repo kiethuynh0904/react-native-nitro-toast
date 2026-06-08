@@ -29,6 +29,8 @@ fun toastList(state: ToastListState) {
             else -> Alignment.BottomCenter
         }
 
+    val offset = (toasts.firstOrNull()?.config?.offset ?: 0.0).dp
+
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -40,12 +42,12 @@ fun toastList(state: ToastListState) {
                         WindowInsets.statusBars
                             .asPaddingValues()
                             .calculateTopPadding() +
-                            if (position == Alignment.TopCenter) 16.dp else 0.dp,
+                            if (position == Alignment.TopCenter) 16.dp + offset else 0.dp,
                     bottom =
                         WindowInsets.navigationBars
                             .asPaddingValues()
                             .calculateBottomPadding() +
-                            if (position == Alignment.BottomCenter) 16.dp else 0.dp,
+                            if (position == Alignment.BottomCenter) 16.dp + offset else 0.dp,
                 ),
     ) {
         if (position == Alignment.BottomCenter) {

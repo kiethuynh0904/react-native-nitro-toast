@@ -73,6 +73,12 @@ describe('showToast', () => {
   test('returns the native toast id', () => {
     expect(showToast('x')).toBe('id-1')
   })
+
+  test('forwards maxToasts and offset', () => {
+    showToast('x', { maxToasts: 3, offset: 24 })
+    expect(showCalls[0]!.config.maxToasts).toBe(3)
+    expect(showCalls[0]!.config.offset).toBe(24)
+  })
 })
 
 describe('dismissToast', () => {

@@ -116,6 +116,17 @@ object ToastManager {
         } else {
             val toast = Toast(id = toastId, message = message, config = config, isVisible = false)
             state.add(toast)
+            // Enforce maxToasts: dismiss the oldest beyond the cap.
+            config.maxToasts?.let { max ->
+                if (max >= 1) {
+                    val overflow = state.toasts.value.size - max.toInt()
+                    if (overflow > 0) {
+                        state.toasts.value
+                            .take(overflow)
+                            .forEach { dismiss(it.id) }
+                    }
+                }
+            }
             context.runOnUiThread {
                 ensureToastContainer(context)
                 lifecycleJobs[toastId] = scope.launch { handleToastLifecycle(toast, config.duration) }

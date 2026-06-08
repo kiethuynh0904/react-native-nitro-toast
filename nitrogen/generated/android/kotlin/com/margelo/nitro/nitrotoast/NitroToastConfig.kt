@@ -58,7 +58,13 @@ data class NitroToastConfig(
   val fontFamily: String?,
   @DoNotStrip
   @Keep
-  val maxWidth: Double?
+  val maxWidth: Double?,
+  @DoNotStrip
+  @Keep
+  val maxToasts: Double?,
+  @DoNotStrip
+  @Keep
+  val offset: Double?
 ) {
   /* primary constructor */
 
@@ -70,8 +76,8 @@ data class NitroToastConfig(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(toastId: String?, type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Boolean, haptics: Boolean?, iconUri: String?, fontFamily: String?, maxWidth: Double?): NitroToastConfig {
-      return NitroToastConfig(toastId, type, presentation, duration, title, position, backgroundColor, titleColor, messageColor, useOverlay, haptics, iconUri, fontFamily, maxWidth)
+    private fun fromCpp(toastId: String?, type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Boolean, haptics: Boolean?, iconUri: String?, fontFamily: String?, maxWidth: Double?, maxToasts: Double?, offset: Double?): NitroToastConfig {
+      return NitroToastConfig(toastId, type, presentation, duration, title, position, backgroundColor, titleColor, messageColor, useOverlay, haptics, iconUri, fontFamily, maxWidth, maxToasts, offset)
     }
   }
 }

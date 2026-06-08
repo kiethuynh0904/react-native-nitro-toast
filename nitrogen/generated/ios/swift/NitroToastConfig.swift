@@ -18,7 +18,7 @@ public extension NitroToastConfig {
   /**
    * Create a new instance of `NitroToastConfig`.
    */
-  init(toastId: String?, type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Bool, haptics: Bool?, iconUri: String?, fontFamily: String?, maxWidth: Double?) {
+  init(toastId: String?, type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Bool, haptics: Bool?, iconUri: String?, fontFamily: String?, maxWidth: Double?, maxToasts: Double?, offset: Double?) {
     self.init({ () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = toastId {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
@@ -69,6 +69,18 @@ public extension NitroToastConfig {
       }
     }(), { () -> bridge.std__optional_double_ in
       if let __unwrappedValue = maxWidth {
+        return bridge.create_std__optional_double_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_double_ in
+      if let __unwrappedValue = maxToasts {
+        return bridge.create_std__optional_double_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_double_ in
+      if let __unwrappedValue = offset {
         return bridge.create_std__optional_double_(__unwrappedValue)
       } else {
         return .init()
@@ -202,6 +214,30 @@ public extension NitroToastConfig {
     return { () -> Double? in
       if bridge.has_value_std__optional_double_(self.__maxWidth) {
         let __unwrapped = bridge.get_std__optional_double_(self.__maxWidth)
+        return __unwrapped
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var maxToasts: Double? {
+    return { () -> Double? in
+      if bridge.has_value_std__optional_double_(self.__maxToasts) {
+        let __unwrapped = bridge.get_std__optional_double_(self.__maxToasts)
+        return __unwrapped
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var offset: Double? {
+    return { () -> Double? in
+      if bridge.has_value_std__optional_double_(self.__offset) {
+        let __unwrapped = bridge.get_std__optional_double_(self.__offset)
         return __unwrapped
       } else {
         return nil

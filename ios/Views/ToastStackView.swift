@@ -24,6 +24,8 @@ private struct ToastsView: View {
     @ObservedObject var viewModel: ToastViewModel
     @Namespace private var stackNamespace
 
+    private var edgeOffset: CGFloat { CGFloat(viewModel.toasts.first?.config.offset ?? 0) }
+
     var body: some View {
         ZStack(alignment: .bottom) {
             if viewModel.isExpanded {
@@ -47,7 +49,7 @@ private struct ToastsView: View {
                 viewModel.isExpanded = false
             }
         }
-        .padding(.bottom, 15)
+        .padding(.bottom, 15 + edgeOffset)
     }
 
     // MARK: - Shared toast rows (no layout, just row content)
