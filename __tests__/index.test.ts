@@ -4,6 +4,7 @@ type ShowCall = { message: string; config: Record<string, unknown> }
 
 let showCalls: ShowCall[] = []
 let dismissCalls: string[] = []
+let dismissAllCount = 0
 let idCounter = 0
 
 const fakeModule = {
@@ -14,6 +15,9 @@ const fakeModule = {
   dismiss(id: string) {
     dismissCalls.push(id)
   },
+  dismissAll() {
+    dismissAllCount++
+  },
 }
 
 // index.ts calls createHybridObject at load time — register the mock first.
@@ -21,12 +25,19 @@ mock.module('react-native-nitro-modules', () => ({
   NitroModules: { createHybridObject: () => fakeModule },
 }))
 
-const { showToast, dismissToast, showToastPromise, defaultToastConfig, configure } =
-  await import('../src/index')
+const {
+  showToast,
+  dismissToast,
+  dismissAllToasts,
+  showToastPromise,
+  defaultToastConfig,
+  configure,
+} = await import('../src/index')
 
 beforeEach(() => {
   showCalls = []
   dismissCalls = []
+  dismissAllCount = 0
   idCounter = 0
 })
 
@@ -68,6 +79,11 @@ describe('dismissToast', () => {
   test('forwards the id to native dismiss', () => {
     dismissToast('abc')
     expect(dismissCalls).toEqual(['abc'])
+  })
+
+  test('dismissAllToasts calls native dismissAll', () => {
+    dismissAllToasts()
+    expect(dismissAllCount).toBe(1)
   })
 })
 

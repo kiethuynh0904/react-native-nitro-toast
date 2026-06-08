@@ -22,4 +22,10 @@ class HybridNitroToast: HybridNitroToastSpec {
             ToastViewModel.shared.dismiss(toastId)
         }
     }
+
+    func dismissAll() {
+        DispatchQueue.main.async {
+            ToastViewModel.shared.dismissAll()
+        }
+    }
 }

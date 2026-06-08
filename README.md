@@ -75,7 +75,7 @@ See the [INSTALLATION.md](./docs/INSTALLATION.md) guide for full setup, requirem
 Check out the [example app](./example) for a full working demo.
 
 ```tsx
-import { showToast, dismissToast } from 'react-native-nitro-toast';
+import { showToast, dismissToast, dismissAllToasts } from 'react-native-nitro-toast';
 
 // Basic usage
 showToast('Upload completed!');
@@ -101,6 +101,9 @@ showToast('Just a message, no title', {
 const id = showToast('Loading...', { type: 'loading' });
 // Dismiss the toast when your async work is done
 dismissToast(id);
+
+// Dismiss every visible toast at once
+dismissAllToasts();
 ```
 
 ### ⚙️ Global defaults

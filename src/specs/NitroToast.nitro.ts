@@ -87,4 +87,9 @@ export interface NitroToast
    * @param toastId - The ID of the toast to dismiss
    */
   dismiss(toastId:string) : void
+
+  /**
+   * Dismisses all currently visible toasts.
+   */
+  dismissAll(): void
 }

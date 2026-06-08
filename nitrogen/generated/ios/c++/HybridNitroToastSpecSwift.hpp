@@ -81,6 +81,12 @@ namespace margelo::nitro::nitrotoast {
         std::rethrow_exception(__result.error());
       }
     }
+    inline void dismissAll() override {
+      auto __result = _swiftPart.dismissAll();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+    }
 
   private:
     NitroToast::HybridNitroToastSpec_cxx _swiftPart;

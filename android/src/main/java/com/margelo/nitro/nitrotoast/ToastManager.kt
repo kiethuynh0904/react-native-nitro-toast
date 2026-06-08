@@ -82,6 +82,12 @@ class ToastListState {
         delay(ANIMATION_DURATION_MS)
         _toasts.value = _toasts.value.filterNot { it.id == toastId }
     }
+
+    suspend fun clearWithAnimation() {
+        _toasts.value = _toasts.value.map { it.copy(isVisible = false) }
+        delay(ANIMATION_DURATION_MS)
+        _toasts.value = emptyList()
+    }
 }
 
 object ToastManager {
@@ -141,6 +147,15 @@ object ToastManager {
             state.removeWithAnimation(toastId)
             lifecycleJobs[toastId]?.cancel()
             lifecycleJobs.remove(toastId)
+            checkAndRemoveContainer()
+        }
+    }
+
+    fun dismissAll() {
+        scope.launch {
+            lifecycleJobs.values.forEach { it.cancel() }
+            lifecycleJobs.clear()
+            state.clearWithAnimation()
             checkAndRemoveContainer()
         }
     }

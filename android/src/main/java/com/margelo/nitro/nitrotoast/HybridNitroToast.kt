@@ -23,4 +23,8 @@ class HybridNitroToast : HybridNitroToastSpec() {
     override fun dismiss(toastId: String) {
         ToastManager.dismiss(toastId)
     }
+
+    override fun dismissAll() {
+        ToastManager.dismissAll()
+    }
 }

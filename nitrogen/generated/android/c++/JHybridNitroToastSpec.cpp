@@ -57,5 +57,9 @@ namespace margelo::nitro::nitrotoast {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* toastId */)>("dismiss");
     method(_javaPart, jni::make_jstring(toastId));
   }
+  void JHybridNitroToastSpec::dismissAll() {
+    static const auto method = javaClassStatic()->getMethod<void()>("dismissAll");
+    method(_javaPart);
+  }
 
 } // namespace margelo::nitro::nitrotoast

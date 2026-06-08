@@ -53,6 +53,7 @@ namespace margelo::nitro::nitrotoast {
     // Methods
     std::string show(const std::string& message, const NitroToastConfig& config) override;
     void dismiss(const std::string& toastId) override;
+    void dismissAll() override;
 
   private:
     friend HybridBase;

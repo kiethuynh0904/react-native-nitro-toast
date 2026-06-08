@@ -52,6 +52,7 @@ namespace margelo::nitro::nitrotoast {
       // Methods
       virtual std::string show(const std::string& message, const NitroToastConfig& config) = 0;
       virtual void dismiss(const std::string& toastId) = 0;
+      virtual void dismissAll() = 0;
 
     protected:
       // Hybrid Setup

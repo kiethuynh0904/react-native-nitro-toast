@@ -181,6 +181,16 @@ class ToastViewModel: ObservableObject {
         }
     }
 
+    func dismissAll() {
+        countdownTasks.values.forEach { $0.cancel() }
+        countdownTasks.removeAll()
+        isExpanded = false
+        withAnimation(.bouncy) {
+            toasts.removeAll()
+        }
+        cleanWindow()
+    }
+
     private func cleanWindow() {
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.animationDuration) {
             guard self.isEmpty else { return }

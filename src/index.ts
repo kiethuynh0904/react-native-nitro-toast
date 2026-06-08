@@ -64,6 +64,13 @@ export const dismissToast = (id: string): void => {
 }
 
 /**
+ * Dismisses all currently visible toasts.
+ */
+export const dismissAllToasts = (): void => {
+  NitroToastModule.dismissAll()
+}
+
+/**
  * Resolves a message that can be either a string or a function that returns a string.
  * @param msg The message (string or function)
  * @param arg The argument to pass to the function if it's a function
