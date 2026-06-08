@@ -1,6 +1,9 @@
 package com.margelo.nitro.nitrotoast
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -107,6 +110,11 @@ fun stackedToastList(state: ToastListState) {
         targetValue = if (isExpanded) 0.25f else 0f,
         label = "scrim",
     )
+    val spacing by animateDpAsState(
+        targetValue = if (isExpanded) 10.dp else (-40).dp,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "spacing",
+    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Dim backdrop while expanded; tap to collapse.
@@ -122,61 +130,48 @@ fun stackedToastList(state: ToastListState) {
             )
         }
 
+        // Single column for both states — animating spacing (overlap when collapsed)
+        // + per-toast scale gives a smooth deck <-> list morph (no layout swap).
         Box(
             modifier =
                 Modifier
                     .align(Alignment.BottomCenter)
                     .navigationBarsPadding()
-                    .padding(bottom = 16.dp + offset),
+                    .padding(bottom = 16.dp + offset)
+                    .pointerInput(Unit) {
+                        detectTapGestures { state.setExpanded(!state.isExpanded.value) }
+                    },
             contentAlignment = Alignment.BottomCenter,
         ) {
-            if (isExpanded) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    toasts.forEach { toast ->
-                        key(toast.id) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(spacing),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                toasts.forEachIndexed { index, toast ->
+                    val depth = (toasts.lastIndex - index).coerceAtMost(2)
+                    val scale by animateFloatAsState(
+                        targetValue = if (isExpanded) 1f else 1f - depth * 0.05f,
+                        animationSpec =
+                            spring(
+                                dampingRatio = Spring.DampingRatioLowBouncy,
+                                stiffness = Spring.StiffnessLow,
+                            ),
+                        label = "deckScale",
+                    )
+                    key(toast.id) {
+                        Box(
+                            modifier =
+                                Modifier.graphicsLayer {
+                                    scaleX = scale
+                                    scaleY = scale
+                                },
+                        ) {
                             draggableToast(
                                 toast = toast,
                                 position = Alignment.BottomCenter,
                                 onPaused = { state.setPaused(toast.id, it) },
                                 onDismiss = { ToastManager.dismiss(toast.id) },
                             )
-                        }
-                    }
-                }
-            } else {
-                // Collapsed deck — tap anywhere on it to expand.
-                Box(
-                    modifier =
-                        Modifier.pointerInput(Unit) {
-                            detectTapGestures { state.setExpanded(true) }
-                        },
-                    contentAlignment = Alignment.BottomCenter,
-                ) {
-                    toasts.forEachIndexed { index, toast ->
-                        // depth 0 = newest (front), larger depth = further back.
-                        val depth = (toasts.lastIndex - index).coerceAtMost(2)
-                        val scale by animateFloatAsState(
-                            targetValue = 1f - depth * 0.06f,
-                            label = "deckScale",
-                        )
-                        val translateY by animateFloatAsState(
-                            targetValue = -depth * 14f,
-                            label = "deckOffset",
-                        )
-                        key(toast.id) {
-                            Box(
-                                modifier =
-                                    Modifier.graphicsLayer {
-                                        scaleX = scale
-                                        scaleY = scale
-                                        translationY = translateY
-                                    },
-                            ) {
-                                toastView(toast)
-                            }
                         }
                     }
                 }
