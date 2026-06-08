@@ -18,6 +18,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
@@ -228,14 +229,18 @@ object ToastManager {
 
         if (duration > 0) {
             var remaining = duration.toLong() - ANIMATION_DURATION_MS
+            // Paused while held (pauseMap) OR while the stacked deck is expanded (iOS parity).
+            val paused =
+                combine(state.pauseMap, state.isExpanded) { pm, expanded ->
+                    pm[toast.id] == true || expanded
+                }
             while (remaining > 0) {
-                // Suspend (no polling) until the toast is not paused.
-                state.pauseMap.first { it[toast.id] != true }
+                paused.first { !it } // suspend until not paused (no polling)
                 val start = SystemClock.elapsedRealtime()
-                // Sleep for the remaining time, waking early only if it becomes paused.
+                // Sleep the remaining time, waking early if it becomes paused.
                 val becamePaused =
                     withTimeoutOrNull(remaining) {
-                        state.pauseMap.first { it[toast.id] == true }
+                        paused.first { it }
                         true
                     }
                 if (becamePaused == null) {

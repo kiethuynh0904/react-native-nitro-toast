@@ -171,7 +171,11 @@ fun stackedToastList(state: ToastListState) {
                                 position = Alignment.BottomCenter,
                                 onPaused = { state.setPaused(toast.id, it) },
                                 onDismiss = { ToastManager.dismiss(toast.id) },
-                            )
+                            ) {
+                                stackedToastCard(toast) {
+                                    ToastManager.dismiss(toast.id)
+                                }
+                            }
                         }
                     }
                 }
