@@ -103,6 +103,17 @@ const id = showToast('Loading...', { type: 'loading' });
 dismissToast(id);
 ```
 
+### ⚙️ Global defaults
+
+Set app-wide defaults once (e.g. at startup). They merge on top of the built-in
+defaults and below each `showToast` call's own config:
+
+```tsx
+import { configure } from 'react-native-nitro-toast';
+
+configure({ position: 'top', haptics: true });
+```
+
 ### ⏳ Promise-based Toasts
 
 ```tsx

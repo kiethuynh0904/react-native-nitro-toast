@@ -21,7 +21,7 @@ mock.module('react-native-nitro-modules', () => ({
   NitroModules: { createHybridObject: () => fakeModule },
 }))
 
-const { showToast, dismissToast, showToastPromise, defaultToastConfig } =
+const { showToast, dismissToast, showToastPromise, defaultToastConfig, configure } =
   await import('../src/index')
 
 beforeEach(() => {
@@ -105,5 +105,19 @@ describe('showToastPromise', () => {
       {}
     )
     expect(result).toBe('v')
+  })
+})
+
+describe('configure', () => {
+  test('app-wide defaults apply, under per-call config', () => {
+    configure({ position: 'top' })
+    showToast('x')
+    expect(showCalls[0]!.config.position).toBe('top')
+
+    showCalls = []
+    showToast('y', { position: 'bottom' })
+    expect(showCalls[0]!.config.position).toBe('bottom') // per-call wins
+
+    configure({ position: 'bottom' }) // restore built-in default (avoid cross-file leak)
   })
 })

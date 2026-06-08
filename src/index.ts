@@ -18,6 +18,20 @@ export const defaultToastConfig: NitroToastConfig = {
   useOverlay: true,
 }
 
+/** App-wide overrides set via {@link configure}, merged between the built-in
+ * defaults and each call's config. */
+let globalDefaults: Partial<NitroToastConfig> = {}
+
+/**
+ * Set app-wide default toast options once (e.g. at startup). Merged on top of the
+ * built-in defaults and below each `showToast` call's own config. Calls merge
+ * (later calls override earlier keys).
+ * @example configure({ position: 'top', haptics: true })
+ */
+export const configure = (defaults: Partial<NitroToastConfig>): void => {
+  globalDefaults = { ...globalDefaults, ...defaults }
+}
+
 /**
  * Shows a toast message.
  * @param message The message to display.
@@ -28,13 +42,17 @@ export const showToast = (
   message: string,
   config?: Partial<NitroToastConfig>
 ): string => {
-
   const _config: NitroToastConfig = {
     ...defaultToastConfig,
+    ...globalDefaults,
     ...config,
-    duration: config?.duration ?? (config?.type === 'loading' ? 0 : defaultToastConfig.duration),
-  };
-  return NitroToastModule.show(message, _config);
+    duration:
+      config?.duration ??
+      (config?.type === 'loading'
+        ? 0
+        : globalDefaults.duration ?? defaultToastConfig.duration),
+  }
+  return NitroToastModule.show(message, _config)
 }
 
 /**
