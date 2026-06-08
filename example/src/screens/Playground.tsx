@@ -36,6 +36,13 @@ const DURATIONS: readonly { label: string; value: number }[] = [
   { label: '8s', value: 8000 },
 ]
 
+const MAX_WIDTHS: readonly { label: string; value?: number }[] = [
+  { label: 'Default', value: undefined },
+  { label: '320', value: 320 },
+  { label: '480', value: 480 },
+  { label: '600', value: 600 },
+]
+
 const Playground = () => {
   const t = useTheme()
 
@@ -55,6 +62,7 @@ const Playground = () => {
   const [haptics, setHaptics] = useState(true)
   const [useOverlay, setUseOverlay] = useState(true)
   const [bg, setBg] = useState<string | undefined>(undefined)
+  const [maxWidth, setMaxWidth] = useState<number | undefined>(undefined)
   const [title, setTitle] = useState('')
   const [message, setMessage] = useState('Your changes have been saved.')
   const [lastId, setLastId] = useState<string | null>(null)
@@ -74,6 +82,7 @@ const Playground = () => {
       config.titleColor = '#FFFFFF'
       config.messageColor = '#FFFFFF'
     }
+    if (maxWidth !== undefined) config.maxWidth = maxWidth
     const id = showToast(message || 'Hello from Nitro Toast', config)
     setLastId(id)
   }
@@ -130,6 +139,19 @@ const Playground = () => {
                 label={d.label}
                 active={duration === d.value}
                 onPress={() => setDuration(d.value)}
+              />
+            ))}
+          </Row>
+        </View>
+        <View>
+          <FieldLabel>Max width (large screens)</FieldLabel>
+          <Row>
+            {MAX_WIDTHS.map((m) => (
+              <Chip
+                key={m.label}
+                label={m.label}
+                active={maxWidth === m.value}
+                onPress={() => setMaxWidth(m.value)}
               />
             ))}
           </Row>

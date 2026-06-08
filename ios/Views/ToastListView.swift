@@ -123,7 +123,7 @@ private struct ToastView: View {
             .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 2)
         }
         .padding(.horizontal, 15)
-        .frame(maxWidth: ToastLayout.maxWidth)
+        .frame(maxWidth: toast.maxWidth)
         // Animate main view scale for update
     }
 }

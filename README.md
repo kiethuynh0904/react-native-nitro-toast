@@ -147,6 +147,7 @@ function handleUpload() {
 | `titleColor`     | `string` (HEX)               | Varies by type      | Custom title color (optional)              |
 | `messageColor`   | `string` (HEX)               | Varies by type      | Custom message color (optional)            |
 | `useOverlay`     | `boolean`                    | `true`      | Apply semi-transparent overlay             |
+| `maxWidth`       | `number` (pt/dp)             | `480`       | Max toast width; caps + centers on large screens (iPad/tablet), no-op on phones |
 
 ## 🤝 Contributing & Issues
 Contributions are always welcome! If you have an idea, find a bug, or want to help improve the library, please feel free to:

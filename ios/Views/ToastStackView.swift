@@ -170,7 +170,7 @@ private struct ToastRow: View {
                         .scaleEffect(isExpanded ? 1 : scale, anchor: .bottom)
                         .offset(y: isExpanded ? 0 : offsetY)
                 }
-                .frame(maxWidth: ToastLayout.maxWidth)
+                .frame(maxWidth: toast.maxWidth)
                 .transition(
                     .asymmetric(
                         insertion: .offset(y: 100),
@@ -197,7 +197,7 @@ private struct ToastRow: View {
                 .scaleEffect(isExpanded ? 1 : scale, anchor: .bottom)
                 .offset(y: isExpanded ? 0 : offsetY)
                 .zIndex(toast.isDeleting ? 1000 : 0)
-                .frame(maxWidth: ToastLayout.maxWidth)
+                .frame(maxWidth: toast.maxWidth)
                 .transition(
                     .asymmetric(
                         insertion: .offset(y: 100),

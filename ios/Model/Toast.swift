@@ -40,6 +40,11 @@ final class Toast: Identifiable, ObservableObject {
 }
 
 extension Toast {
+    /// Configured max width, falling back to the shared default.
+    var maxWidth: CGFloat {
+        config.maxWidth.map { CGFloat($0) } ?? ToastLayout.maxWidth
+    }
+
     var backgroundColor: Color {
         if let hex = config.backgroundColor {
             return Color(hex)
