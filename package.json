@@ -38,7 +38,7 @@
     "lint:ci": "eslint \"**/*.{js,ts,tsx}\"",
     "test": "bun test __tests__/*.test.ts",
     "typescript": "tsc",
-    "specs": "tsc && nitro-codegen --logLevel=\"debug\"",
+    "specs": "tsc && nitrogen --logLevel=\"debug\"",
     "release": "release-it",
     "prepare": "bob build"
   },
