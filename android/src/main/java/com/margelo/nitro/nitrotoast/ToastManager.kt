@@ -82,6 +82,12 @@ class ToastListState {
         delay(ANIMATION_DURATION_MS)
         _toasts.value = _toasts.value.filterNot { it.id == toastId }
     }
+
+    suspend fun clearWithAnimation() {
+        _toasts.value = _toasts.value.map { it.copy(isVisible = false) }
+        delay(ANIMATION_DURATION_MS)
+        _toasts.value = emptyList()
+    }
 }
 
 object ToastManager {
@@ -110,6 +116,17 @@ object ToastManager {
         } else {
             val toast = Toast(id = toastId, message = message, config = config, isVisible = false)
             state.add(toast)
+            // Enforce maxToasts: dismiss the oldest beyond the cap.
+            config.maxToasts?.let { max ->
+                if (max >= 1) {
+                    val overflow = state.toasts.value.size - max.toInt()
+                    if (overflow > 0) {
+                        state.toasts.value
+                            .take(overflow)
+                            .forEach { dismiss(it.id) }
+                    }
+                }
+            }
             context.runOnUiThread {
                 ensureToastContainer(context)
                 lifecycleJobs[toastId] = scope.launch { handleToastLifecycle(toast, config.duration) }
@@ -141,6 +158,15 @@ object ToastManager {
             state.removeWithAnimation(toastId)
             lifecycleJobs[toastId]?.cancel()
             lifecycleJobs.remove(toastId)
+            checkAndRemoveContainer()
+        }
+    }
+
+    fun dismissAll() {
+        scope.launch {
+            lifecycleJobs.values.forEach { it.cancel() }
+            lifecycleJobs.clear()
+            state.clearWithAnimation()
             checkAndRemoveContainer()
         }
     }

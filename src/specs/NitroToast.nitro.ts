@@ -67,6 +67,12 @@ export type NitroToastConfig = {
    * Caps and centers the toast on large screens (iPad / tablets);
    * has no effect on phones narrower than this. Defaults to 480. */
   maxWidth?: number
+  /** Max number of toasts kept on screen at once; the oldest is dismissed
+   * when the limit is exceeded. Unlimited when omitted. */
+  maxToasts?: number
+  /** Extra distance (in points/dp) from the screen edge on the toast's
+   * `position` side, added on top of the safe-area inset. Defaults to 0. */
+  offset?: number
 }
 
 /**
@@ -87,4 +93,9 @@ export interface NitroToast
    * @param toastId - The ID of the toast to dismiss
    */
   dismiss(toastId:string) : void
+
+  /**
+   * Dismisses all currently visible toasts.
+   */
+  dismissAll(): void
 }

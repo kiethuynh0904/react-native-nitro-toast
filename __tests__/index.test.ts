@@ -4,6 +4,7 @@ type ShowCall = { message: string; config: Record<string, unknown> }
 
 let showCalls: ShowCall[] = []
 let dismissCalls: string[] = []
+let dismissAllCount = 0
 let idCounter = 0
 
 const fakeModule = {
@@ -14,6 +15,9 @@ const fakeModule = {
   dismiss(id: string) {
     dismissCalls.push(id)
   },
+  dismissAll() {
+    dismissAllCount++
+  },
 }
 
 // index.ts calls createHybridObject at load time — register the mock first.
@@ -21,12 +25,19 @@ mock.module('react-native-nitro-modules', () => ({
   NitroModules: { createHybridObject: () => fakeModule },
 }))
 
-const { showToast, dismissToast, showToastPromise, defaultToastConfig } =
-  await import('../src/index')
+const {
+  showToast,
+  dismissToast,
+  dismissAllToasts,
+  showToastPromise,
+  defaultToastConfig,
+  configure,
+} = await import('../src/index')
 
 beforeEach(() => {
   showCalls = []
   dismissCalls = []
+  dismissAllCount = 0
   idCounter = 0
 })
 
@@ -62,12 +73,23 @@ describe('showToast', () => {
   test('returns the native toast id', () => {
     expect(showToast('x')).toBe('id-1')
   })
+
+  test('forwards maxToasts and offset', () => {
+    showToast('x', { maxToasts: 3, offset: 24 })
+    expect(showCalls[0]!.config.maxToasts).toBe(3)
+    expect(showCalls[0]!.config.offset).toBe(24)
+  })
 })
 
 describe('dismissToast', () => {
   test('forwards the id to native dismiss', () => {
     dismissToast('abc')
     expect(dismissCalls).toEqual(['abc'])
+  })
+
+  test('dismissAllToasts calls native dismissAll', () => {
+    dismissAllToasts()
+    expect(dismissAllCount).toBe(1)
   })
 })
 
@@ -105,5 +127,19 @@ describe('showToastPromise', () => {
       {}
     )
     expect(result).toBe('v')
+  })
+})
+
+describe('configure', () => {
+  test('app-wide defaults apply, under per-call config', () => {
+    configure({ position: 'top' })
+    showToast('x')
+    expect(showCalls[0]!.config.position).toBe('top')
+
+    showCalls = []
+    showToast('y', { position: 'bottom' })
+    expect(showCalls[0]!.config.position).toBe('bottom') // per-call wins
+
+    configure({ position: 'bottom' }) // restore built-in default (avoid cross-file leak)
   })
 })

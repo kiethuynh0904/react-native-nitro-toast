@@ -10,6 +10,9 @@ import SwiftUI
 struct ToastListView: View {
     @ObservedObject var viewModel = ToastViewModel.shared
 
+    private var isTop: Bool { viewModel.toasts.first?.config.position == .top }
+    private var edgeOffset: CGFloat { CGFloat(viewModel.toasts.first?.config.offset ?? 0) }
+
     var body: some View {
         VStack {
             if viewModel.toasts.first?.config.position == .top {
@@ -35,7 +38,7 @@ struct ToastListView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(.bottom, 15)
+        .padding(isTop ? .top : .bottom, 15 + edgeOffset)
     }
 }
 

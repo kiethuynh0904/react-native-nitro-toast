@@ -75,7 +75,7 @@ See the [INSTALLATION.md](./docs/INSTALLATION.md) guide for full setup, requirem
 Check out the [example app](./example) for a full working demo.
 
 ```tsx
-import { showToast, dismissToast } from 'react-native-nitro-toast';
+import { showToast, dismissToast, dismissAllToasts } from 'react-native-nitro-toast';
 
 // Basic usage
 showToast('Upload completed!');
@@ -101,6 +101,20 @@ showToast('Just a message, no title', {
 const id = showToast('Loading...', { type: 'loading' });
 // Dismiss the toast when your async work is done
 dismissToast(id);
+
+// Dismiss every visible toast at once
+dismissAllToasts();
+```
+
+### ⚙️ Global defaults
+
+Set app-wide defaults once (e.g. at startup). They merge on top of the built-in
+defaults and below each `showToast` call's own config:
+
+```tsx
+import { configure } from 'react-native-nitro-toast';
+
+configure({ position: 'top', haptics: true });
 ```
 
 ### ⏳ Promise-based Toasts
@@ -148,6 +162,8 @@ function handleUpload() {
 | `messageColor`   | `string` (HEX)               | Varies by type      | Custom message color (optional)            |
 | `useOverlay`     | `boolean`                    | `true`      | Apply semi-transparent overlay             |
 | `maxWidth`       | `number` (pt/dp)             | `480`       | Max toast width; caps + centers on large screens (iPad/tablet), no-op on phones |
+| `maxToasts`      | `number`                     | unlimited   | Max toasts kept on screen; the oldest is dismissed past the limit |
+| `offset`         | `number` (pt/dp)             | `0`         | Extra distance from the edge on the `position` side (added to the safe-area inset) |
 
 ## 🤝 Contributing & Issues
 Contributions are always welcome! If you have an idea, find a bug, or want to help improve the library, please feel free to:

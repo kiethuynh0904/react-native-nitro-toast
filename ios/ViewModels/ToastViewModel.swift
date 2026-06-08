@@ -39,6 +39,14 @@ class ToastViewModel: ObservableObject {
                 toasts.append(newToast)
             }
             toast = newToast
+
+            // Enforce maxToasts: dismiss the oldest beyond the cap.
+            if let max = config.maxToasts, max >= 1 {
+                while toasts.count > Int(max) {
+                    guard let oldest = toasts.first(where: { $0.id != newToast.id }) else { break }
+                    dismiss(oldest.id)
+                }
+            }
         }
 
         if config.haptics == true {
@@ -179,6 +187,16 @@ class ToastViewModel: ObservableObject {
             isExpanded = false
             cleanWindow()
         }
+    }
+
+    func dismissAll() {
+        countdownTasks.values.forEach { $0.cancel() }
+        countdownTasks.removeAll()
+        isExpanded = false
+        withAnimation(.bouncy) {
+            toasts.removeAll()
+        }
+        cleanWindow()
     }
 
     private func cleanWindow() {
