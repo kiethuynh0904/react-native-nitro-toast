@@ -32,6 +32,13 @@ class ToastListState {
     private val _pauseMap = MutableStateFlow<Map<String, Boolean>>(emptyMap())
     val pauseMap = _pauseMap.asStateFlow()
 
+    private val _isExpanded = MutableStateFlow(false)
+    val isExpanded = _isExpanded.asStateFlow()
+
+    fun setExpanded(expanded: Boolean) {
+        _isExpanded.value = expanded
+    }
+
     fun setPaused(
         toastId: String,
         paused: Boolean,
@@ -81,12 +88,14 @@ class ToastListState {
         updateVisibility(toastId, false)
         delay(ANIMATION_DURATION_MS)
         _toasts.value = _toasts.value.filterNot { it.id == toastId }
+        if (_toasts.value.isEmpty()) _isExpanded.value = false
     }
 
     suspend fun clearWithAnimation() {
         _toasts.value = _toasts.value.map { it.copy(isVisible = false) }
         delay(ANIMATION_DURATION_MS)
         _toasts.value = emptyList()
+        _isExpanded.value = false
     }
 }
 
