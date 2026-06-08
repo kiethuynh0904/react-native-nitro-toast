@@ -56,8 +56,8 @@ fun toastView(toast: Toast) {
 
     val containerModifier =
         Modifier
-            .fillMaxWidth()
             .widthIn(max = toast.config.maxWidth?.dp ?: MAX_TOAST_WIDTH)
+            .fillMaxWidth()
             .padding(horizontal = 15.dp)
             .shadow(1.5.dp, RoundedCornerShape(12.dp))
             .background(Color.White, RoundedCornerShape(12.dp))
