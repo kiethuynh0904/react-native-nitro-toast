@@ -140,8 +140,20 @@ class ToastViewModel: ObservableObject {
         let host = UIHostingController(rootView: toastHostView)
         host.view.backgroundColor = .clear
 
-        /// Create and present the toast window
-        let window = PassthroughWindow(frame: UIScreen.main.bounds)
+        /// Create and present the toast window, bound to the active window scene
+        /// (scene-aware — correct on iPad / multi-window / Stage Manager).
+        let activeScene = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first { $0.activationState == .foregroundActive }
+            ?? UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }.first
+
+        let window: PassthroughWindow
+        if let activeScene {
+            window = PassthroughWindow(windowScene: activeScene)
+        } else {
+            window = PassthroughWindow(frame: UIScreen.main.bounds)
+        }
         window.windowLevel = .alert + 1
         window.rootViewController = host
         window.isHidden = false
