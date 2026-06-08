@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
@@ -42,6 +43,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/** Max width of a toast card — caps + centers on large screens (tablets); no-op on phones. */
+private val MAX_TOAST_WIDTH = 480.dp
+
 @Composable
 fun toastView(toast: Toast) {
 //    val scale by animateFloatAsState(if (toast.isUpdating) 1.05f else 1.0f)
@@ -53,6 +57,7 @@ fun toastView(toast: Toast) {
     val containerModifier =
         Modifier
             .fillMaxWidth()
+            .widthIn(max = MAX_TOAST_WIDTH)
             .padding(horizontal = 15.dp)
             .shadow(1.5.dp, RoundedCornerShape(12.dp))
             .background(Color.White, RoundedCornerShape(12.dp))
