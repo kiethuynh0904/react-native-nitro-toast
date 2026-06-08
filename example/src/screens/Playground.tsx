@@ -3,6 +3,7 @@ import { View, Text, TextInput, Switch, StyleSheet } from 'react-native'
 import {
   showToast,
   dismissToast,
+  dismissAllToasts,
   type AlertToastType,
   type PositionToastType,
   type PresentationToastType,
@@ -210,6 +211,7 @@ const Playground = () => {
 
       <PrimaryButton title="Show toast" onPress={show} />
       <GhostButton title="Dismiss last toast" onPress={dismissLast} />
+      <GhostButton title="Dismiss all toasts" onPress={dismissAllToasts} />
 
       <Text style={[styles.footnote, { color: t.textFaint }]}>
         Tip: set Duration to “Sticky”, fire a toast, then dismiss it manually to
