@@ -59,10 +59,14 @@ export type NitroToastConfig = {
   haptics?: boolean
   /** Your custom icon to display in the toast */
   iconUri?: string
-  /** Custom font family to display in the toast 
+  /** Custom font family to display in the toast
    * @example 'Rubik-Regular'
   */
   fontFamily?: string
+  /** Max width of the toast card in points (iOS) / dp (Android).
+   * Caps and centers the toast on large screens (iPad / tablets);
+   * has no effect on phones narrower than this. Defaults to 480. */
+  maxWidth?: number
 }
 
 /**

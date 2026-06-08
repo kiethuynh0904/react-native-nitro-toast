@@ -8,6 +8,13 @@
 import Foundation
 import SwiftUI
 
+/// Shared layout constants for toast rendering.
+enum ToastLayout {
+    /// Max width of a toast card — caps + centers on large screens (iPad);
+    /// a no-op on phones (their width is already below this).
+    static let maxWidth: CGFloat = 480
+}
+
 enum ToastIcon {
     case system(name: String, color: Color)
     case image(uri: String)
@@ -33,6 +40,11 @@ final class Toast: Identifiable, ObservableObject {
 }
 
 extension Toast {
+    /// Configured max width, falling back to the shared default.
+    var maxWidth: CGFloat {
+        config.maxWidth.map { CGFloat($0) } ?? ToastLayout.maxWidth
+    }
+
     var backgroundColor: Color {
         if let hex = config.backgroundColor {
             return Color(hex)
