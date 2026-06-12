@@ -13,6 +13,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -62,6 +63,12 @@ fun toastView(toast: Toast) {
             .shadow(1.5.dp, RoundedCornerShape(12.dp))
             .background(Color.White, RoundedCornerShape(12.dp))
             .border(0.5.dp, toast.backgroundColor, RoundedCornerShape(12.dp))
+            // Tap-to-act: only clickable when a handler is provided.
+            .then(
+                toast.config.onPress?.let { onPress ->
+                    Modifier.clickable { onPress.invoke() }
+                } ?: Modifier,
+            )
 
     Box(modifier = containerModifier) {
         Box(
@@ -118,6 +125,22 @@ fun toastView(toast: Toast) {
                                         android.graphics.Typeface.NORMAL,
                                     ),
                             ),
+                    )
+                }
+            }
+
+            toast.badgeText?.let { badge ->
+                Spacer(modifier = Modifier.width(8.dp))
+                Box(
+                    modifier =
+                        Modifier
+                            .background(Color.Red, CircleShape)
+                            .padding(horizontal = 6.dp, vertical = 2.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    BasicText(
+                        text = badge,
+                        style = TextStyle(fontSize = 11.sp, color = Color.White),
                     )
                 }
             }

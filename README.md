@@ -164,6 +164,21 @@ function handleUpload() {
 | `maxWidth`       | `number` (pt/dp)             | `480`       | Max toast width; caps + centers on large screens (iPad/tablet), no-op on phones |
 | `maxToasts`      | `number`                     | unlimited   | Max toasts kept on screen; the oldest is dismissed past the limit |
 | `offset`         | `number` (pt/dp)             | `0`         | Extra distance from the edge on the `position` side (added to the safe-area inset) |
+| `onPress`        | `() => void`                 | `undefined` | Tap handler invoked when the user taps the toast body (e.g. navigate to the source). The toast still auto-dismisses per `duration`; the tap doesn't dismiss unless the handler does. |
+| `badgeCount`     | `number`                     | `undefined` | Count badge rendered on the toast (e.g. an unread inbox count). `<= 0` or omitted hides it; values over 99 display as `99+`. |
+
+### Tappable toast with a count badge
+
+```ts
+import { showToast } from 'react-native-nitro-toast'
+
+showToast('You have a new inbox message', {
+  type: 'info',
+  title: 'New message',
+  badgeCount: unreadCount,        // shows a count pill (e.g. "3", "99+")
+  onPress: () => navigation.navigate('Inbox'), // tap the toast to open it
+})
+```
 
 ## 🤝 Contributing & Issues
 Contributions are always welcome! If you have an idea, find a bug, or want to help improve the library, please feel free to:

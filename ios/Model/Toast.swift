@@ -134,4 +134,12 @@ extension Toast {
         }
         return .secondary
     }
+
+    /// The text rendered inside the count badge, or `nil` when no badge should
+    /// show. Hidden for `nil`/`<= 0`; capped at `99+`. Pure (unit-mirrorable).
+    var badgeText: String? {
+        guard let count = config.badgeCount, count > 0 else { return nil }
+        let n = Int(count)
+        return n > 99 ? "99+" : "\(n)"
+    }
 }

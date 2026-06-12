@@ -221,6 +221,16 @@ private struct ToastView: View {
                 .font(.footnote)
             Spacer(minLength: 0)
 
+            if let badge = toast.badgeText {
+                Text(badge)
+                    .font(.caption2.weight(.bold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Capsule().fill(Color.red))
+                    .accessibilityLabel("\(badge) unread")
+            }
+
             Button {
                 onRemove()
             } label: {
@@ -239,6 +249,23 @@ private struct ToastView: View {
                 .shadow(color: .black.opacity(0.06), radius: 3, x: -1, y: -3)
                 .shadow(color: .black.opacity(0.06), radius: 2, x: 1, y: 3)
         }
+        // Tap-to-act: only attach when a handler is provided, so toasts without
+        // `onPress` keep the parent stack's tap-to-expand behavior untouched.
+        .onToastTap(toast.config.onPress)
         .padding(.horizontal, 15)
+    }
+}
+
+private extension View {
+    /// Attach a tap handler that invokes `action` over the whole card, but ONLY
+    /// when `action` is non-nil — otherwise the view is returned unchanged so the
+    /// parent's tap gestures (stack expand/collapse) still receive the tap.
+    @ViewBuilder
+    func onToastTap(_ action: (() -> Void)?) -> some View {
+        if let action {
+            contentShape(Capsule()).onTapGesture(perform: action)
+        } else {
+            self
+        }
     }
 }

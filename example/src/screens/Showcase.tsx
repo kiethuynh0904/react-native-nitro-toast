@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Alert } from 'react-native'
 import {
   showToast,
   showToastPromise,
@@ -95,8 +95,40 @@ const Showcase = () => {
       haptics: true,
     })
 
+  // Tap-to-act + count badge: tapping the toast body fires `onPress`; `badgeCount`
+  // renders a count pill (try 0 → hidden, 3 → "3", 150 → "99+").
+  const showTappableWithBadge = (badgeCount: number) =>
+    showToast('You have unread inbox messages', {
+      title: 'New message',
+      type: 'info',
+      position: 'top',
+      badgeCount,
+      haptics: true,
+      onPress: () =>
+        Alert.alert('Toast tapped', 'onPress fired — navigate to the Inbox here.'),
+    })
+
   return (
     <Screen>
+      <SectionLabel>Tap &amp; badge</SectionLabel>
+      <Card style={{ gap: 0 }}>
+        <ListRow
+          icon="👆"
+          title="Tappable + badge"
+          subtitle="Tap the toast → onPress; shows a count pill (3)"
+          accent={typeAccent.info}
+          onPress={() => showTappableWithBadge(3)}
+        />
+        <Divider />
+        <ListRow
+          icon="💯"
+          title="Badge cap (99+)"
+          subtitle="badgeCount 150 renders as 99+"
+          accent={typeAccent.info}
+          onPress={() => showTappableWithBadge(150)}
+        />
+      </Card>
+
       <SectionLabel>Toast types</SectionLabel>
       <Card style={{ gap: 0 }}>
         <ListRow
