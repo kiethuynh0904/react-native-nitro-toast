@@ -73,6 +73,13 @@ export type NitroToastConfig = {
   /** Extra distance (in points/dp) from the screen edge on the toast's
    * `position` side, added on top of the safe-area inset. Defaults to 0. */
   offset?: number
+  /** Tap handler — invoked when the user taps the toast body (e.g. to navigate to
+   * the source of the notification). The toast still auto-dismisses per `duration`;
+   * the tap does not dismiss it unless the handler does so explicitly. */
+  onPress?: () => void
+  /** Unread/count badge rendered on the toast (e.g. an inbox message count). A
+   * value `<= 0` or omitted hides the badge; values above 99 display as `99+`. */
+  badgeCount?: number
 }
 
 /**

@@ -18,7 +18,7 @@ public extension NitroToastConfig {
   /**
    * Create a new instance of `NitroToastConfig`.
    */
-  init(toastId: String?, type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Bool, haptics: Bool?, iconUri: String?, fontFamily: String?, maxWidth: Double?, maxToasts: Double?, offset: Double?) {
+  init(toastId: String?, type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Bool, haptics: Bool?, iconUri: String?, fontFamily: String?, maxWidth: Double?, maxToasts: Double?, offset: Double?, onPress: (() -> Void)?, badgeCount: Double?) {
     self.init({ () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = toastId {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
@@ -81,6 +81,21 @@ public extension NitroToastConfig {
       }
     }(), { () -> bridge.std__optional_double_ in
       if let __unwrappedValue = offset {
+        return bridge.create_std__optional_double_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_std__function_void____ in
+      if let __unwrappedValue = onPress {
+        return bridge.create_std__optional_std__function_void____({ () -> bridge.Func_void in
+          let __closureWrapper = Func_void(__unwrappedValue)
+          return bridge.create_Func_void(__closureWrapper.toUnsafe())
+        }())
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_double_ in
+      if let __unwrappedValue = badgeCount {
         return bridge.create_std__optional_double_(__unwrappedValue)
       } else {
         return .init()
@@ -238,6 +253,35 @@ public extension NitroToastConfig {
     return { () -> Double? in
       if bridge.has_value_std__optional_double_(self.__offset) {
         let __unwrapped = bridge.get_std__optional_double_(self.__offset)
+        return __unwrapped
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var onPress: (() -> Void)? {
+    return { () -> (() -> Void)? in
+      if bridge.has_value_std__optional_std__function_void____(self.__onPress) {
+        let __unwrapped = bridge.get_std__optional_std__function_void____(self.__onPress)
+        return { () -> () -> Void in
+          let __wrappedFunction = bridge.wrap_Func_void(__unwrapped)
+          return { () -> Void in
+            __wrappedFunction.call()
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var badgeCount: Double? {
+    return { () -> Double? in
+      if bridge.has_value_std__optional_double_(self.__badgeCount) {
+        let __unwrapped = bridge.get_std__optional_double_(self.__badgeCount)
         return __unwrapped
       } else {
         return nil
