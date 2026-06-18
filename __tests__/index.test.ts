@@ -79,6 +79,40 @@ describe('showToast', () => {
     expect(showCalls[0]!.config.maxToasts).toBe(3)
     expect(showCalls[0]!.config.offset).toBe(24)
   })
+
+  test('forwards the onPress tap handler to native', () => {
+    const onPress = () => {}
+    showToast('x', { onPress })
+    expect(showCalls[0]!.config.onPress).toBe(onPress)
+  })
+
+  test('forwarded onPress is callable (the real fn, not dropped)', () => {
+    let pressed = 0
+    showToast('x', { onPress: () => pressed++ })
+    expect(typeof showCalls[0]!.config.onPress).toBe('function')
+    ;(showCalls[0]!.config.onPress as () => void)()
+    expect(pressed).toBe(1)
+  })
+
+  test('no onPress key when the caller omits it', () => {
+    showToast('x')
+    expect('onPress' in showCalls[0]!.config).toBe(false)
+  })
+
+  test('forwards badgeCount to native', () => {
+    showToast('x', { badgeCount: 3 })
+    expect(showCalls[0]!.config.badgeCount).toBe(3)
+  })
+
+  test('onPress + badgeCount survive the defaults/configure merge', () => {
+    configure({ position: 'top' })
+    const onPress = () => {}
+    showToast('x', { onPress, badgeCount: 7 })
+    expect(showCalls[0]!.config.onPress).toBe(onPress)
+    expect(showCalls[0]!.config.badgeCount).toBe(7)
+    expect(showCalls[0]!.config.position).toBe('top')
+    configure({ position: 'bottom' }) // restore (avoid cross-test leak)
+  })
 })
 
 describe('dismissToast', () => {

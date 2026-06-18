@@ -40,6 +40,7 @@ namespace margelo::nitro::nitrotoast { enum class PositionToastType; }
 #include "AlertToastType.hpp"
 #include "PresentationToastType.hpp"
 #include "PositionToastType.hpp"
+#include <functional>
 
 namespace margelo::nitro::nitrotoast {
 
@@ -64,13 +65,15 @@ namespace margelo::nitro::nitrotoast {
     std::optional<double> maxWidth     SWIFT_PRIVATE;
     std::optional<double> maxToasts     SWIFT_PRIVATE;
     std::optional<double> offset     SWIFT_PRIVATE;
+    std::optional<std::function<void()>> onPress     SWIFT_PRIVATE;
+    std::optional<double> badgeCount     SWIFT_PRIVATE;
 
   public:
     NitroToastConfig() = default;
-    explicit NitroToastConfig(std::optional<std::string> toastId, AlertToastType type, PresentationToastType presentation, double duration, std::optional<std::string> title, PositionToastType position, std::optional<std::string> backgroundColor, std::optional<std::string> titleColor, std::optional<std::string> messageColor, bool useOverlay, std::optional<bool> haptics, std::optional<std::string> iconUri, std::optional<std::string> fontFamily, std::optional<double> maxWidth, std::optional<double> maxToasts, std::optional<double> offset): toastId(toastId), type(type), presentation(presentation), duration(duration), title(title), position(position), backgroundColor(backgroundColor), titleColor(titleColor), messageColor(messageColor), useOverlay(useOverlay), haptics(haptics), iconUri(iconUri), fontFamily(fontFamily), maxWidth(maxWidth), maxToasts(maxToasts), offset(offset) {}
+    explicit NitroToastConfig(std::optional<std::string> toastId, AlertToastType type, PresentationToastType presentation, double duration, std::optional<std::string> title, PositionToastType position, std::optional<std::string> backgroundColor, std::optional<std::string> titleColor, std::optional<std::string> messageColor, bool useOverlay, std::optional<bool> haptics, std::optional<std::string> iconUri, std::optional<std::string> fontFamily, std::optional<double> maxWidth, std::optional<double> maxToasts, std::optional<double> offset, std::optional<std::function<void()>> onPress, std::optional<double> badgeCount): toastId(toastId), type(type), presentation(presentation), duration(duration), title(title), position(position), backgroundColor(backgroundColor), titleColor(titleColor), messageColor(messageColor), useOverlay(useOverlay), haptics(haptics), iconUri(iconUri), fontFamily(fontFamily), maxWidth(maxWidth), maxToasts(maxToasts), offset(offset), onPress(onPress), badgeCount(badgeCount) {}
 
   public:
-    friend bool operator==(const NitroToastConfig& lhs, const NitroToastConfig& rhs) = default;
+    // NitroToastConfig is not equatable because these properties are not equatable: onPress
   };
 
 } // namespace margelo::nitro::nitrotoast
@@ -98,7 +101,9 @@ namespace margelo::nitro {
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "fontFamily"))),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "maxWidth"))),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "maxToasts"))),
-        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "offset")))
+        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "offset"))),
+        JSIConverter<std::optional<std::function<void()>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "onPress"))),
+        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "badgeCount")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::nitrotoast::NitroToastConfig& arg) {
@@ -119,6 +124,8 @@ namespace margelo::nitro {
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "maxWidth"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.maxWidth));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "maxToasts"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.maxToasts));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "offset"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.offset));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "onPress"), JSIConverter<std::optional<std::function<void()>>>::toJSI(runtime, arg.onPress));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "badgeCount"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.badgeCount));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -145,6 +152,8 @@ namespace margelo::nitro {
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "maxWidth")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "maxToasts")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "offset")))) return false;
+      if (!JSIConverter<std::optional<std::function<void()>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "onPress")))) return false;
+      if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "badgeCount")))) return false;
       return true;
     }
   };

@@ -27,6 +27,7 @@ namespace margelo::nitro::nitrotoast { enum class PresentationToastType; }
 #include "PresentationToastType.hpp"
 #include <NitroModules/Result.hpp>
 #include <exception>
+#include <functional>
 #include <memory>
 #include <optional>
 #include <string>
