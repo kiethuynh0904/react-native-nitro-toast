@@ -18,6 +18,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
@@ -31,6 +32,13 @@ class ToastListState {
 
     private val _pauseMap = MutableStateFlow<Map<String, Boolean>>(emptyMap())
     val pauseMap = _pauseMap.asStateFlow()
+
+    private val _isExpanded = MutableStateFlow(false)
+    val isExpanded = _isExpanded.asStateFlow()
+
+    fun setExpanded(expanded: Boolean) {
+        _isExpanded.value = expanded
+    }
 
     fun setPaused(
         toastId: String,
@@ -81,12 +89,14 @@ class ToastListState {
         updateVisibility(toastId, false)
         delay(ANIMATION_DURATION_MS)
         _toasts.value = _toasts.value.filterNot { it.id == toastId }
+        if (_toasts.value.isEmpty()) _isExpanded.value = false
     }
 
     suspend fun clearWithAnimation() {
         _toasts.value = _toasts.value.map { it.copy(isVisible = false) }
         delay(ANIMATION_DURATION_MS)
         _toasts.value = emptyList()
+        _isExpanded.value = false
     }
 }
 
@@ -219,14 +229,18 @@ object ToastManager {
 
         if (duration > 0) {
             var remaining = duration.toLong() - ANIMATION_DURATION_MS
+            // Paused while held (pauseMap) OR while the stacked deck is expanded (iOS parity).
+            val paused =
+                combine(state.pauseMap, state.isExpanded) { pm, expanded ->
+                    pm[toast.id] == true || expanded
+                }
             while (remaining > 0) {
-                // Suspend (no polling) until the toast is not paused.
-                state.pauseMap.first { it[toast.id] != true }
+                paused.first { !it } // suspend until not paused (no polling)
                 val start = SystemClock.elapsedRealtime()
-                // Sleep for the remaining time, waking early only if it becomes paused.
+                // Sleep the remaining time, waking early if it becomes paused.
                 val becamePaused =
                     withTimeoutOrNull(remaining) {
-                        state.pauseMap.first { it[toast.id] == true }
+                        paused.first { it }
                         true
                     }
                 if (becamePaused == null) {

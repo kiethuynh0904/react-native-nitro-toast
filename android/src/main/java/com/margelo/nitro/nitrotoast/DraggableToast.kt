@@ -36,6 +36,7 @@ fun draggableToast(
     position: Alignment,
     onPaused: (Boolean) -> Unit,
     onDismiss: () -> Unit,
+    content: @Composable () -> Unit = { toastView(toast) },
 ) {
     var offsetY by remember { mutableFloatStateOf(0f) }
     val animatedOffsetY by animateFloatAsState(
@@ -94,7 +95,7 @@ fun draggableToast(
                         )
                     }.graphicsLayer(scaleX = scale, scaleY = scale),
         ) {
-            toastView(toast)
+            content()
         }
     }
 }

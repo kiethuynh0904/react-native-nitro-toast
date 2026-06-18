@@ -13,6 +13,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -56,8 +59,8 @@ fun toastView(toast: Toast) {
 
     val containerModifier =
         Modifier
-            .fillMaxWidth()
             .widthIn(max = toast.config.maxWidth?.dp ?: MAX_TOAST_WIDTH)
+            .fillMaxWidth()
             .padding(horizontal = 15.dp)
             .shadow(1.5.dp, RoundedCornerShape(12.dp))
             .background(Color.White, RoundedCornerShape(12.dp))
@@ -121,6 +124,65 @@ fun toastView(toast: Toast) {
                     )
                 }
             }
+        }
+    }
+}
+
+/**
+ * Stacked-mode card: neutral surface, type icon + message, and an X to dismiss.
+ * Mirrors the iOS stacked toast (no type-colored background, no title).
+ */
+@Composable
+fun stackedToastCard(
+    toast: Toast,
+    onDismiss: () -> Unit,
+) {
+    val context = LocalContext.current
+    Box(
+        modifier =
+            Modifier
+                .widthIn(max = toast.config.maxWidth?.dp ?: MAX_TOAST_WIDTH)
+                .fillMaxWidth()
+                .padding(horizontal = 15.dp)
+                .shadow(2.dp, RoundedCornerShape(28.dp))
+                .background(Color.White, RoundedCornerShape(28.dp)),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 15.dp),
+        ) {
+            renderToastIcon(toast)
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            BasicText(
+                text = toast.message,
+                modifier = Modifier.weight(1f),
+                style =
+                    TextStyle(
+                        fontSize = 13.sp,
+                        color = Color(0xFF11141A),
+                        fontFamily =
+                            resolveFontFamilyFromReact(
+                                context,
+                                toast.config.fontFamily,
+                                android.graphics.Typeface.NORMAL,
+                            ),
+                    ),
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Image(
+                imageVector = Icons.Filled.Close,
+                contentDescription = "Dismiss",
+                colorFilter = ColorFilter.tint(Color(0xFF9AA0AC)),
+                modifier =
+                    Modifier
+                        .size(20.dp)
+                        .clip(CircleShape)
+                        .clickable { onDismiss() },
+            )
         }
     }
 }

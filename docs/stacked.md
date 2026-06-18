@@ -1,8 +1,10 @@
-# 🍞 Stacked Toast (iOS Only)
+# 🍞 Stacked Toast
 
-> ⚠️ Currently supported only on iOS.
+> Supported on **both iOS and Android**.
 
-The `stacked` presentation queues multiple toasts and displays them one-by-one.
+The `stacked` presentation collects multiple toasts into a deck: the newest sits in
+front with older ones peeking behind it. Tap the deck to expand it into a list (with a
+dim backdrop); tap the backdrop to collapse.
 
 ---
 
