@@ -8,11 +8,9 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -103,29 +101,23 @@ fun draggableToast(
 @Composable
 private fun getEnterAnimation(position: Alignment): EnterTransition {
     val transformOrigin =
-        if (position == Alignment.TopCenter) {
-            TransformOrigin(0.5f, 0f)
-        } else {
-            TransformOrigin(0.5f, 1f)
-        }
+        if (position == Alignment.TopCenter) TransformOrigin(0.5f, 0f) else TransformOrigin(0.5f, 1f)
 
     return if (position == Alignment.TopCenter) {
         slideInVertically(initialOffsetY = { -it }) +
-            expandVertically(expandFrom = Alignment.Top) +
             scaleIn(transformOrigin = transformOrigin) +
-            fadeIn(initialAlpha = 0.3f)
+            fadeIn(initialAlpha = 0f)
     } else {
         slideInVertically(initialOffsetY = { it }) +
-            expandVertically() +
             scaleIn(transformOrigin = transformOrigin) +
-            fadeIn(initialAlpha = 0.3f)
+            fadeIn(initialAlpha = 0f)
     }
 }
 
 @Composable
 private fun getExitAnimation(position: Alignment): ExitTransition =
     if (position == Alignment.TopCenter) {
-        slideOutVertically(targetOffsetY = { -it }) + shrinkVertically() + fadeOut()
+        slideOutVertically(targetOffsetY = { -it }) + fadeOut()
     } else {
-        slideOutVertically(targetOffsetY = { it }) + shrinkVertically() + fadeOut()
+        slideOutVertically(targetOffsetY = { it }) + fadeOut()
     }
