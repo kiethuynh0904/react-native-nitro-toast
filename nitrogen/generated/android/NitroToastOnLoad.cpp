@@ -16,6 +16,7 @@
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 #include "JHybridNitroToastSpec.hpp"
+#include "JFunc_void.hpp"
 #include <NitroModules/DefaultConstructableObject.hpp>
 
 namespace margelo::nitro::nitrotoast {
@@ -41,6 +42,7 @@ void registerAllNatives() {
 
   // Register native JNI methods
   margelo::nitro::nitrotoast::JHybridNitroToastSpec::CxxPart::registerNatives();
+  margelo::nitro::nitrotoast::JFunc_void_cxx::registerNatives();
 
   // Register Nitro Hybrid Objects
   HybridObjectRegistry::registerHybridObjectConstructor(

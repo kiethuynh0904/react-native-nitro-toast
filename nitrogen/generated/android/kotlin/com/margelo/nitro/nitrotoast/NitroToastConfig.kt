@@ -64,9 +64,19 @@ data class NitroToastConfig(
   val maxToasts: Double?,
   @DoNotStrip
   @Keep
-  val offset: Double?
+  val offset: Double?,
+  @DoNotStrip
+  @Keep
+  val onPress: Func_void?,
+  @DoNotStrip
+  @Keep
+  val badgeCount: Double?
 ) {
-  /* primary constructor */
+  /**
+   * Create a new instance of NitroToastConfig from Kotlin
+   */
+  constructor(toastId: String?, type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Boolean, haptics: Boolean?, iconUri: String?, fontFamily: String?, maxWidth: Double?, maxToasts: Double?, offset: Double?, onPress: (() -> Unit)?, badgeCount: Double?):
+         this(toastId, type, presentation, duration, title, position, backgroundColor, titleColor, messageColor, useOverlay, haptics, iconUri, fontFamily, maxWidth, maxToasts, offset, onPress?.let { Func_void_java(it) }, badgeCount)
 
   companion object {
     /**
@@ -76,8 +86,8 @@ data class NitroToastConfig(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(toastId: String?, type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Boolean, haptics: Boolean?, iconUri: String?, fontFamily: String?, maxWidth: Double?, maxToasts: Double?, offset: Double?): NitroToastConfig {
-      return NitroToastConfig(toastId, type, presentation, duration, title, position, backgroundColor, titleColor, messageColor, useOverlay, haptics, iconUri, fontFamily, maxWidth, maxToasts, offset)
+    private fun fromCpp(toastId: String?, type: AlertToastType, presentation: PresentationToastType, duration: Double, title: String?, position: PositionToastType, backgroundColor: String?, titleColor: String?, messageColor: String?, useOverlay: Boolean, haptics: Boolean?, iconUri: String?, fontFamily: String?, maxWidth: Double?, maxToasts: Double?, offset: Double?, onPress: Func_void?, badgeCount: Double?): NitroToastConfig {
+      return NitroToastConfig(toastId, type, presentation, duration, title, position, backgroundColor, titleColor, messageColor, useOverlay, haptics, iconUri, fontFamily, maxWidth, maxToasts, offset, onPress, badgeCount)
     }
   }
 }

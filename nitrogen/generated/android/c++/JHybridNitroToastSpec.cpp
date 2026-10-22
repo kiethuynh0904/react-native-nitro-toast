@@ -26,6 +26,9 @@ namespace margelo::nitro::nitrotoast { enum class PositionToastType; }
 #include "JPresentationToastType.hpp"
 #include "PositionToastType.hpp"
 #include "JPositionToastType.hpp"
+#include <functional>
+#include "JFunc_void.hpp"
+#include <NitroModules/JNICallable.hpp>
 
 namespace margelo::nitro::nitrotoast {
 

@@ -12,10 +12,13 @@
 
 #include "AlertToastType.hpp"
 #include "JAlertToastType.hpp"
+#include "JFunc_void.hpp"
 #include "JPositionToastType.hpp"
 #include "JPresentationToastType.hpp"
 #include "PositionToastType.hpp"
 #include "PresentationToastType.hpp"
+#include <NitroModules/JNICallable.hpp>
+#include <functional>
 #include <optional>
 #include <string>
 
@@ -70,6 +73,10 @@ namespace margelo::nitro::nitrotoast {
       jni::local_ref<jni::JDouble> maxToasts = this->getFieldValue(fieldMaxToasts);
       static const auto fieldOffset = clazz->getField<jni::JDouble>("offset");
       jni::local_ref<jni::JDouble> offset = this->getFieldValue(fieldOffset);
+      static const auto fieldOnPress = clazz->getField<JFunc_void::javaobject>("onPress");
+      jni::local_ref<JFunc_void::javaobject> onPress = this->getFieldValue(fieldOnPress);
+      static const auto fieldBadgeCount = clazz->getField<jni::JDouble>("badgeCount");
+      jni::local_ref<jni::JDouble> badgeCount = this->getFieldValue(fieldBadgeCount);
       return NitroToastConfig(
         toastId != nullptr ? std::make_optional(toastId->toStdString()) : std::nullopt,
         type->toCpp(),
@@ -86,7 +93,17 @@ namespace margelo::nitro::nitrotoast {
         fontFamily != nullptr ? std::make_optional(fontFamily->toStdString()) : std::nullopt,
         maxWidth != nullptr ? std::make_optional(maxWidth->value()) : std::nullopt,
         maxToasts != nullptr ? std::make_optional(maxToasts->value()) : std::nullopt,
-        offset != nullptr ? std::make_optional(offset->value()) : std::nullopt
+        offset != nullptr ? std::make_optional(offset->value()) : std::nullopt,
+        onPress != nullptr ? std::make_optional([&]() -> std::function<void()> {
+          if (onPress->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
+            auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(onPress);
+            return downcast->cthis()->getFunction();
+          } else {
+            auto onPressRef = jni::make_global(onPress);
+            return JNICallable<JFunc_void, void()>(std::move(onPressRef));
+          }
+        }()) : std::nullopt,
+        badgeCount != nullptr ? std::make_optional(badgeCount->value()) : std::nullopt
       );
     }
 
@@ -96,7 +113,7 @@ namespace margelo::nitro::nitrotoast {
      */
     [[maybe_unused]]
     static jni::local_ref<JNitroToastConfig::javaobject> fromCpp(const NitroToastConfig& value) {
-      using JSignature = JNitroToastConfig(jni::alias_ref<jni::JString>, jni::alias_ref<JAlertToastType>, jni::alias_ref<JPresentationToastType>, double, jni::alias_ref<jni::JString>, jni::alias_ref<JPositionToastType>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jboolean, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>);
+      using JSignature = JNitroToastConfig(jni::alias_ref<jni::JString>, jni::alias_ref<JAlertToastType>, jni::alias_ref<JPresentationToastType>, double, jni::alias_ref<jni::JString>, jni::alias_ref<JPositionToastType>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jboolean, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<JFunc_void::javaobject>, jni::alias_ref<jni::JDouble>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
@@ -116,7 +133,9 @@ namespace margelo::nitro::nitrotoast {
         value.fontFamily.has_value() ? jni::make_jstring(value.fontFamily.value()) : nullptr,
         value.maxWidth.has_value() ? jni::JDouble::valueOf(value.maxWidth.value()) : nullptr,
         value.maxToasts.has_value() ? jni::JDouble::valueOf(value.maxToasts.value()) : nullptr,
-        value.offset.has_value() ? jni::JDouble::valueOf(value.offset.value()) : nullptr
+        value.offset.has_value() ? jni::JDouble::valueOf(value.offset.value()) : nullptr,
+        value.onPress.has_value() ? JFunc_void_cxx::fromCpp(value.onPress.value()) : nullptr,
+        value.badgeCount.has_value() ? jni::JDouble::valueOf(value.badgeCount.value()) : nullptr
       );
     }
   };

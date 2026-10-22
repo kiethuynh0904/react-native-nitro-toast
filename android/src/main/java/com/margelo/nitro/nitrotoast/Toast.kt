@@ -78,4 +78,13 @@ data class Toast(
                     null
                 }
             }
+
+    /** Text rendered inside the count badge, or `null` when no badge should show.
+     * Hidden for `null`/`<= 0`; capped at `99+`. Mirrors the iOS `badgeText`. */
+    val badgeText: String?
+        get() {
+            val count = config.badgeCount?.toInt() ?: return null
+            if (count <= 0) return null
+            return if (count > 99) "99+" else count.toString()
+        }
 }
